@@ -1,38 +1,69 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; 
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Hit Windows (หน่วยเป็นจังหวะ)")]
-    [Tooltip("ระยะ Perfect (แม่นเป๊ะ)")]
-    public float perfectWindow = 0.1f;
+    public static PlayerController instance;
 
-    [Tooltip("ระยะ Good (คลาดเคลื่อนนิดหน่อย)")]
-    public float goodWindow = 0.25f;
+    [Header("Hit Windows")]
+    public float perfectWindow = 0.2f;
+    public float goodWindow = 0.4f;
 
-    [Tooltip("ระยะ Bad (เกือบจะวืด)")]
-    public float badWindow = 0.4f;
+    [Header("Cooldown System")]
+    public float cooldownTime = 0.2f;
+    private float nextAllowedPressTime = 0f;
+
+    [Header("Player Health (HP)")]
+    public int maxHealth = 3;        // เลือดสูงสุด 3 ขีด
+    private int currentHealth;       // เลือดปัจจุบัน
+
+    [Header("Visual Feedback")]
+    public SpriteRenderer playerSprite;
+    public Color perfectColor = Color.green;
+    public Color goodColor = Color.yellow;
+    public Color badColor = Color.cyan;
+    public Color damageColor = Color.white;
+
+    private Color originalColor;
+    private float resetColorTime = 0f;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        if (playerSprite != null) originalColor = playerSprite.color;
+        currentHealth = maxHealth; // เริ่มเกมเลือดเต็ม 3
+    }
 
     void Update()
     {
-        // เช็คการกดปุ่ม
+        if (playerSprite != null && Time.time > resetColorTime) playerSprite.color = originalColor;
+        if (Time.time < nextAllowedPressTime) return;
+
         if (Input.GetKeyDown(KeyCode.W)) TryHit(KeyCode.W);
-        if (Input.GetKeyDown(KeyCode.A)) TryHit(KeyCode.A);
-        if (Input.GetKeyDown(KeyCode.S)) TryHit(KeyCode.S);
-        if (Input.GetKeyDown(KeyCode.D)) TryHit(KeyCode.D);
+        else if (Input.GetKeyDown(KeyCode.A)) TryHit(KeyCode.A);
+        else if (Input.GetKeyDown(KeyCode.S)) TryHit(KeyCode.S);
+        else if (Input.GetKeyDown(KeyCode.D)) TryHit(KeyCode.D);
     }
 
     void TryHit(KeyCode pressedKey)
     {
-        LipidMovement[] allLipids = FindObjectsOfType<LipidMovement>();
+        nextAllowedPressTime = Time.time + cooldownTime;
+
+        // อัปเดตมาใช้แบบใหม่ตามที่ Unity แนะนำ (แก้ Warning หายเกลี้ยง)
+        LipidMovement[] allLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
+        if (allLipids.Length == 0) return;
+
         LipidMovement targetLipid = null;
         float closestBeatDist = 100f;
+        float currentBeat = HeartbeatManager.instance.heartPositionInBeats;
 
-        // 1. หาว่าไขมันตัวไหนอยู่ใกล้จังหวะที่สุด
         foreach (LipidMovement lipid in allLipids)
         {
-            float currentBeat = HeartbeatManager.instance.heartPositionInBeats;
             float beatDist = Mathf.Abs(lipid.targetBeat - currentBeat);
-
             if (beatDist < closestBeatDist)
             {
                 closestBeatDist = beatDist;
@@ -40,37 +71,63 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // 2. ถ้ามีไขมันอยู่ในระยะที่ไกลที่สุดที่ยังพอยอมรับได้ (Bad Window)
-        if (targetLipid != null && closestBeatDist <= badWindow)
+        // ตีได้ก็ต่อเมื่อก้อนไขมันวิ่งผ่าน X = 0 มาแล้ว
+        if (targetLipid != null && targetLipid.transform.position.x <= 0f)
         {
-            // 3. เช็คว่ากดถูกปุ่มไหม?
             if (pressedKey == targetLipid.keyToPress)
             {
-                // ถ้ากดถูกปุ่ม มาวัดความแม่นยำกัน!
                 if (closestBeatDist <= perfectWindow)
                 {
-                    Debug.Log("<color=yellow>PERFECT!!!</color> แม่นมาก!");
+                    Debug.Log("PERFECT!");
+                    ChangeColorTemp(perfectColor, 0.2f);
                 }
                 else if (closestBeatDist <= goodWindow)
                 {
-                    Debug.Log("<color=green>GOOD!</color> นอกจังหวะนิดนึง");
+                    Debug.Log("GOOD!");
+                    ChangeColorTemp(goodColor, 0.2f);
                 }
                 else
                 {
-                    Debug.Log("<color=orange>BAD.</color> เกือบวืดแล้ว!");
+                    Debug.Log("BAD");
+                    ChangeColorTemp(badColor, 0.2f);
                 }
 
-                Destroy(targetLipid.gameObject); // ตีโดนแล้วไขมันแตก
+                Destroy(targetLipid.gameObject);
             }
             else
             {
-                Debug.Log($"<color=red>MISS!</color> กดผิดปุ่ม! (ต้องกด {targetLipid.keyToPress})");
-                Destroy(targetLipid.gameObject); // ทำโทษกดผิด ให้ไขมันแตกไปเลยแต่ไม่ได้คะแนน
+                Debug.Log("MISS! กดผิดปุ่ม");
             }
         }
-        else
+    }
+
+    // ฟังก์ชันรับดาเมจเมื่อไขมันชน
+    public void TakeDamage()
+    {
+        currentHealth--;
+        Debug.Log($"<color=red>โดนชน!</color> เลือดเหลือ: {currentHealth}/{maxHealth}");
+
+        ChangeColorTemp(damageColor, 3f);
+
+        if (currentHealth <= 0)
         {
-            Debug.Log("วืดดดดดดดดด! ไม่มีไขมันอยู่ในระยะเลย");
+            Die();
+        }
+    }
+
+    // ฟังก์ชันตอนเลือดหมด
+    void Die()
+    {
+        Debug.Log("<color=red>GAME OVER! เริ่มเกมใหม่</color>");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void ChangeColorTemp(Color newColor, float duration)
+    {
+        if (playerSprite != null)
+        {
+            playerSprite.color = newColor;
+            resetColorTime = Time.time + duration;
         }
     }
 }
