@@ -1,113 +1,160 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using TMPro;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+    public static bool isGameOver = false;
 
-    [Header("Hit Windows")]
-    public float perfectWindow = 0.2f;
-    public float goodWindow = 0.4f;
+    [Header("Score System")]
+    public int score = 0;
+    public TextMeshProUGUI scoreText;
 
     [Header("Cooldown System")]
-    public float cooldownTime = 0.2f;
+    public float cooldownTime = 0.08f;
     private float nextAllowedPressTime = 0f;
 
     [Header("Player Health (HP)")]
-    public int maxHealth = 3;        // เลือดสูงสุด 3 ขีด
-    private int currentHealth;       // เลือดปัจจุบัน
+    public int maxHealth = 3;
+    private int currentHealth;
 
-    [Header("Visual Feedback")]
-    public SpriteRenderer playerSprite;
-    public Color perfectColor = Color.green;
-    public Color goodColor = Color.yellow;
-    public Color badColor = Color.cyan;
-    public Color damageColor = Color.white;
+    [Header("UI Feedback Text")]
+    public TextMeshProUGUI feedbackText;
 
-    private Color originalColor;
-    private float resetColorTime = 0f;
-
-    void Awake()
-    {
-        instance = this;
-    }
+    void Awake() { instance = this; }
 
     void Start()
     {
-        if (playerSprite != null) originalColor = playerSprite.color;
-        currentHealth = maxHealth; // เริ่มเกมเลือดเต็ม 3
+        currentHealth = maxHealth;
+        score = 0;
+        isGameOver = false;
+        Time.timeScale = 1f;
+        UpdateScoreUI();
+
+        if (feedbackText != null) feedbackText.text = "";
     }
 
     void Update()
     {
-        if (playerSprite != null && Time.time > resetColorTime) playerSprite.color = originalColor;
+        if (isGameOver) return;
         if (Time.time < nextAllowedPressTime) return;
 
         if (Input.GetKeyDown(KeyCode.W)) TryHit(KeyCode.W);
         else if (Input.GetKeyDown(KeyCode.A)) TryHit(KeyCode.A);
         else if (Input.GetKeyDown(KeyCode.S)) TryHit(KeyCode.S);
         else if (Input.GetKeyDown(KeyCode.D)) TryHit(KeyCode.D);
+
+        if (Input.GetKeyDown(KeyCode.Space)) TryHit(KeyCode.Space);
     }
 
     void TryHit(KeyCode pressedKey)
     {
         nextAllowedPressTime = Time.time + cooldownTime;
 
-        // อัปเดตมาใช้แบบใหม่ตามที่ Unity แนะนำ (แก้ Warning หายเกลี้ยง)
         LipidMovement[] allLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
         if (allLipids.Length == 0) return;
 
         LipidMovement targetLipid = null;
-        float closestBeatDist = 100f;
-        float currentBeat = HeartbeatManager.instance.heartPositionInBeats;
+        float closestX = float.MaxValue;
 
         foreach (LipidMovement lipid in allLipids)
         {
-            float beatDist = Mathf.Abs(lipid.targetBeat - currentBeat);
-            if (beatDist < closestBeatDist)
+            if (lipid.transform.position.x < closestX)
             {
-                closestBeatDist = beatDist;
+                closestX = lipid.transform.position.x;
                 targetLipid = lipid;
             }
         }
 
-        // ตีได้ก็ต่อเมื่อก้อนไขมันวิ่งผ่าน X = 0 มาแล้ว
-        if (targetLipid != null && targetLipid.transform.position.x <= 0f)
-        {
-            if (pressedKey == targetLipid.keyToPress)
-            {
-                if (closestBeatDist <= perfectWindow)
-                {
-                    Debug.Log("PERFECT!");
-                    ChangeColorTemp(perfectColor, 0.2f);
-                }
-                else if (closestBeatDist <= goodWindow)
-                {
-                    Debug.Log("GOOD!");
-                    ChangeColorTemp(goodColor, 0.2f);
-                }
-                else
-                {
-                    Debug.Log("BAD");
-                    ChangeColorTemp(badColor, 0.2f);
-                }
+        if (targetLipid == null) return;
 
-                Destroy(targetLipid.gameObject);
+        // เฟสที่ 1: พิมพ์ชุดปุ่ม W, A, S, D
+        if (!targetLipid.sequenceCompleted)
+        {
+            if (pressedKey == KeyCode.Space) return;
+
+            KeyCode expectedKey = targetLipid.keySequence[targetLipid.currentKeyIndex];
+
+            if (pressedKey == expectedKey)
+            {
+                targetLipid.CorrectKeyInput();
             }
             else
             {
-                Debug.Log("MISS! กดผิดปุ่ม");
+                targetLipid.ResetSequence();
+            }
+        }
+        else
+        {
+           // กด Spacebar เช็คโซนสีกลางจอ
+            if (pressedKey == KeyCode.Space)
+            {
+                string hitResult = GameUIManager.instance.CheckHitZone();
+
+                if (hitResult == "Perfect")
+                {
+                    score += 300;
+                    ShowFeedback("PERFECT! +300");
+                    UpdateScoreUI();
+                    GameUIManager.instance.HideAllUI(); 
+                    Destroy(targetLipid.gameObject);
+                }
+                else if (hitResult == "Good")
+                {
+                    score += 150;
+                    ShowFeedback("GOOD! +150");
+                    UpdateScoreUI();
+                    GameUIManager.instance.HideAllUI();
+                    Destroy(targetLipid.gameObject);
+                }
+                else
+                {
+                    score += 50;
+                    ShowFeedback("BAD +50");
+                    UpdateScoreUI();
+                    GameUIManager.instance.HideAllUI();
+                    Destroy(targetLipid.gameObject);
+                }
             }
         }
     }
 
-    // ฟังก์ชันรับดาเมจเมื่อไขมันชน
+    void UpdateScoreUI()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score;
+        }
+    }
+
+    void ShowFeedback(string message)
+    {
+        if (feedbackText != null)
+        {
+            feedbackText.text = message;
+            if (!isGameOver)
+            {
+                CancelInvoke("ClearFeedback");
+                Invoke("ClearFeedback", 0.6f);
+            }
+        }
+    }
+
+    void ClearFeedback()
+    {
+        if (feedbackText != null && !isGameOver) feedbackText.text = "";
+    }
+
     public void TakeDamage()
     {
-        currentHealth--;
-        Debug.Log($"<color=red>โดนชน!</color> เลือดเหลือ: {currentHealth}/{maxHealth}");
+        if (isGameOver) return;
 
-        ChangeColorTemp(damageColor, 3f);
+        currentHealth--;
+        ShowFeedback("DAMAGE!");
 
         if (currentHealth <= 0)
         {
@@ -115,19 +162,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ฟังก์ชันตอนเลือดหมด
     void Die()
     {
-        Debug.Log("<color=red>GAME OVER! เริ่มเกมใหม่</color>");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+        isGameOver = true;
+        ShowFeedback("GAME OVER!");
+        Debug.Log("GAME OVER! คะแนนสุทธิ: " + score);
 
-    private void ChangeColorTemp(Color newColor, float duration)
-    {
-        if (playerSprite != null)
+       
+        LipidSpawner[] spawners = Object.FindObjectsByType<LipidSpawner>(FindObjectsSortMode.None);
+        foreach (var spawner in spawners)
         {
-            playerSprite.color = newColor;
-            resetColorTime = Time.time + duration;
+            spawner.enabled = false;
         }
+
+        LipidMovement[] remainingLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
+        foreach (var lipid in remainingLipids)
+        {
+            Destroy(lipid.gameObject);
+        }
+
+        if (GameUIManager.instance != null)
+        {
+            GameUIManager.instance.HideAllUI();
+        }
+
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

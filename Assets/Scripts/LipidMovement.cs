@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class LipidMovement : MonoBehaviour
 {
@@ -7,50 +6,48 @@ public class LipidMovement : MonoBehaviour
     public float targetBeat;
     public float beatsToReachTarget = 4f;
 
-    [Header("Position")]
+    [Header("Position & Height")]
     public float spawnPosX = 10f;
     public float hitPosX = -6f;
+    public float spawnPosY = 0f;
 
-    [Header("Hit System")]
-    public KeyCode keyToPress;
-    public TextMeshPro textDisplay;
+    [Header("Audition Sequence System")]
+    public KeyCode[] keySequence;
+    public int sequenceLength = 3;
+    public int currentKeyIndex = 0;
 
-    [Header("Skill Check UI")]
-    public RectTransform skillCheckBG;
-    public RectTransform redLineCursor;
+    [HideInInspector] public bool sequenceCompleted = false;
 
-    private float barTravelDistance;
-    private bool wasActiveLastFrame = false;
+    private float skillCheckStartBeat = 0f;
+    private const float skillCheckDuration = 2f;
+    private bool skillCheckExpired = false;
 
     void Start()
     {
         KeyCode[] possibleKeys = { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
-        keyToPress = possibleKeys[Random.Range(0, possibleKeys.Length)];
+        keySequence = new KeyCode[sequenceLength];
 
-        if (textDisplay != null)
+        for (int i = 0; i < sequenceLength; i++)
         {
-            textDisplay.text = keyToPress.ToString();
+            keySequence[i] = possibleKeys[Random.Range(0, possibleKeys.Length)];
         }
 
-        if (skillCheckBG != null)
-        {
-            barTravelDistance = skillCheckBG.rect.width / 2f;
-            skillCheckBG.gameObject.SetActive(false);
-        }
-
-        if (textDisplay != null)
-        {
-            textDisplay.gameObject.SetActive(false);
-        }
+        transform.position = new Vector3(spawnPosX, spawnPosY, 0);
     }
 
     void Update()
     {
+        if (PlayerController.isGameOver) return;
         if (HeartbeatManager.instance == null) return;
 
         float currentBeat = HeartbeatManager.instance.heartPositionInBeats;
 
-        // 1. ขยับตำแหน่งตัวก้อนไขมัน
+        if (currentBeat < (targetBeat - beatsToReachTarget))
+        {
+            transform.position = new Vector3(spawnPosX, spawnPosY, 0);
+            return;
+        }
+
         float beatInteger = Mathf.Floor(currentBeat);
         float beatFraction = currentBeat - beatInteger;
         float slideDuration = 0.3f;
@@ -61,9 +58,14 @@ public class LipidMovement : MonoBehaviour
         float t = beatsUntilHit / beatsToReachTarget;
 
         float currentX = Mathf.Lerp(hitPosX, spawnPosX, t);
-        transform.position = new Vector3(currentX, transform.position.y, 0);
+        transform.position = new Vector3(currentX, spawnPosY, 0);
 
-        // 2. เช็คคิว (อัปเดตมาใช้แบบใหม่ตามที่ Unity แนะนำ)
+        if (transform.position.x <= hitPosX)
+        {
+            TriggerDamageAndDestroy();
+        }
+
+
         LipidMovement[] allLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
         float lowestTargetBeat = float.MaxValue;
 
@@ -75,34 +77,84 @@ public class LipidMovement : MonoBehaviour
             }
         }
 
-        // 3. เงื่อนไขการแสดงผล (ต้องเป็นคิวแรก และ ผ่าน X = 0 มาแล้ว)
-        bool shouldShowUI = (this.targetBeat <= lowestTargetBeat && transform.position.x <= 0f);
+        bool isFirst = (this.targetBeat <= lowestTargetBeat);
 
-        if (shouldShowUI != wasActiveLastFrame)
+        if (sequenceCompleted && !skillCheckExpired)
         {
-            if (skillCheckBG != null) skillCheckBG.gameObject.SetActive(shouldShowUI);
-            if (textDisplay != null) textDisplay.gameObject.SetActive(shouldShowUI);
-            wasActiveLastFrame = shouldShowUI;
-        }
-
-        // 4. ระบบแกว่งเส้นแดง
-        float realBeatsUntilHit = targetBeat - currentBeat;
-
-        if (redLineCursor != null && shouldShowUI)
-        {
-            float pingPongValue = Mathf.PingPong(currentBeat + 0.5f, 1f);
-            float cursorX = Mathf.Lerp(-barTravelDistance, barTravelDistance, pingPongValue);
-            redLineCursor.localPosition = new Vector3(cursorX, 0, 0);
-        }
-
-        // 5. ชนแล้วหักเลือดทันที
-        if (transform.position.x <= hitPosX)
-        {
-            if (PlayerController.instance != null)
+            float elapsedSkillBeat = currentBeat - skillCheckStartBeat;
+            if (elapsedSkillBeat >= skillCheckDuration)
             {
-                PlayerController.instance.TakeDamage();
+                skillCheckExpired = true;
             }
-            Destroy(gameObject);
         }
+
+        // ส่งข้อมูลให้ UI กลางจอแสดงผล (เฉพาะตัวแรกสุด)
+        if (isFirst && GameUIManager.instance != null)
+        {
+            if (!sequenceCompleted)
+            {
+                // ยังพิมพ์ไม่ครบ -> แสดงชุดปุ่ม W A S D กลางจอแบบไม่มีสี
+                GameUIManager.instance.ShowSequence(GetFormattedSequenceString());
+            }
+            else if (!skillCheckExpired)
+            {
+                // พิมพ์ครบแล้ว -> แสดงหลอด Skill Check กลางจอ
+                float elapsedSkillBeat = currentBeat - skillCheckStartBeat;
+                float progress = Mathf.Clamp01(elapsedSkillBeat / skillCheckDuration);
+                float pingPongValue = Mathf.PingPong(progress * 4f, 1f);
+
+                GameUIManager.instance.ShowSkillCheck(pingPongValue);
+            }
+            else
+            {
+                GameUIManager.instance.HideAllUI();
+            }
+        }
+    }
+
+    public string GetFormattedSequenceString()
+    {
+        string displayStr = "";
+        for (int i = 0; i < keySequence.Length; i++)
+        {
+            if (i == currentKeyIndex)
+            {
+                displayStr += "[" + keySequence[i] + "] ";
+            }
+            else
+            {
+                displayStr += keySequence[i] + " ";
+            }
+        }
+        return displayStr;
+    }
+
+    public void CorrectKeyInput()
+    {
+        currentKeyIndex++;
+
+        if (currentKeyIndex >= keySequence.Length)
+        {
+            sequenceCompleted = true;
+            skillCheckStartBeat = HeartbeatManager.instance.heartPositionInBeats;
+        }
+    }
+
+    public void ResetSequence()
+    {
+        currentKeyIndex = 0;
+    }
+
+    void TriggerDamageAndDestroy()
+    {
+        if (PlayerController.instance != null)
+        {
+            PlayerController.instance.TakeDamage();
+        }
+        if (GameUIManager.instance != null)
+        {
+            GameUIManager.instance.HideAllUI();
+        }
+        Destroy(gameObject);
     }
 }
