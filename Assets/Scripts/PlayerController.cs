@@ -25,7 +25,21 @@ public class PlayerController : MonoBehaviour
     [Header("UI Feedback Text")]
     public TextMeshProUGUI feedbackText;
 
-    void Awake() { instance = this; }
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
+    private static readonly int PreThrow = Animator.StringToHash("PreThrow");
+    private static readonly int ThrowCollect = Animator.StringToHash("ThrowCollect");
+
+    void Awake()
+    { 
+        instance = this;
+      
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+
+    }
 
     void Start()
     {
@@ -81,6 +95,7 @@ public class PlayerController : MonoBehaviour
 
             if (pressedKey == expectedKey)
             {
+                animator?.SetTrigger(PreThrow);
                 targetLipid.CorrectKeyInput();
             }
             else
@@ -93,6 +108,7 @@ public class PlayerController : MonoBehaviour
            // ¡´ Spacebar àªç¤â«¹ÊÕ¡ÅÒ§¨Í
             if (pressedKey == KeyCode.Space)
             {
+                animator?.SetTrigger(ThrowCollect);
                 string hitResult = GameUIManager.instance.CheckHitZone();
 
                 if (hitResult == "Perfect")

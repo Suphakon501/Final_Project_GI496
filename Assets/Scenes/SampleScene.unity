@@ -361,7 +361,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 4334783836991956000, guid: 8b6c140225be3f944800d32a93845e7c, type: 3}
+  m_Sprite: {fileID: 4130640169021434097, guid: fe841bf9bf87047488133ef5a4ec3cb2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -404,6 +404,7 @@ MonoBehaviour:
   cooldownTime: 0.2
   maxHealth: 3
   feedbackText: {fileID: 863394538}
+  animator: {fileID: 0}
 --- !u!1 &211594265
 GameObject:
   m_ObjectHideFlags: 0
