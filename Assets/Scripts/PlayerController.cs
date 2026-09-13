@@ -19,8 +19,11 @@ public class PlayerController : MonoBehaviour
     private float nextAllowedPressTime = 0f;
 
     [Header("Player Health (HP)")]
-    public int maxHealth = 3;
-    private int currentHealth;
+    [SerializeField] private HealthBarUI healthBar;
+    [SerializeField] private float perfectHealthGain = 12f;
+    [SerializeField] private float goodHealthGain = 6f;
+    [SerializeField] private float badHealthGain = 2f;
+    [SerializeField] private float missHealthDamage = 20f;
 
     [Header("UI Feedback Text")]
     public TextMeshProUGUI feedbackText;
@@ -43,7 +46,11 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
+        if (healthBar == null)
+            healthBar = Object.FindFirstObjectByType<HealthBarUI>();
+
+        if (healthBar != null)
+            healthBar.ResetHealth();
         score = 0;
         isGameOver = false;
         Time.timeScale = 1f;
@@ -114,6 +121,7 @@ public class PlayerController : MonoBehaviour
                 if (hitResult == "Perfect")
                 {
                     score += 300;
+                    ChangeHealth(perfectHealthGain);
                     ShowFeedback("PERFECT! +300");
                     UpdateScoreUI();
                     GameUIManager.instance.HideAllUI(); 
@@ -122,6 +130,7 @@ public class PlayerController : MonoBehaviour
                 else if (hitResult == "Good")
                 {
                     score += 150;
+                    ChangeHealth(goodHealthGain);
                     ShowFeedback("GOOD! +150");
                     UpdateScoreUI();
                     GameUIManager.instance.HideAllUI();
@@ -130,6 +139,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     score += 50;
+                    ChangeHealth(badHealthGain);
                     ShowFeedback("BAD +50");
                     UpdateScoreUI();
                     GameUIManager.instance.HideAllUI();
@@ -143,7 +153,7 @@ public class PlayerController : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + score;
+            scoreText.text = "" + score;
         }
     }
 
@@ -169,13 +179,23 @@ public class PlayerController : MonoBehaviour
     {
         if (isGameOver) return;
 
-        currentHealth--;
+        ChangeHealth(-missHealthDamage);
         ShowFeedback("DAMAGE!");
 
-        if (currentHealth <= 0)
+        if (healthBar != null && healthBar.IsEmpty)
         {
             Die();
         }
+    }
+
+    private void ChangeHealth(float amount)
+    {
+        if (healthBar == null) return;
+
+        if (amount >= 0f)
+            healthBar.AddHealth(amount);
+        else
+            healthBar.TakeDamage(-amount);
     }
 
     void Die()
