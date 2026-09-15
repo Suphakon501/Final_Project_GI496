@@ -5,49 +5,75 @@ public class LipidSpawner : MonoBehaviour
     [Header("Spawner Settings")]
     public GameObject lipidPrefab;
 
-    [Header("Wave Pattern (ปรับแต่งกลุ่มที่มาต่อกัน)")]
-    public int lipidsPerWave = 3;           
-    public float beatsBetweenSpawns = 1.0f; 
-    public float restBeats = 4.0f;          
+    [Header("Spawn Position")]
+    [SerializeField] private float customSpawnPosX = 10f;
+    [SerializeField] private float customSpawnPosY = 0f;
 
-    private float nextTargetBeat = 4.0f;
-    private int spawnedInCurrentWave = 0;
+    [Header("Spawn Timing (วินาที)")]
+    [SerializeField] private float startDelaySeconds = 3.0f; 
+    [SerializeField] private float spawnIntervalSeconds = 2.0f; 
+
+    [Header("Difficulty Progression (ตามจำนวนตัวที่เกิด)")]
+    [SerializeField] private int countFor4Keys = 5;  
+    [SerializeField] private int countFor6Keys = 15; 
+
+    private float timer = 0f;
+    private bool hasStarted = false;
+    private int totalSpawnedCount = 0;
 
     void Update()
     {
-        if (HeartbeatManager.instance == null || lipidPrefab == null) return;
+        if (PlayerController.isGameOver) return;
+        if (lipidPrefab == null) return;
 
-        float currentBeat = HeartbeatManager.instance.heartPositionInBeats;
-
-        float beatsToReach = 4f;
-        if (lipidPrefab.GetComponent<LipidMovement>() != null)
+        if (!hasStarted)
         {
-            beatsToReach = lipidPrefab.GetComponent<LipidMovement>().beatsToReachTarget;
+            timer += Time.deltaTime;
+            if (timer >= startDelaySeconds)
+            {
+                hasStarted = true;
+                timer = spawnIntervalSeconds; 
+            }
+            return;
         }
 
-       
-        if (currentBeat >= nextTargetBeat - beatsToReach)
+        // 2. จับเวลาเกิดตัวถัดไปเรื่อยๆ
+        timer += Time.deltaTime;
+        if (timer >= spawnIntervalSeconds)
         {
+            timer = 0f;
             SpawnLipid();
         }
     }
 
     void SpawnLipid()
     {
-        
-        GameObject newLipid = Instantiate(lipidPrefab, transform.position, Quaternion.identity);
-        newLipid.GetComponent<LipidMovement>().targetBeat = nextTargetBeat;
+        Vector3 spawnPos = new Vector3(customSpawnPosX, customSpawnPosY, 0f);
 
-        spawnedInCurrentWave++;
+        GameObject newLipid = Instantiate(lipidPrefab, spawnPos, Quaternion.identity);
+        LipidMovement lipidMovement = newLipid.GetComponent<LipidMovement>();
 
-        if (spawnedInCurrentWave >= lipidsPerWave)
+        if (lipidMovement != null)
         {
-            nextTargetBeat += restBeats;
-            spawnedInCurrentWave = 0;
-        }
-        else
-        {
-            nextTargetBeat += beatsBetweenSpawns;
+            lipidMovement.spawnPosX = customSpawnPosX;
+            lipidMovement.spawnPosY = customSpawnPosY;
+
+            totalSpawnedCount++;
+
+            if (totalSpawnedCount >= countFor6Keys)
+            {
+                lipidMovement.sequenceLength = 6;
+            }
+            else if (totalSpawnedCount >= countFor4Keys)
+            {
+                lipidMovement.sequenceLength = 4;
+            }
+            else
+            {
+                lipidMovement.sequenceLength = 2;
+            }
+
+            lipidMovement.InitializeSequence();
         }
     }
 }

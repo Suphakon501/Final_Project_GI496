@@ -3,17 +3,19 @@ using UnityEngine.UI;
 
 public class HealthBarUI : MonoBehaviour
 {
+    public static HealthBarUI instance;
+
     [SerializeField] private Image fillImage;
 
-    [Header("HP")]
+    [Header("HP Settings")]
     [SerializeField] private float maxHP = 100f;
-    [SerializeField] private float startingHP = 80f;
+    [SerializeField] private float startingHP = 100f;
 
-    [Header("เลือดลดต่อวินาที")]
-    [SerializeField] private float hpDrainPerSecond = 0f;
+    [Header("เลือดลดอัตโนมัติตามเวลา (ถ้าไม่ต้องการให้ลดเอง ปรับเป็น 0 ได้ครับ)")]
+    [SerializeField] private float hpDrainPerSecond = 0f; // ตั้งเป็น 0 ไปก่อน จะได้ให้เลือดลดเฉพาะตอนชนหรือโดนโจมตีครับ
 
-    [Header("ความเร็วที่ภาพหลอดเลือดตามค่า HP")]
-    [SerializeField] private float visualDrainSpeed = 0.15f;
+    [Header("Visual Speed (ความเร็วภาพหลอดเลือดวิ่งตาม)")]
+    [SerializeField] private float visualDrainSpeed = 20f; // ปรับให้สูงขึ้นมากๆ (เช่น 20 หรือ 50) เลือดจะกระชากลดลงทันทีแบบแทบไม่สโลว์
     [SerializeField] private float visualHealSpeed = 5f;
 
     private float currentHP;
@@ -23,6 +25,11 @@ public class HealthBarUI : MonoBehaviour
     public float MaxHP => maxHP;
     public bool IsEmpty => currentHP <= 0f;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         ResetHealth();
@@ -30,11 +37,21 @@ public class HealthBarUI : MonoBehaviour
 
     private void Update()
     {
-        // ตั้งค่าเป็น 0 ได้หากต้องการให้ HP เปลี่ยนเฉพาะตอน Perfect/Good/Bad/Miss
-        if (hpDrainPerSecond > 0f)
-            currentHP = Mathf.Max(0f, currentHP - hpDrainPerSecond * Time.deltaTime);
+        if (PlayerController.isGameOver) return;
 
-        // ตอนเลือดลดให้ค่อย ๆ ลดแบบ osu! แต่ตอนฮีลให้พุ่งขึ้นมองเห็นชัด
+        // 1. เลือดลดอัตโนมัติตามเวลา (ถ้า hpDrainPerSecond เป็น 0 จะไม่ลดเอง)
+        if (hpDrainPerSecond > 0f)
+        {
+            currentHP = Mathf.Max(0f, currentHP - (hpDrainPerSecond * Time.deltaTime));
+        }
+
+        // 2. เช็คว่าถ้าเลือดหมด ให้สั่งจบเกม
+        if (currentHP <= 0f && !PlayerController.isGameOver)
+        {
+            currentHP = 0f;
+        }
+
+        // 3. ทำให้ภาพหลอดเลือดบนจอวิ่งตามเลือดจริงแบบรวดเร็วทันใจ
         float visualSpeed = displayedHP < currentHP ? visualHealSpeed : visualDrainSpeed;
         displayedHP = Mathf.Lerp(
             displayedHP,
@@ -62,6 +79,13 @@ public class HealthBarUI : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        // หักเลือดจริงทันที
         currentHP = Mathf.Clamp(currentHP - amount, 0f, maxHP);
+
+        // บังคับให้ displayedHP กระชากตามไปทันที ไม่ต้องรอไหลสโลว์ (เลือดจะหายวูบลงทันทีตามคาด)
+        displayedHP = currentHP;
+
+        if (fillImage != null)
+            fillImage.fillAmount = displayedHP / maxHP;
     }
 }

@@ -188,8 +188,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624d905c3610af64c8c31e21393b7d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetBeat: 10
-  beatsToReachTarget: 4
+  stepInterval: 0.984
+  stepDistance: 2.5
   spawnPosX: 10
   hitPosX: -6
   spawnPosY: 0

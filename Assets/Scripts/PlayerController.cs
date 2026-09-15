@@ -14,47 +14,29 @@ public class PlayerController : MonoBehaviour
     public int score = 0;
     public TextMeshProUGUI scoreText;
 
+    [Header("Animation System")]
+    public Animator playerAnimator;
+    [SerializeField] private string idleAnimName = "Player_Idle";
+    [SerializeField] private string prepAnimName = "Player_Prep";
+    [SerializeField] private string throwAnimName = "Player_Throw";
+
     [Header("Cooldown System")]
     public float cooldownTime = 0.08f;
     private float nextAllowedPressTime = 0f;
 
-    [Header("Player Health (HP)")]
-    [SerializeField] private HealthBarUI healthBar;
-    [SerializeField] private float perfectHealthGain = 12f;
-    [SerializeField] private float goodHealthGain = 6f;
-    [SerializeField] private float badHealthGain = 2f;
-    [SerializeField] private float missHealthDamage = 20f;
-
     [Header("UI Feedback Text")]
     public TextMeshProUGUI feedbackText;
 
-    [Header("Animation")]
-    [SerializeField] private Animator animator;
-
-    private static readonly int PreThrow = Animator.StringToHash("PreThrow");
-    private static readonly int ThrowCollect = Animator.StringToHash("ThrowCollect");
-
-    void Awake()
-    { 
-        instance = this;
-      
-        if (animator == null)
-            animator = GetComponent<Animator>();
-
-
-    }
+    void Awake() { instance = this; }
 
     void Start()
     {
-        if (healthBar == null)
-            healthBar = Object.FindFirstObjectByType<HealthBarUI>();
-
-        if (healthBar != null)
-            healthBar.ResetHealth();
         score = 0;
         isGameOver = false;
         Time.timeScale = 1f;
         UpdateScoreUI();
+
+        PlayAnimationDirectly(idleAnimName);
 
         if (feedbackText != null) feedbackText.text = "";
     }
@@ -68,8 +50,6 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.A)) TryHit(KeyCode.A);
         else if (Input.GetKeyDown(KeyCode.S)) TryHit(KeyCode.S);
         else if (Input.GetKeyDown(KeyCode.D)) TryHit(KeyCode.D);
-
-        if (Input.GetKeyDown(KeyCode.Space)) TryHit(KeyCode.Space);
     }
 
     void TryHit(KeyCode pressedKey)
@@ -93,59 +73,70 @@ public class PlayerController : MonoBehaviour
 
         if (targetLipid == null) return;
 
-        // ‡ø ∑’Ë 1: æ‘¡æÏ™ÿ¥ªÿË¡ W, A, S, D
-        if (!targetLipid.sequenceCompleted)
+        KeyCode expectedKey = targetLipid.keySequence[targetLipid.currentKeyIndex];
+
+        if (pressedKey == expectedKey)
         {
-            if (pressedKey == KeyCode.Space) return;
+            targetLipid.CorrectKeyInput();
 
-            KeyCode expectedKey = targetLipid.keySequence[targetLipid.currentKeyIndex];
+            int currentIndex = targetLipid.currentKeyIndex;
 
-            if (pressedKey == expectedKey)
+            if (targetLipid.sequenceCompleted)
             {
-                animator?.SetTrigger(PreThrow);
-                targetLipid.CorrectKeyInput();
+                PlayAnimationDirectly(throwAnimName);
+
+                score += 300;
+                ShowFeedback("GREAT! +300");
+                UpdateScoreUI();
+
+                if (GameUIManager.instance != null)
+                {
+                    GameUIManager.instance.HideAllUI();
+                }
+
+                //  Skill Check  
+                if (RingSkillCheck.instance != null)
+                {
+                    RingSkillCheck.instance.StartRingCheck();
+                }
+
+                Destroy(targetLipid.gameObject);
+
+                Invoke("ResetToIdle", 0.4f);
             }
             else
             {
-                targetLipid.ResetSequence();
+                if (currentIndex % 2 == 1)
+                {
+                    PlayAnimationDirectly(prepAnimName);
+                }
+                else
+                {
+                    PlayAnimationDirectly(throwAnimName);
+                }
             }
         }
         else
         {
-           // °¥ Spacebar ‡™Á§‚´π ’°≈“ß®Õ
-            if (pressedKey == KeyCode.Space)
-            {
-                animator?.SetTrigger(ThrowCollect);
-                string hitResult = GameUIManager.instance.CheckHitZone();
+            targetLipid.ResetSequence();
+            PlayAnimationDirectly(idleAnimName);
+            ShowFeedback("MISS!");
+        }
+    }
 
-                if (hitResult == "Perfect")
-                {
-                    score += 300;
-                    ChangeHealth(perfectHealthGain);
-                    ShowFeedback("PERFECT! +300");
-                    UpdateScoreUI();
-                    GameUIManager.instance.HideAllUI(); 
-                    Destroy(targetLipid.gameObject);
-                }
-                else if (hitResult == "Good")
-                {
-                    score += 150;
-                    ChangeHealth(goodHealthGain);
-                    ShowFeedback("GOOD! +150");
-                    UpdateScoreUI();
-                    GameUIManager.instance.HideAllUI();
-                    Destroy(targetLipid.gameObject);
-                }
-                else
-                {
-                    score += 50;
-                    ChangeHealth(badHealthGain);
-                    ShowFeedback("BAD +50");
-                    UpdateScoreUI();
-                    GameUIManager.instance.HideAllUI();
-                    Destroy(targetLipid.gameObject);
-                }
-            }
+    void PlayAnimationDirectly(string animName)
+    {
+        if (playerAnimator != null && !string.IsNullOrEmpty(animName))
+        {
+            playerAnimator.Play(animName, 0, 0f);
+        }
+    }
+
+    void ResetToIdle()
+    {
+        if (!isGameOver)
+        {
+            PlayAnimationDirectly(idleAnimName);
         }
     }
 
@@ -153,7 +144,7 @@ public class PlayerController : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = "" + score;
+            scoreText.text = "Score: " + score;
         }
     }
 
@@ -179,23 +170,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isGameOver) return;
 
-        ChangeHealth(-missHealthDamage);
         ShowFeedback("DAMAGE!");
+        PlayAnimationDirectly(idleAnimName);
 
-        if (healthBar != null && healthBar.IsEmpty)
+        if (HealthBarUI.instance != null && HealthBarUI.instance.IsEmpty)
         {
             Die();
         }
-    }
-
-    private void ChangeHealth(float amount)
-    {
-        if (healthBar == null) return;
-
-        if (amount >= 0f)
-            healthBar.AddHealth(amount);
-        else
-            healthBar.TakeDamage(-amount);
     }
 
     void Die()
@@ -204,7 +185,8 @@ public class PlayerController : MonoBehaviour
         ShowFeedback("GAME OVER!");
         Debug.Log("GAME OVER! §–·ππ ÿ∑∏‘: " + score);
 
-       
+        PlayAnimationDirectly(idleAnimName);
+
         LipidSpawner[] spawners = Object.FindObjectsByType<LipidSpawner>(FindObjectsSortMode.None);
         foreach (var spawner in spawners)
         {
