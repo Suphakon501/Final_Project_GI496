@@ -49,6 +49,11 @@ public class HealthBarUI : MonoBehaviour
         if (currentHP <= 0f && !PlayerController.isGameOver)
         {
             currentHP = 0f;
+
+            if (PlayerController.instance != null)
+            {
+                PlayerController.instance.CheckGameOver();
+            }
         }
 
         // 3. ทำให้ภาพหลอดเลือดบนจอวิ่งตามเลือดจริงแบบรวดเร็วทันใจ

@@ -9,11 +9,11 @@ public class LipidSpawner : MonoBehaviour
     [SerializeField] private float customSpawnPosX = 10f;
     [SerializeField] private float customSpawnPosY = 0f;
 
-    [Header("Spawn Timing (�Թҷ�)")]
+    [Header("Spawn Timing (�Թҷ�)")]
     [SerializeField] private float startDelaySeconds = 3.0f; 
     [SerializeField] private float spawnIntervalSeconds = 2.0f; 
 
-    [Header("Difficulty Progression (����ӹǹ��Ƿ���Դ)")]
+    [Header("Difficulty Progression (����ӹǹ��Ƿ���Դ)")]
     [SerializeField] private int countFor4Keys = 5;  
     [SerializeField] private int countFor6Keys = 15; 
 
@@ -32,12 +32,16 @@ public class LipidSpawner : MonoBehaviour
             if (timer >= startDelaySeconds)
             {
                 hasStarted = true;
-                timer = spawnIntervalSeconds; 
+                timer = spawnIntervalSeconds;
             }
             return;
         }
 
-        // 2. �Ѻ�����Դ��ǶѴ��������
+        // รอให้ตัวเดิมตาย/โดนเก็บก่อน ค่อยปล่อยตัวใหม่ ไม่ให้ซ้อนกันจนไล่ไม่ทัน
+        bool lipidAlive = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None).Length > 0;
+        if (lipidAlive) return;
+
+        // 2. �Ѻ�����Դ��ǶѴ��������
         timer += Time.deltaTime;
         if (timer >= spawnIntervalSeconds)
         {

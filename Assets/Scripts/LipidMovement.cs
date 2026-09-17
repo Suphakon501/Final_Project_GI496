@@ -3,13 +3,20 @@ using UnityEngine;
 public class LipidMovement : MonoBehaviour
 {
     [Header("Step Movement Settings")]
-    [SerializeField] private float stepInterval = 1.0f;
+    [SerializeField] private float stepInterval = 1.0f; // ใช้เฉพาะตอนไม่มี BeatManager ในซีน
     [SerializeField] private float stepDistance = 2.0f;
+    [SerializeField] private int beatsPerStep = 1; // ถ้ามี BeatManager จะก้าวทุกๆ กี่บีทแทน stepInterval
+
+    private float EffectiveStepInterval =>
+        BeatManager.instance != null ? BeatManager.instance.BeatDuration * beatsPerStep : stepInterval;
 
     [Header("Position & Height")]
     public float spawnPosX = 10f;
     public float hitPosX = -6f;
     public float spawnPosY = 0f;
+
+    [Header("Damage")]
+    [SerializeField] private float damageOnReachPlayer = 20f; // เลือดที่เสียถ้าปล่อยให้เดินถึงผู้เล่น (เดิม hardcode 34)
 
     [Header("Audition Sequence System")]
     public KeyCode[] keySequence;
@@ -48,7 +55,7 @@ public class LipidMovement : MonoBehaviour
         if (PlayerController.isGameOver) return;
 
         stepTimer += Time.deltaTime;
-        if (stepTimer >= stepInterval)
+        if (stepTimer >= EffectiveStepInterval)
         {
             stepTimer = 0f;
 
@@ -105,7 +112,8 @@ public class LipidMovement : MonoBehaviour
         {
             if (!sequenceCompleted)
             {
-                GameUIManager.instance.ShowSequence(GetFormattedSequenceString());
+                // currentKeyIndex * 2 เพราะแต่ละคีย์กินพื้นที่ 2 ตัวอักษรใน string (ตัวคีย์ + ช่องว่าง)
+                GameUIManager.instance.ShowSequence(GetFormattedSequenceString(), currentKeyIndex * 2);
             }
             else
             {
@@ -121,7 +129,8 @@ public class LipidMovement : MonoBehaviour
         {
             if (i == currentKeyIndex)
             {
-                displayStr += "[" + keySequence[i] + "] ";
+                // ตัวที่ต้องกดตอนนี้ เปลี่ยนสีให้เห็นชัด ส่วนขนาด/การเด้งตามจังหวะ ให้ TMPCharacterBeatPulse จัดการแยก (เด้งเฉพาะตัวนี้ ไม่กระทบตัวอื่น)
+                displayStr += "<color=#FFD400>" + keySequence[i] + "</color> ";
             }
             else
             {
@@ -150,7 +159,7 @@ public class LipidMovement : MonoBehaviour
     {
         if (HealthBarUI.instance != null)
         {
-            HealthBarUI.instance.TakeDamage(34f);
+            HealthBarUI.instance.TakeDamage(damageOnReachPlayer);
         }
 
         if (PlayerController.instance != null)
