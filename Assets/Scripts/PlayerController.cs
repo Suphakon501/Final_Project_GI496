@@ -14,18 +14,11 @@ public class PlayerController : MonoBehaviour
     public int score = 0;
     public TextMeshProUGUI scoreText;
 
-    [Header("Combo System (เชื่อมกับ RingSkillCheck)")]
-    public int comboCount = 0;
-    public TextMeshProUGUI comboText; // ถ้าไม่ผูก Text ไว้ใน Inspector จะแค่ไม่โชว์ UI แต่คะแนน/คอมโบยังนับปกติ
-    [SerializeField] private int comboBonusPerStack = 50; // คอมโบยิ่งสูง ยิ่งได้โบนัสคะแนนต่อครั้งมากขึ้น
-
     [Header("Animation System")]
     public Animator playerAnimator;
     [SerializeField] private string idleAnimName = "Player_Idle";
     [SerializeField] private string prepAnimName = "Player_Prep";
     [SerializeField] private string throwAnimName = "Player_Throw";
-    [SerializeField] private float throwHoldDuration = 0.4f; // ระยะเวลาที่ค้างท่า Throw ก่อนกลับ Idle
-    [SerializeField] private float minPoseVisibleTime = 0.15f; // แต่ละท่าต้องค้างจออย่างน้อยเท่านี้ก่อนโดนท่าถัดไปทับ
 
     [Header("Cooldown System")]
     public float cooldownTime = 0.08f;
@@ -34,19 +27,32 @@ public class PlayerController : MonoBehaviour
     [Header("UI Feedback Text")]
     public TextMeshProUGUI feedbackText;
 
-    void Awake() { instance = this; }
+    [Header("Audio System (Sound Effects)")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip goodSound;
+    [SerializeField] private AudioClip badMissSound;
+
+    [Header("Perfect Chain Sounds (Max 6 Steps)")]
+    [SerializeField] private AudioClip[] perfectStepSounds = new AudioClip[5];
+    [SerializeField] private AudioClip perfectEndSound;
+
+    private int currentPerfectStreak = 0;
+
+    void Awake()
+    {
+        instance = this;
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
         score = 0;
-        comboCount = 0;
+        currentPerfectStreak = 0;
         isGameOver = false;
         Time.timeScale = 1f;
         UpdateScoreUI();
-        UpdateComboUI();
 
         PlayAnimationDirectly(idleAnimName);
-
         if (feedbackText != null) feedbackText.text = "";
     }
 
@@ -65,172 +71,133 @@ public class PlayerController : MonoBehaviour
     {
         nextAllowedPressTime = Time.time + cooldownTime;
 
-        LipidMovement[] allLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
-        if (allLipids.Length == 0) return;
+        MiniLipid[] allMinis = Object.FindObjectsByType<MiniLipid>(FindObjectsSortMode.None);
+        if (allMinis.Length == 0) return;
 
-        LipidMovement targetLipid = null;
-        float closestX = float.MaxValue;
+        MiniLipid targetMini = null;
+        float lowestX = float.MaxValue;
 
-        foreach (LipidMovement lipid in allLipids)
+        foreach (var mini in allMinis)
         {
-            if (lipid.sequenceCompleted) continue; // ตัวนี้กำลังรอผล skill check อยู่ ยังไม่ใช่เป้าใหม่
-
-            if (lipid.transform.position.x < closestX)
+            if (mini.transform.position.x < lowestX)
             {
-                closestX = lipid.transform.position.x;
-                targetLipid = lipid;
+                lowestX = mini.transform.position.x;
+                targetMini = mini;
             }
         }
 
-        if (targetLipid == null) return;
+        if (targetMini == null) return;
 
-        KeyCode expectedKey = targetLipid.keySequence[targetLipid.currentKeyIndex];
-
-        if (pressedKey == expectedKey)
+        if (pressedKey == targetMini.assignedKey)
         {
-            // กดถูกคีย์อย่างเดียวไม่พอ ถ้ามี BeatManager ต้องกดให้ตรงจังหวะเพลงด้วย ไม่งั้นนับเป็นพลาดเหมือนกดผิดคีย์
-            if (BeatManager.instance != null && BeatManager.instance.GradeCurrentPress() == BeatGrade.Miss)
+            string accuracy = targetMini.EvaluateAccuracy();
+            bool isLastOne = targetMini.IsLastInRow();
+
+            PlayAnimationDirectly(throwAnimName);
+
+            if (accuracy == "PERFECT")
             {
-                targetLipid.ResetSequence();
-                PlayAnimationDirectly(idleAnimName);
-                ShowFeedback("OFF-BEAT!");
-                return;
-            }
-
-            targetLipid.CorrectKeyInput();
-
-            int currentIndex = targetLipid.currentKeyIndex;
-
-            if (targetLipid.sequenceCompleted)
-            {
-                PlayAnimationDirectly(throwAnimName);
-
                 score += 300;
-                ShowFeedback("GREAT! +300");
-                UpdateScoreUI();
-
-                if (GameUIManager.instance != null)
+                if (HealthBarUI.instance != null)
                 {
-                    GameUIManager.instance.HideAllUI();
+                    HealthBarUI.instance.AddHealth(5f); // ได้เลือด +5 เฉพาะ Perfect
                 }
 
-                targetLipid.enabled = false; // หยุดไม่ให้เดินต่อ/ทำดาเมจซ้ำ ระหว่างรอผล skill check
+                currentPerfectStreak++;
+                ShowFeedback("PERFECT! +300 (+5 HP)");
 
-                //  Skill Check — RingSkillCheck จะเป็นคนทำลาย targetLipid เองตอนกดจบ (ไม่ว่า Perfect หรือ Miss)
-                if (RingSkillCheck.instance != null)
-                {
-                    RingSkillCheck.instance.StartRingCheck(targetLipid.gameObject);
-                }
-                else
-                {
-                    Destroy(targetLipid.gameObject);
-                }
+                PlayPerfectSound(isLastOne);
 
-                Invoke("ResetToIdle", throwHoldDuration);
+                // ส่งค่า "PERFECT" ให้ MiniLipid เล่นพาร์ทิเคิล Perfect
+                targetMini.ConsumeMini("PERFECT");
+            }
+            else if (accuracy == "GOOD")
+            {
+                score += 100;
+                currentPerfectStreak = 0; // ตัดเชน Perfect ทันที
+                ShowFeedback("GOOD! +100");
+
+                PlaySound(goodSound);
+
+                // ส่งค่า "GOOD" ให้ MiniLipid เล่นพาร์ทิเคิล Good
+                targetMini.ConsumeMini("GOOD");
             }
             else
             {
-                if (currentIndex % 2 == 1)
-                {
-                    PlayAnimationDirectly(prepAnimName);
-                }
-                else
-                {
-                    PlayAnimationDirectly(throwAnimName);
-                }
+                score += 25;
+                currentPerfectStreak = 0; // ตัดเชน Perfect ทันที
+                ShowFeedback("BAD!");
+
+                PlaySound(badMissSound);
+
+                // ส่งค่า "BAD" ให้ MiniLipid เล่นพาร์ทิเคิล Bad/Miss
+                targetMini.ConsumeMini("BAD");
             }
         }
         else
         {
-            targetLipid.ResetSequence();
+            currentPerfectStreak = 0;
             PlayAnimationDirectly(idleAnimName);
             ShowFeedback("MISS!");
+
+            PlaySound(badMissSound);
+
+            // กดผิดปุ่ม ส่งค่า "MISS" ให้ MiniLipid เล่นพาร์ทิเคิล Bad/Miss
+            targetMini.ConsumeMini("MISS");
         }
+
+        UpdateScoreUI();
+        Invoke("ResetToIdle", 0.3f);
     }
 
-    private float lastAnimStartTime = -999f;
-    private string pendingAnimName;
-
-    // การันตีว่าแต่ละท่าจะค้างบนจอนานอย่างน้อย minPoseVisibleTime
-    // ไม่งั้นถ้ากดรัวเร็วกว่านี้ ท่าก่อนหน้าจะโดนสลับทับจนมองไม่ทันว่าขยับ
-    void PlayAnimationDirectly(string animName)
+    void PlayPerfectSound(bool isLastOfSequence)
     {
-        if (playerAnimator == null || string.IsNullOrEmpty(animName)) return;
+        if (audioSource == null) return;
 
-        float elapsed = Time.time - lastAnimStartTime;
-        if (elapsed >= minPoseVisibleTime)
+        AudioClip clipToPlay = null;
+
+        // ถ้าเป็นตัวสุดท้าย หรือครบ 6 ตัวพอดี เล่นเสียงปิดทันที
+        if (isLastOfSequence || currentPerfectStreak >= 6)
         {
-            CancelInvoke(nameof(PlayPendingAnim));
-            DoPlayAnimation(animName);
+            clipToPlay = perfectEndSound;
+            currentPerfectStreak = 0;
         }
         else
         {
-            pendingAnimName = animName;
-            CancelInvoke(nameof(PlayPendingAnim));
-            Invoke(nameof(PlayPendingAnim), minPoseVisibleTime - elapsed);
+            int soundIndex = Mathf.Clamp(currentPerfectStreak - 1, 0, perfectStepSounds.Length - 1);
+            clipToPlay = perfectStepSounds[soundIndex];
+        }
+
+        if (clipToPlay != null)
+        {
+            audioSource.PlayOneShot(clipToPlay);
         }
     }
 
-    void PlayPendingAnim()
+    void PlaySound(AudioClip clip)
     {
-        DoPlayAnimation(pendingAnimName);
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 
-    void DoPlayAnimation(string animName)
+    void PlayAnimationDirectly(string animName)
     {
-        playerAnimator.Play(animName, 0, 0f);
-        lastAnimStartTime = Time.time;
+        if (playerAnimator != null && !string.IsNullOrEmpty(animName))
+        {
+            playerAnimator.Play(animName, 0, 0f);
+        }
     }
 
     void ResetToIdle()
     {
-        if (!isGameOver)
-        {
-            PlayAnimationDirectly(idleAnimName);
-        }
+        if (!isGameOver) PlayAnimationDirectly(idleAnimName);
     }
 
     void UpdateScoreUI()
     {
-        if (scoreText != null)
-        {
-            scoreText.text = "Score: " + score;
-        }
-    }
-
-    // เรียกจาก RingSkillCheck หลังบีบวงจบทุกครั้ง (Perfect / Good / Miss)
-    public void RegisterSkillCheckResult(SkillCheckGrade grade)
-    {
-        switch (grade)
-        {
-            case SkillCheckGrade.Perfect:
-                comboCount++;
-                int bonus = comboCount * comboBonusPerStack;
-                score += bonus;
-                ShowFeedback($"COMBO x{comboCount}! +{bonus}");
-                break;
-
-            case SkillCheckGrade.Good:
-                // กดใกล้ๆ แต่ไม่ทัน Perfect: ไม่เพิ่ม ไม่หักคอมโบ แค่ได้เลือดคืนบางส่วน (ฮีลจัดการฝั่ง RingSkillCheck)
-                ShowFeedback("GOOD!");
-                break;
-
-            case SkillCheckGrade.Miss:
-                if (comboCount > 0) ShowFeedback("COMBO BREAK!");
-                comboCount = 0;
-                break;
-        }
-
-        UpdateScoreUI();
-        UpdateComboUI();
-    }
-
-    void UpdateComboUI()
-    {
-        if (comboText != null)
-        {
-            comboText.text = comboCount > 0 ? "Combo x" + comboCount : "";
-        }
+        if (scoreText != null) scoreText.text = "Score: " + score;
     }
 
     void ShowFeedback(string message)
@@ -251,20 +218,6 @@ public class PlayerController : MonoBehaviour
         if (feedbackText != null && !isGameOver) feedbackText.text = "";
     }
 
-    public void TakeDamage()
-    {
-        if (isGameOver) return;
-
-        ShowFeedback("DAMAGE!");
-        PlayAnimationDirectly(idleAnimName);
-
-        if (HealthBarUI.instance != null && HealthBarUI.instance.IsEmpty)
-        {
-            Die();
-        }
-    }
-
-    // เรียกจาก HealthBarUI ตอนเลือดหมดจากสาเหตุอื่นที่ไม่ใช่การโดนชน (เช่น เลือดไหลลดเองต่อวินาที)
     public void CheckGameOver()
     {
         if (isGameOver) return;
@@ -279,26 +232,15 @@ public class PlayerController : MonoBehaviour
     {
         isGameOver = true;
         ShowFeedback("GAME OVER!");
-        Debug.Log("GAME OVER! ��ṹ�ط��: " + score);
+        Debug.Log("GAME OVER! คะแนนสุทธิ: " + score);
 
         PlayAnimationDirectly(idleAnimName);
 
-        LipidSpawner[] spawners = Object.FindObjectsByType<LipidSpawner>(FindObjectsSortMode.None);
-        foreach (var spawner in spawners)
-        {
-            spawner.enabled = false;
-        }
+        MiniLipid[] remainingMinis = Object.FindObjectsByType<MiniLipid>(FindObjectsSortMode.None);
+        foreach (var mini in remainingMinis) Destroy(mini.gameObject);
 
         LipidMovement[] remainingLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
-        foreach (var lipid in remainingLipids)
-        {
-            Destroy(lipid.gameObject);
-        }
-
-        if (GameUIManager.instance != null)
-        {
-            GameUIManager.instance.HideAllUI();
-        }
+        foreach (var lipid in remainingLipids) Destroy(lipid.gameObject);
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;

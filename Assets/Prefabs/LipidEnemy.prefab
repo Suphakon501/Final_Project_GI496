@@ -188,12 +188,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624d905c3610af64c8c31e21393b7d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepInterval: 0.984
-  stepDistance: 2.5
+  moveSpeed: 3
   spawnPosX: 10
-  hitPosX: -6
-  spawnPosY: 0
-  keySequence: 
-  sequenceLength: 3
-  currentKeyIndex: 0
-  sequenceCompleted: 0
+  stopPosX: 6
+  stopPosY: 0
+  miniLipidPrefab: {fileID: 8207271258691897193, guid: 418152cc8345bab46aaa5d6688c2e2f3, type: 3}
+  spacingX: 1.5
+  sequenceLength: 2
