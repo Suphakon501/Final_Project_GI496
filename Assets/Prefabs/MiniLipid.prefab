@@ -344,7 +344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letterText: {fileID: 984390691535403762}
   assignedKey: 0
-  moveSpeed: 6.5
+  moveSpeed: 9
   hitLineX: -3.5
   goodParticlePrefab: {fileID: 391463048371747209, guid: cbee7d3a7c0c7bf4e9e546932f8ce9fd, type: 3}
   perfectParticlePrefab: {fileID: 391463048371747209, guid: 09f670a2135db2f439171abf32cbe0e8, type: 3}

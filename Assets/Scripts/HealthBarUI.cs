@@ -13,6 +13,12 @@ public class HealthBarUI : MonoBehaviour
 
     [Header("เลือดลดอัตโนมัติตามเวลา (ถ้าไม่ต้องการให้ลดเอง ปรับเป็น 0 ได้ครับ)")]
     [SerializeField] private float hpDrainPerSecond = 0f; // ตั้งเป็น 0 ไปก่อน จะได้ให้เลือดลดเฉพาะตอนชนหรือโดนโจมตีครับ
+    [SerializeField] private bool drainOnlyDuringWaves = true; // ลดเฉพาะตอนไขมันกำลังปล่อยโน้ต ช่วงรอตัวใหม่เดินเข้ามาไม่ลด
+
+    private bool waveActive = false;
+
+    [Header("ทดสอบ (อย่าลืมปิดก่อนส่งงาน)")]
+    [SerializeField] private bool invincible = false; // เปิด = เลือดไม่ลด ไม่ตาย เอาไว้ลองเกม/ตั้ง offset เพลง
 
     [Header("Visual Speed (ความเร็วภาพหลอดเลือดวิ่งตาม)")]
     [SerializeField] private float visualDrainSpeed = 20f; // ปรับให้สูงขึ้นมากๆ (เช่น 20 หรือ 50) เลือดจะกระชากลดลงทันทีแบบแทบไม่สโลว์
@@ -40,7 +46,7 @@ public class HealthBarUI : MonoBehaviour
         if (PlayerController.isGameOver) return;
 
         // 1. เลือดลดอัตโนมัติตามเวลา (ถ้า hpDrainPerSecond เป็น 0 จะไม่ลดเอง)
-        if (hpDrainPerSecond > 0f)
+        if (!invincible && hpDrainPerSecond > 0f && (!drainOnlyDuringWaves || waveActive))
         {
             currentHP = Mathf.Max(0f, currentHP - (hpDrainPerSecond * Time.deltaTime));
         }
@@ -77,6 +83,12 @@ public class HealthBarUI : MonoBehaviour
             fillImage.fillAmount = displayedHP / maxHP;
     }
 
+    // PlayerController เรียกตอนไขมันเริ่มปล่อยโน้ต (true) และตอนโน้ตหมด (false)
+    public void SetWaveActive(bool active)
+    {
+        waveActive = active;
+    }
+
     public void AddHealth(float amount)
     {
         currentHP = Mathf.Clamp(currentHP + amount, 0f, maxHP);
@@ -84,6 +96,8 @@ public class HealthBarUI : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (invincible) return;
+
         // หักเลือดจริงทันที
         currentHP = Mathf.Clamp(currentHP - amount, 0f, maxHP);
 

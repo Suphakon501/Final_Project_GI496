@@ -5,6 +5,7 @@ public enum BeatGrade { Perfect, Good, Miss }
 // ตัวจับจังหวะเพลงกลาง ใช้ทดสอบระบบ rhythm ได้ทันทีแม้ยังไม่มีไฟล์เพลงจริง
 // ถ้า musicSource ว่าง จะนับจังหวะเองจาก Time.time ตาม bpm ที่ตั้งไว้
 // พอมีเพลงจริงแล้ว แค่ลาก AudioSource (ที่ใส่ AudioClip ไว้) มาใส่ musicSource ระบบจะ sync กับเพลงอัตโนมัติ
+[DefaultExecutionOrder(-100)] // อัปเดตเวลาเพลงก่อนสคริปต์อื่น โน้ตจะได้อ่านเวลาเฟรมเดียวกัน
 public class BeatManager : MonoBehaviour
 {
     public static BeatManager instance;
@@ -14,6 +15,19 @@ public class BeatManager : MonoBehaviour
 
     [Header("Music (ปล่อยว่างไว้ก่อนได้ถ้ายังไม่มีไฟล์เพลงจริง)")]
     public AudioSource musicSource;
+    [Tooltip("เพลงเริ่มกี่วินาทีถึงจะเจอบีทแรก (ถ้าตัวอักษรเต้นก่อน/หลังเพลง ปรับตรงนี้ ทีละ 0.01-0.05)")]
+    public float songOffsetSeconds = 0f;
+
+    private float lastMusicTime;
+    private int musicLoopCount;
+    private float smoothRawTime;
+    private bool smoothClockStarted;
+
+    [Header("หา Offset: กด Enter ตามกลองหลายๆ ที แล้วดูค่าแนะนำใน Console / กด [ ] ขยับทีละ 0.01")]
+    [SerializeField] private KeyCode offsetDownKey = KeyCode.LeftBracket;
+    [SerializeField] private KeyCode offsetUpKey = KeyCode.RightBracket;
+    [SerializeField] private int calibrationTaps = 8;
+    private readonly System.Collections.Generic.List<float> tapErrors = new System.Collections.Generic.List<float>();
 
     [Header("Live Readout (ดูตอน Play เพื่อเช็คว่าจับจังหวะถูกไหม)")]
     public float songPositionInSeconds;
@@ -62,11 +76,35 @@ public class BeatManager : MonoBehaviour
     {
         if (musicSource != null && musicSource.clip != null)
         {
-            songPositionInSeconds = musicSource.isPlaying ? musicSource.time : 0f;
+            // เวลาเพลงนับต่อเนื่องแม้เพลงวนลูป (ไม่งั้นพอเพลงวนกลับ 0 การรอบีทของโน้ตจะค้าง)
+            // timeSamples แม่นกว่า .time แต่ Unity อัปเดตเป็นก้อนๆ (~20-40ms) เลยต้องทำให้ลื่นอีกชั้น
+            float t = musicSource.timeSamples / (float)musicSource.clip.frequency;
+            if (t + 1f < lastMusicTime) musicLoopCount++;
+            lastMusicTime = t;
+
+            if (musicSource.isPlaying)
+            {
+                float measured = t + musicLoopCount * musicSource.clip.length;
+                if (!smoothClockStarted || Mathf.Abs(measured - smoothRawTime) > 0.1f)
+                {
+                    smoothRawTime = measured; // เริ่มใหม่ / คลาดเยอะ (เช่นเฟรมกระตุก) ให้กระโดดไปตรงเลย
+                    smoothClockStarted = true;
+                }
+                else
+                {
+                    smoothRawTime += Time.unscaledDeltaTime;               // เดินลื่นๆ ตามเวลาจริง
+                    smoothRawTime += (measured - smoothRawTime) * 0.05f;   // ดึงเข้าหาเวลาเพลงทีละนิด ไม่ให้หลุด
+                }
+                songPositionInSeconds = smoothRawTime - songOffsetSeconds;
+            }
+            else
+            {
+                songPositionInSeconds = -songOffsetSeconds;
+            }
         }
         else
         {
-            songPositionInSeconds = Time.time - virtualStartTime;
+            songPositionInSeconds = Time.time - virtualStartTime - songOffsetSeconds;
         }
 
         songPositionInBeats = songPositionInSeconds / BeatDuration;
@@ -75,7 +113,25 @@ public class BeatManager : MonoBehaviour
         {
             lastTestOffset = GetBeatOffset();
             lastTestGrade = GradeOffset(lastTestOffset);
-            Debug.Log($"[BeatManager Test] {lastTestGrade} (offset={lastTestOffset:F3} beat)");
+
+            // + = กดหลังบีทของเกม (บีทเกมมาก่อนเพลง), - = กดก่อน
+            float errorSeconds = (songPositionInBeats - Mathf.Round(songPositionInBeats)) * BeatDuration;
+            tapErrors.Add(errorSeconds);
+            if (tapErrors.Count > calibrationTaps) tapErrors.RemoveAt(0);
+
+            float avg = 0f;
+            foreach (var e in tapErrors) avg += e;
+            avg /= tapErrors.Count;
+
+            Debug.Log($"[BeatManager] {lastTestGrade}  กดคลาด {errorSeconds * 1000f:+0;-0} ms | เฉลี่ย {tapErrors.Count} ครั้ง {avg * 1000f:+0;-0} ms " +
+                      $"→ แนะนำ Song Offset Seconds = {songOffsetSeconds + avg:F3} (ตอนนี้ {songOffsetSeconds:F3})");
+        }
+
+        if (Input.GetKeyDown(offsetDownKey) || Input.GetKeyDown(offsetUpKey))
+        {
+            songOffsetSeconds += Input.GetKeyDown(offsetUpKey) ? 0.01f : -0.01f;
+            tapErrors.Clear(); // เปลี่ยน offset แล้ว ผลกดเก่าใช้ไม่ได้
+            Debug.Log($"[BeatManager] Song Offset Seconds = {songOffsetSeconds:F3}  (จดค่านี้ไว้ ค่าที่แก้ตอน Play จะหายตอนหยุด)");
         }
     }
 
