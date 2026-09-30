@@ -318,7 +318,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.6747296, b: 0, a: 1}
   m_FlipX: 0
@@ -346,6 +346,9 @@ MonoBehaviour:
   assignedKey: 0
   moveSpeed: 9
   hitLineX: -3.5
+  perfectWindow: 0.09
+  goodWindow: 0.2
+  missAfter: 0.23
   goodParticlePrefab: {fileID: 391463048371747209, guid: cbee7d3a7c0c7bf4e9e546932f8ce9fd, type: 3}
   perfectParticlePrefab: {fileID: 391463048371747209, guid: 09f670a2135db2f439171abf32cbe0e8, type: 3}
   badMissParticlePrefab: {fileID: 391463048371747209, guid: ba6db130da4e91346a038af7f5d15300, type: 3}
