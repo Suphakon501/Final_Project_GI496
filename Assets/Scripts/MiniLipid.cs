@@ -128,12 +128,15 @@ public class MiniLipid : MonoBehaviour
             Destroy(effect, 0.6f);
         }
 
-        CheckAndNotifyParent();
+        if (parentLipid != null) parentLipid.OnMiniFinished(accuracyResult);
         Destroy(gameObject);
     }
 
+    // เป็นโน้ตตัวสุดท้ายของไขมันตัวนี้ไหม (ใช้เลือกเสียงปิดเชน Perfect)
     public bool IsLastInRow()
     {
+        if (parentLipid != null) return parentLipid.IsLastPending;
+
         MiniLipid[] remainingMinis = Object.FindObjectsByType<MiniLipid>(FindObjectsSortMode.None);
         int activeCount = 0;
 
@@ -145,13 +148,5 @@ public class MiniLipid : MonoBehaviour
             }
         }
         return (activeCount == 0);
-    }
-
-    void CheckAndNotifyParent()
-    {
-        if (IsLastInRow() && parentLipid != null)
-        {
-            parentLipid.OnAllMinisCleared();
-        }
     }
 }

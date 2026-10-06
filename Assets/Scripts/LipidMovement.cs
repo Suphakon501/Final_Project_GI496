@@ -25,9 +25,25 @@ public class LipidMovement : MonoBehaviour
 
     private bool hasStopped = false;
 
+    // ไขมันแต่ละตัวนับโน้ตของตัวเอง (ไม่นับทั้งจอ) เพราะโหมดชาร์ตอาจมีไขมัน 2 ตัวบนจอพร้อมกัน
+    private int totalNotes = 0;
+    private int spawnedNotes = 0;
+    private int finishedNotes = 0;
+    private bool hadMiss = false;
+    private bool waveEnded = false;
+
+    // โหมดชาร์ต: ChartPlayer เป็นคนปล่อยโน้ต ไขมันแค่เดินเข้ามายืน
+    private bool chartControlled = false;
+    private bool snappedToStop = false;
+
+    public float MoveSpeed => moveSpeed;
+    public float WalkInDuration => Mathf.Abs(spawnPosX - stopPosX) / Mathf.Max(0.01f, moveSpeed);
+    public bool AllNotesSpawned => totalNotes > 0 && spawnedNotes >= totalNotes;
+    public bool IsLastPending => AllNotesSpawned && totalNotes - finishedNotes == 1;
+
     void Start()
     {
-        transform.position = new Vector3(spawnPosX, stopPosY, 0f);
+        if (!snappedToStop) transform.position = new Vector3(spawnPosX, stopPosY, 0f);
         hasStopped = false;
     }
 
@@ -50,10 +66,33 @@ public class LipidMovement : MonoBehaviour
             transform.position = new Vector3(stopPosX, stopPosY, 0f);
             hasStopped = true;
 
+            HideFinishedLipids();
             if (PlayerController.instance != null) PlayerController.instance.OnWaveStart();
-            StartCoroutine(ReleaseMiniLipidsRoutine());
+            if (!chartControlled) StartCoroutine(ReleaseMiniLipidsRoutine());
         }
     }
+
+    // ---------- โหมดชาร์ต (ChartPlayer เรียก) ----------
+
+    public void BeginChartWave(int noteCount)
+    {
+        chartControlled = true;
+        totalNotes = noteCount;
+    }
+
+    // มาช้าเกินกว่าจะเดินเข้าทัน (เช่นโน้ตชุดแรกต้นเพลง) ให้โผล่ที่จุดหยุดเลย
+    public void SnapToStop()
+    {
+        snappedToStop = true;
+        transform.position = new Vector3(stopPosX, stopPosY, 0f);
+    }
+
+    public void RegisterSpawnedNote()
+    {
+        spawnedNotes++;
+    }
+
+    // ---------- โหมดสุ่ม (แบบเดิม) ----------
 
     IEnumerator ReleaseMiniLipidsRoutine()
     {
@@ -64,6 +103,7 @@ public class LipidMovement : MonoBehaviour
 
         int calculatedLength = baseSequenceLength + Mathf.FloorToInt(globalGameTimer / 20f);
         int finalLength = Mathf.Clamp(calculatedLength, 1, Mathf.Max(1, maxSequenceLength));
+        totalNotes = finalLength;
 
         var beat = BeatManager.instance;
         var miniTemplate = miniLipidPrefab.GetComponent<MiniLipid>();
@@ -113,6 +153,7 @@ public class LipidMovement : MonoBehaviour
         float randomY = allowedYPositions[Random.Range(0, allowedYPositions.Length)];
 
         GameObject miniObj = Instantiate(miniLipidPrefab, new Vector3(x, randomY, 0f), Quaternion.identity);
+        RegisterSpawnedNote();
 
         MiniLipid miniScript = miniObj.GetComponent<MiniLipid>();
         if (miniScript != null)
@@ -122,9 +163,29 @@ public class LipidMovement : MonoBehaviour
         return miniScript;
     }
 
-    public void OnAllMinisCleared()
+    // ---------- จบคลื่น ----------
+
+    // MiniLipid เรียกทุกครั้งที่โน้ตของไขมันตัวนี้หายไป (กดโดน / กดผิด / ปล่อยผ่าน)
+    public void OnMiniFinished(string result)
     {
-        if (PlayerController.instance != null) PlayerController.instance.OnWaveEnd();
-        Destroy(gameObject);
+        finishedNotes++;
+        if (result == "MISS") hadMiss = true;
+
+        if (!waveEnded && AllNotesSpawned && finishedNotes >= totalNotes)
+        {
+            waveEnded = true;
+            if (PlayerController.instance != null) PlayerController.instance.OnWaveEnd(hadMiss);
+            Destroy(gameObject);
+        }
+    }
+
+    // ไขมันตัวใหม่มาถึงแล้ว: ซ่อนตัวเก่าที่ปล่อยโน้ตครบแล้ว (โน้ตของมันยังวิ่งต่อและนับผลได้ปกติ) จะได้ไม่ยืนซ้อนกัน
+    void HideFinishedLipids()
+    {
+        foreach (var other in Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None))
+        {
+            if (other == this || !other.AllNotesSpawned) continue;
+            foreach (var r in other.GetComponentsInChildren<Renderer>()) r.enabled = false;
+        }
     }
 }

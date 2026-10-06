@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float cleanWaveBonus = 3f;    // เคลียร์โน้ตของไขมันตัวนั้นหมดโดยไม่ MISS เลย ได้โบนัส
 
     private int missStreak = 0;
-    private bool waveHadMiss = false;
+    private int activeWaves = 0; // ไขมันที่ยังมีโน้ตค้างอยู่ (โหมดชาร์ตอาจซ้อนกัน 2 ตัว)
 
     [Header("Cooldown System")]
     public float cooldownTime = 0.08f;
@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
         combo = 0;
         maxCombo = 0;
         missStreak = 0;
+        activeWaves = 0;
         isGameOver = false;
         Time.timeScale = 1f;
         UpdateScoreUI();
@@ -218,24 +219,27 @@ public class PlayerController : MonoBehaviour
     {
         if (isGameOver) return;
         CancelInvoke("PlaySheathe");
+        activeWaves++;
+        if (activeWaves > 1) return; // ยังสู้ไขมันตัวก่อนอยู่ ไม่ต้องควักมีดใหม่
+
         throwStep = 0;
-        waveHadMiss = false;
         if (HealthBarUI.instance != null) HealthBarUI.instance.SetWaveActive(true);
         PlayAnimationDirectly(drawAnimName);
     }
 
     // LipidMovement เรียกตอนโน้ตของคลื่นนี้หมดแล้ว
     // หน่วงไว้ก่อน ไม่งั้นท่าขว้างของโน้ตตัวสุดท้ายจะโดนทับทันทีจนมองไม่เห็น
-    public void OnWaveEnd()
+    public void OnWaveEnd(bool hadMiss)
     {
         if (isGameOver) return;
 
-        if (HealthBarUI.instance != null)
-        {
-            HealthBarUI.instance.SetWaveActive(false);
-            if (!waveHadMiss && cleanWaveBonus > 0f) HealthBarUI.instance.AddHealth(cleanWaveBonus);
-        }
+        if (!hadMiss && cleanWaveBonus > 0f && HealthBarUI.instance != null)
+            HealthBarUI.instance.AddHealth(cleanWaveBonus);
 
+        activeWaves = Mathf.Max(0, activeWaves - 1);
+        if (activeWaves > 0) return; // ไขมันตัวถัดไปมาแล้ว ยังไม่เก็บมีด
+
+        if (HealthBarUI.instance != null) HealthBarUI.instance.SetWaveActive(false);
         CancelInvoke("PlaySheathe");
         Invoke("PlaySheathe", sheatheDelay);
     }
@@ -252,7 +256,6 @@ public class PlayerController : MonoBehaviour
     // MISS: ครั้งแรกเบา ถ้าพลาดติดกันจะหนักขึ้นเรื่อยๆ (พลาดครั้งเดียวยังเอาคืนได้ พังติดกันถึงจะเจ็บ)
     void ApplyMissDamage()
     {
-        waveHadMiss = true;
         float damage = Mathf.Min(missDamageBase + missDamageStep * missStreak, missDamageMax);
         missStreak++;
         if (HealthBarUI.instance != null) HealthBarUI.instance.TakeDamage(damage);

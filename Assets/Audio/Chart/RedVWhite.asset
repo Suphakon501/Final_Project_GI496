@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3023949f9a7d947bf8d8f4c357050b, type: 3}
+  m_Name: RedVWhite
+  m_EditorClassIdentifier: 
+  music: {fileID: 8300000, guid: 27fd6c2608122e9469102f79829918e7, type: 3}
+  bpm: 150
+  offsetSeconds: 0
+  waveGapBeats: 3
+  notes:
+  - beat: 7
+    key: 2
+    row: 2
+  - beat: 9
+    key: 0
+    row: 0
+  - beat: 10.5
+    key: 1
+    row: 1
+  - beat: 11.5
+    key: 3
+    row: 1
+  - beat: 12.5
+    key: 0
+    row: 0
+  - beat: 14
+    key: 0
+    row: 0
+  - beat: 16
+    key: 3
+    row: 1
+  - beat: 18
+    key: 2
+    row: 2
+  - beat: 19
+    key: 2
+    row: 2
+  - beat: 20
+    key: 2
+    row: 2
+  - beat: 21.5
+    key: 1
+    row: 1
+  - beat: 23.5
+    key: 0
+    row: 0
+  - beat: 25.5
+    key: 3
+    row: 1
+  - beat: 26.5
+    key: 1
+    row: 1
+  - beat: 27.5
+    key: 2
+    row: 2
+  - beat: 28.5
+    key: 2
+    row: 2
+  - beat: 29.5
+    key: 1
+    row: 1
+  - beat: 31.5
+    key: 1
+    row: 1
+  - beat: 33.5
+    key: 1
+    row: 1
+  - beat: 34.5
+    key: 3
+    row: 1
+  - beat: 35.5
+    key: 0
+    row: 0
+  - beat: 36.5
+    key: 2
+    row: 2
+  - beat: 37.5
+    key: 1
+    row: 1
+  - beat: 39
+    key: 2
+    row: 2
+  - beat: 40
+    key: 0
+    row: 0
+  - beat: 49
+    key: 3
+    row: 1
+  - beat: 51
+    key: 0
+    row: 0
+  - beat: 53
+    key: 1
+    row: 1
+  - beat: 53.5
+    key: 3
+    row: 1
+  - beat: 54.5
+    key: 2
+    row: 2
+  - beat: 55.5
+    key: 0
+    row: 0
+  - beat: 56.5
+    key: 1
+    row: 1
+  - beat: 58
+    key: 3
+    row: 1
+  - beat: 60
+    key: 2
+    row: 2
+  - beat: 61
+    key: 0
+    row: 0
+  - beat: 62
+    key: 1
+    row: 1
+  - beat: 63
+    key: 3
+    row: 1
+  - beat: 64
+    key: 2
+    row: 2
+  - beat: 66
+    key: 0
+    row: 0
+  - beat: 68
+    key: 1
+    row: 1
+  - beat: 69
+    key: 3
+    row: 1
+  - beat: 70
+    key: 2
+    row: 2
+  - beat: 71
+    key: 0
+    row: 0
+  - beat: 72
+    key: 1
+    row: 1
+  - beat: 73
+    key: 3
+    row: 1
