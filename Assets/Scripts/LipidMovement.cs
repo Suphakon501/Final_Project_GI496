@@ -1,8 +1,18 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LipidMovement : MonoBehaviour
 {
+    private static readonly List<LipidMovement> active = new List<LipidMovement>();
+    public static IReadOnlyList<LipidMovement> Active => active;
+
+    private static readonly KeyCode[] RandomKeys = { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+    private static readonly float[] RandomRowsY = { -1.5f, 0f, 1.5f };
+
+    private static float globalGameTimer = 0f;
+    public static void ResetDifficultyTimer() => globalGameTimer = 0f;
+
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 3.0f;
     public float spawnPosX = 10f;
@@ -11,38 +21,35 @@ public class LipidMovement : MonoBehaviour
 
     [Header("Mini Lipid Settings")]
     public GameObject miniLipidPrefab;
-    [SerializeField] private float spawnInterval = 0.4f; // ระยะเวลาในการหน่วงเวลาก่อนปล่อยตัวถัดไป (วินาที) - ใช้ตอนปิด Sync To Beat
+    [SerializeField] private float spawnInterval = 0.4f;
 
-    [Header("Beat Sync (โน้ตวิ่งถึงเส้นตรงบีทเพลงพอดี)")]
+    [Header("Beat Sync")]
     [SerializeField] private bool syncToBeat = true;
-    [SerializeField] private float beatsBetweenNotes = 1f; // 1 = ทุกบีท, 0.5 = ครึ่งบีท (โหด), 2 = ทุก 2 บีท
-    [SerializeField] private int waveStartsOnBeatMultiple = 1; // 1 = โน้ตแรกลงบีทไหนก็ได้, 4 = ลงต้นห้องเพลงเสมอ (ฟังเป็นเพลงขึ้น แต่รอนานขึ้นนิด)
+    [SerializeField] private float beatsBetweenNotes = 1f;
+    [SerializeField] private int waveStartsOnBeatMultiple = 1;
 
-    [Header("Progressive Difficulty (Difficulty Scaling)")]
-    private static float globalGameTimer = 0f;
-    [SerializeField] private int baseSequenceLength = 2;  // จำนวนโน้ตต่อไขมัน 1 ตัวตอนเริ่มเกม (เพิ่มขึ้น 1 ทุก 20 วิ)
-    [SerializeField] private int maxSequenceLength = 6;   // จำนวนโน้ตสูงสุดต่อไขมัน 1 ตัว
+    [Header("Progressive Difficulty")]
+    [SerializeField] private int baseSequenceLength = 2;
+    [SerializeField] private int maxSequenceLength = 6;
+    private const float SecondsPerExtraNote = 20f;
 
     private bool hasStopped = false;
+    private bool chartControlled = false;
+    private bool snappedToStop = false;
 
-    // ไขมันแต่ละตัวนับโน้ตของตัวเอง (ไม่นับทั้งจอ) เพราะโหมดชาร์ตอาจมีไขมัน 2 ตัวบนจอพร้อมกัน
     private int totalNotes = 0;
     private int spawnedNotes = 0;
     private int finishedNotes = 0;
     private bool hadMiss = false;
     private bool waveEnded = false;
 
-    // โหมดชาร์ต: ChartPlayer เป็นคนปล่อยโน้ต ไขมันแค่เดินเข้ามายืน
-    private bool chartControlled = false;
-    private bool snappedToStop = false;
-
-    // ตัวจับเวลาความยากเป็น static เลยค้างข้ามรอบ: เริ่มด่าน / รีสตาร์ทต้องรีเซ็ต
-    public static void ResetDifficultyTimer() => globalGameTimer = 0f;
-
     public float MoveSpeed => moveSpeed;
     public float WalkInDuration => Mathf.Abs(spawnPosX - stopPosX) / Mathf.Max(0.01f, moveSpeed);
     public bool AllNotesSpawned => totalNotes > 0 && spawnedNotes >= totalNotes;
     public bool IsLastPending => AllNotesSpawned && totalNotes - finishedNotes == 1;
+
+    void OnEnable() => active.Add(this);
+    void OnDisable() => active.Remove(this);
 
     void Start()
     {
@@ -55,27 +62,21 @@ public class LipidMovement : MonoBehaviour
         if (PlayerController.isGameOver) return;
 
         globalGameTimer += Time.deltaTime;
-
         if (hasStopped) return;
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            new Vector3(stopPosX, stopPosY, 0f),
-            moveSpeed * Time.deltaTime
-        );
+        Vector3 stopPos = new Vector3(stopPosX, stopPosY, 0f);
+        transform.position = Vector3.MoveTowards(transform.position, stopPos, moveSpeed * Time.deltaTime);
 
         if (Mathf.Abs(transform.position.x - stopPosX) < 0.05f)
         {
-            transform.position = new Vector3(stopPosX, stopPosY, 0f);
+            transform.position = stopPos;
             hasStopped = true;
 
             HideFinishedLipids();
             if (PlayerController.instance != null) PlayerController.instance.OnWaveStart();
-            if (!chartControlled) StartCoroutine(ReleaseMiniLipidsRoutine());
+            if (!chartControlled) StartCoroutine(ReleaseRandomNotes());
         }
     }
-
-    // ---------- โหมดชาร์ต (ChartPlayer เรียก) ----------
 
     public void BeginChartWave(int noteCount)
     {
@@ -83,7 +84,6 @@ public class LipidMovement : MonoBehaviour
         totalNotes = noteCount;
     }
 
-    // มาช้าเกินกว่าจะเดินเข้าทัน (เช่นโน้ตชุดแรกต้นเพลง) ให้โผล่ที่จุดหยุดเลย
     public void SnapToStop()
     {
         snappedToStop = true;
@@ -95,84 +95,63 @@ public class LipidMovement : MonoBehaviour
         spawnedNotes++;
     }
 
-    // ---------- โหมดสุ่ม (แบบเดิม) ----------
-
-    IEnumerator ReleaseMiniLipidsRoutine()
+    IEnumerator ReleaseRandomNotes()
     {
-        if (miniLipidPrefab == null)
-        {
-            yield break;
-        }
+        if (miniLipidPrefab == null) yield break;
 
-        int calculatedLength = baseSequenceLength + Mathf.FloorToInt(globalGameTimer / 20f);
-        int finalLength = Mathf.Clamp(calculatedLength, 1, Mathf.Max(1, maxSequenceLength));
-        totalNotes = finalLength;
+        int length = baseSequenceLength + Mathf.FloorToInt(globalGameTimer / SecondsPerExtraNote);
+        totalNotes = Mathf.Clamp(length, 1, Mathf.Max(1, maxSequenceLength));
 
         var beat = BeatManager.instance;
-        var miniTemplate = miniLipidPrefab.GetComponent<MiniLipid>();
+        var template = miniLipidPrefab.GetComponent<MiniLipid>();
 
-        if (syncToBeat && beat != null && miniTemplate != null && miniTemplate.MoveSpeed > 0f)
+        if (syncToBeat && beat != null && template != null && template.MoveSpeed > 0f)
         {
-            // วางตารางให้โน้ตแต่ละตัว "ถึงเส้น" ตรงบีท แล้วถอยเวลากลับมาว่าต้องปล่อยตอนไหน
-            float speed = miniTemplate.MoveSpeed;
-            float travelTime = (stopPosX - miniTemplate.hitLineX) / speed;
+            float travelTime = (stopPosX - template.hitLineX) / template.MoveSpeed;
             float step = beat.BeatDuration * Mathf.Max(0.125f, beatsBetweenNotes);
-
-            float earliestArrival = beat.songPositionInSeconds + travelTime;
             float startGrid = beat.BeatDuration * Mathf.Max(1, waveStartsOnBeatMultiple);
-            float firstArrival = Mathf.Ceil(earliestArrival / startGrid) * startGrid; // บีท (หรือต้นห้อง) แรกที่ยังทันไปถึง
+            float firstArrival = Mathf.Ceil((beat.songPositionInSeconds + travelTime) / startGrid) * startGrid;
 
-            for (int i = 0; i < finalLength; i++)
+            for (int i = 0; i < totalNotes; i++)
             {
                 float arriveAt = firstArrival + i * step;
-                float spawnAt = arriveAt - travelTime;
-                while (beat.songPositionInSeconds < spawnAt)
+                while (beat.songPositionInSeconds < arriveAt - travelTime)
                 {
                     if (PlayerController.isGameOver) yield break;
                     yield return null;
                 }
 
-                // โน้ตคำนวณตำแหน่งจากเวลาเพลงเองทุกเฟรม เลยถึงเส้นตรงบีทเป๊ะไม่ว่าเฟรมจะกระตุกแค่ไหน
-                var mini = SpawnMini(i, finalLength, stopPosX);
+                var mini = SpawnRandomNote();
                 if (mini != null) mini.SetTargetSongTime(arriveAt);
             }
-            yield break;
         }
-
-        // ไม่มี BeatManager หรือปิด Sync To Beat: ปล่อยตามเวลาแบบเดิม
-        for (int i = 0; i < finalLength; i++)
+        else
         {
-            SpawnMini(i, finalLength, stopPosX);
-            yield return new WaitForSeconds(spawnInterval);
+            for (int i = 0; i < totalNotes; i++)
+            {
+                SpawnRandomNote();
+                yield return new WaitForSeconds(spawnInterval);
+            }
         }
     }
 
-    MiniLipid SpawnMini(int index, int total, float x)
+    MiniLipid SpawnRandomNote()
     {
-        KeyCode[] possibleKeys = { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
-        float[] allowedYPositions = { -1.5f, 0f, 1.5f };
+        KeyCode key = RandomKeys[Random.Range(0, RandomKeys.Length)];
+        float y = RandomRowsY[Random.Range(0, RandomRowsY.Length)];
 
-        KeyCode assignedKey = possibleKeys[Random.Range(0, possibleKeys.Length)];
-        float randomY = allowedYPositions[Random.Range(0, allowedYPositions.Length)];
-
-        GameObject miniObj = Instantiate(miniLipidPrefab, new Vector3(x, randomY, 0f), Quaternion.identity);
+        GameObject obj = Instantiate(miniLipidPrefab, new Vector3(stopPosX, y, 0f), Quaternion.identity);
         RegisterSpawnedNote();
 
-        MiniLipid miniScript = miniObj.GetComponent<MiniLipid>();
-        if (miniScript != null)
-        {
-            miniScript.InitializeMini(assignedKey, this, index, total);
-        }
-        return miniScript;
+        MiniLipid mini = obj.GetComponent<MiniLipid>();
+        if (mini != null) mini.InitializeMini(key, this);
+        return mini;
     }
 
-    // ---------- จบคลื่น ----------
-
-    // MiniLipid เรียกทุกครั้งที่โน้ตของไขมันตัวนี้หายไป (กดโดน / กดผิด / ปล่อยผ่าน)
-    public void OnMiniFinished(string result)
+    public void OnMiniFinished(HitResult result)
     {
         finishedNotes++;
-        if (result == "MISS") hadMiss = true;
+        if (result == HitResult.Miss) hadMiss = true;
 
         if (!waveEnded && AllNotesSpawned && finishedNotes >= totalNotes)
         {
@@ -182,10 +161,9 @@ public class LipidMovement : MonoBehaviour
         }
     }
 
-    // ไขมันตัวใหม่มาถึงแล้ว: ซ่อนตัวเก่าที่ปล่อยโน้ตครบแล้ว (โน้ตของมันยังวิ่งต่อและนับผลได้ปกติ) จะได้ไม่ยืนซ้อนกัน
     void HideFinishedLipids()
     {
-        foreach (var other in Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None))
+        foreach (var other in active)
         {
             if (other == this || !other.AllNotesSpawned) continue;
             foreach (var r in other.GetComponentsInChildren<Renderer>()) r.enabled = false;

@@ -5,9 +5,6 @@ TextureImporter:
   - first:
       213: 8288426215254106694
     second: 8_0
-  - first:
-      213: -2681809406195053031
-    second: 8_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -53,7 +50,7 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 9
-  spritePivot: {x: 0.39597473, y: 0.0055445544}
+  spritePivot: {x: 0.50895333, y: 0.007480315}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -99,19 +96,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -119,10 +103,10 @@ TextureImporter:
       name: 8_0
       rect:
         serializedVersion: 2
-        x: 171
-        y: 13
-        width: 1040
-        height: 2500
+        x: 514
+        y: 18
+        width: 1232
+        height: 2522
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,28 +117,6 @@ TextureImporter:
       bones: []
       spriteID: 642a1439ab7660370800000000000000
       internalID: 8288426215254106694
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 8_1
-      rect:
-        serializedVersion: 2
-        x: 1157
-        y: 605
-        width: 219
-        height: 331
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 91e417ccd8c48cad0800000000000000
-      internalID: -2681809406195053031
       vertices: []
       indices: 
       edges: []
@@ -174,7 +136,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       8_0: 8288426215254106694
-      8_1: -2681809406195053031
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

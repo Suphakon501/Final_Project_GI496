@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameUIManager : MonoBehaviour
 {
@@ -11,6 +11,5 @@ public class GameUIManager : MonoBehaviour
 
     public void HideAllUI()
     {
-        // ฟังก์ชันรองรับการเรียกใช้งานจากสคริปต์อื่น
     }
 }

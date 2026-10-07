@@ -1,66 +1,44 @@
-using UnityEngine;
+๏ปฟusing UnityEngine;
 
-/// <summary>
-/// ข้อมูลพรอบ 1 แถวใน Inspector: ตัวพรอบ + เวลาสปอว์นของตัวนั้น
-/// </summary>
 [System.Serializable]
 public class PropEntry
 {
-    [Tooltip("Prefab หรือ Sprite ที่วางในซีน (ลากจาก Hierarchy ได้)")]
     public GameObject prop;
 
-    [Tooltip("สปอว์นพรอบตัวนี้ทุกกี่วินาที สุ่มระหว่างค่าน้อย-มาก (เช่น 2, 4) ใช้ในโหมดปกติ ไม่ใช้ในโหมด Chain")]
     public Vector2 spawnInterval = new Vector2(1f, 3f);
 }
 
-/// <summary>
-/// สปอว์นพรอบแล้วให้เลื่อนไปทางซ้าย เมื่อพ้นจอจะลบทิ้งตามเวลาที่ตั้งไว้ (ตั้งเวลาสปอว์นแยกรายตัวได้)
-/// มีโหมด Seamless Chain สำหรับพรอบที่ต้องต่อกันเป็นแถว
-/// </summary>
 public class PropSpawner : MonoBehaviour
 {
-    [Header("รายการพรอบ (ตั้งเวลาสปอว์นแยกแต่ละตัวได้)")]
+    [Header("Props")]
     public PropEntry[] props;
 
-    [Header("การลบพรอบ")]
-    [Tooltip("พรอบทุกตัวที่เลยหน้าจอไปจะถูกลบ หน่วงกี่วินาทีหลังพ้นขอบซ้ายของจอ (0 = ลบทันที)")]
+    [Header("Cleanup")]
     public float destroyDelay = 1f;
 
-    [Header("โหมดต่อกันเป็นแถว (ไม่มีช่องว่าง)")]
-    [Tooltip("เปิด = สปอว์นชิ้นใหม่ต่อท้ายชิ้นก่อนหน้าพอดี (ไม่ใช้ตัวจับเวลา)")]
+    [Header("Chain Mode")]
     public bool seamlessChain = false;
-    [Tooltip("ให้ชิ้นซ้อนกันกี่หน่วย กลบรอยต่อ (เช่น 0.02)")]
     [Range(0f, 0.2f)] public float chainOverlap = 0.02f;
-    [Tooltip("ช่องว่างระหว่างชิ้น สุ่มระหว่างค่าน้อย-มาก (0, 0 = ต่อกันติด, เช่น 1, 3 = เว้น 1-3 หน่วย)")]
     public Vector2 chainGap = Vector2.zero;
-    [Tooltip("เริ่มเกมให้มีพรอบเต็มจอเลย ไม่ต้องรอให้เลื่อนเข้ามา")]
     public bool prefillScreen = true;
 
-    [Header("ยึดตำแหน่งตามที่วางไว้")]
-    [Tooltip("ใช้ค่า Y (และ Z) ตามที่วางไว้ในซีน แทนการสุ่ม")]
+    [Header("Placement")]
     public bool keepPlacedY = true;
-    [Tooltip("ใช้ค่า X ตามที่วางไว้ด้วย (ถ้าปิด จะสปอว์นที่ขอบขวาของจอ) ไม่มีผลในโหมด Chain")]
     public bool keepPlacedX = false;
-    [Tooltip("ตัวที่วางในซีนให้เลื่อนตั้งแต่เริ่มเกมเลย ณ ตำแหน่งที่วางไว้")]
     public bool moveSceneObjectsAtStart = true;
 
-    [Header("ความเร็ว")]
-    [Tooltip("ถ้าใส่ไว้ พรอบจะใช้ความเร็วเดียวกับพื้นหลัง (baseSpeed x ตัวคูณด้านล่าง)")]
+    [Header("Speed")]
     public ScrollingBackground background;
     public float speedMultiplier = 1f;
-    [Tooltip("ใช้เมื่อไม่ได้ใส่ background")]
     public float manualSpeed = 2f;
 
-    [Header("การสปอว์น")]
-    [Tooltip("ใช้เมื่อปิด Keep Placed Y")]
+    [Header("Spawning")]
     public float minY = -3f;
     public float maxY = 3f;
-    [Tooltip("ระยะจากขอบขวาของจอ ถึงขอบซ้ายของพรอบ ตอนสปอว์น (ค่ามากขึ้น = โผล่ไกลจากจอขึ้น)")]
     public float spawnOffsetX = 2f;
     public Transform parentForProps;
 
-    [Header("เลเยอร์การแสดงผล")]
-    [Tooltip("ชื่อ Sorting Layer (เว้นว่าง = ใช้ตามที่ตั้งไว้ในตัวพรอบ)")]
+    [Header("Sorting")]
     public string sortingLayerName = "";
     public int sortingOrder = 0;
 
@@ -74,7 +52,7 @@ public class PropSpawner : MonoBehaviour
     {
         cam = Camera.main;
         if (cam == null || !cam.orthographic)
-            Debug.LogWarning("PropSpawner: ต้องมีกล้องที่ tag เป็น MainCamera และตั้ง Projection = Orthographic ไม่งั้นตำแหน่งสปอว์นจะผิด");
+            Debug.LogWarning("PropSpawner: requires an orthographic camera tagged MainCamera");
 
         BuildTemplates();
         timers = new float[props.Length];
@@ -95,7 +73,6 @@ public class PropSpawner : MonoBehaviour
             GameObject src = props[i] != null ? props[i].prop : null;
             if (src == null) continue;
 
-            // ตัวที่วางอยู่ในซีน (ไม่ใช่ Prefab ในโฟลเดอร์ Project)
             if (src.scene.IsValid())
             {
                 GameObject t = Instantiate(src, src.transform.position, src.transform.rotation);
@@ -131,7 +108,6 @@ public class PropSpawner : MonoBehaviour
             return;
         }
 
-        // แต่ละพรอบนับเวลาสปอว์นของตัวเอง
         for (int i = 0; i < templates.Length; i++)
         {
             if (templates[i] == null) continue;
@@ -244,10 +220,6 @@ public class PropSpawner : MonoBehaviour
     }
 }
 
-/// <summary>
-/// เลื่อนพรอบไปทางซ้าย และลบทิ้งเมื่อพ้นขอบซ้ายของจอไปครบเวลาที่ตั้ง
-/// (ถูกเพิ่มให้พรอบอัตโนมัติโดย PropSpawner)
-/// </summary>
 public class PropMover : MonoBehaviour
 {
     [HideInInspector] public float destroyDelay = 1f;

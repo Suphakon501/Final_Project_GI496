@@ -1,26 +1,22 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-// ใช้ใน scene Victory และ GameOver
-// แปะบน GameObject ใดก็ได้ แล้วผูกปุ่ม: OnClick → ResultScreen.Restart / ResultScreen.BackToMenu
-// ช่องแสดงผลปล่อยว่างได้ทั้งหมด ใส่เฉพาะที่หน้านั้นมี
 public class ResultScreen : MonoBehaviour
 {
-    [Header("แสดงผลรอบล่าสุด (ปล่อยว่างได้)")]
-    [SerializeField] private SpriteNumber scoreNumber;   // ตัวเลขแบบ sprite แบบเดียวกับในเกม
+    [Header("Result Display (optional)")]
+    [SerializeField] private SpriteNumber scoreNumber;
     [SerializeField] private SpriteNumber comboNumber;
     [SerializeField] private SpriteNumber bestNumber;
-    [SerializeField] private TMP_Text scoreText;         // หรือใช้ตัวหนังสือธรรมดาก็ได้
+    [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text comboText;
     [SerializeField] private TMP_Text bestText;
-    [SerializeField] private GameObject newBestObject;   // เช่นป้าย NEW BEST! เปิดเฉพาะตอนทำลายสถิติ
+    [SerializeField] private GameObject newBestObject;
 
     [Header("Scene")]
     [SerializeField] private string menuScene = "Menu";
-    [Tooltip("ใช้เมื่อเปิด scene นี้ตรงๆ โดยไม่ได้มาจากด่าน (เช่นกด Play ทดสอบ)")]
     [SerializeField] private string fallbackLevelScene = "Level1";
 
-    [Header("ปุ่มลัด")]
+    [Header("Shortcuts")]
     [SerializeField] private KeyCode restartKey = KeyCode.R;
     [SerializeField] private KeyCode menuKey = KeyCode.Escape;
 
@@ -46,17 +42,16 @@ public class ResultScreen : MonoBehaviour
         else if (Input.GetKeyDown(menuKey)) BackToMenu();
     }
 
-    // เล่นด่านเดิมอีกรอบ
     public void Restart()
     {
         string level = LevelManager.HasResult && !string.IsNullOrEmpty(LevelManager.LastResult.levelScene)
             ? LevelManager.LastResult.levelScene
             : fallbackLevelScene;
-        LevelManager.LoadSceneSafe(level);
+        SceneTransition.Load(level);
     }
 
     public void BackToMenu()
     {
-        LevelManager.LoadSceneSafe(menuScene);
+        SceneTransition.Load(menuScene);
     }
 }

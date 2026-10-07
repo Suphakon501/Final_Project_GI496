@@ -1,49 +1,42 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
-// เมนู Tools > Build Player Animations
-// กดครั้งเดียว: ตั้งค่า import รูปตัวละคร (PPU + pivot ที่เท้า) แล้วสร้าง clip + Animator Controller ให้อัตโนมัติ
-// ถ้าคนวาดแก้รูปแล้ว export ใหม่ แค่วางทับไฟล์เดิมแล้วกดเมนูนี้ซ้ำ pivot จะคำนวณใหม่จากรูปเอง
 public static class PlayerAnimationBuilder
 {
     const string SpriteRoot = "Assets/Sprites/Player";
     const string OutputFolder = "Assets/Animations/Player";
     const string ControllerPath = OutputFolder + "/PlayerMain.controller";
 
-    const float BasePPU = 100f;          // PPU ของ Idle / PullWeapon
+    const float BasePPU = 100f;
 
-    // ขยาย/ย่อบางเฟรมที่วาดมาขนาดไม่เท่าเพื่อน (1.2 = ใหญ่ขึ้น 20%) โดยไม่ต้องแก้ไฟล์รูป
-    // key = "โฟลเดอร์/ชื่อไฟล์" ; เท้ายังอยู่ที่เดิมเพราะ pivot อยู่ที่เท้า
     static readonly Dictionary<string, float> FrameScale = new Dictionary<string, float>
     {
-        { "Attack/5", 1.2f }, // ท่าหมุนขว้าง วาดเล็กกว่าท่าอื่นประมาณ 80-83%
+        { "Attack/5", 1.2f },
     };
-    const byte AlphaThreshold = 20;      // pixel ที่ alpha เกินนี้ถือว่าเป็นตัวละคร
-    const float FeetBandPercent = 0.03f; // ใช้ 3% ล่างสุดของตัวละครหาตำแหน่งเท้า
+    const byte AlphaThreshold = 20;
+    const float FeetBandPercent = 0.03f;
 
-    // ความเร็วแต่ละท่า
     const float IdleFps = 8f;
-    // ท่าควักมีด: ช่วงต้นเร็ว ช่วงเลือดกลายเป็นมีดช้าลง แล้วค้างท่าถือมีดให้เห็นชัด
-    // รวมต้องไม่เกิน ~1.4 วิ (โน้ตตัวแรกใช้เวลาประมาณนั้นกว่าจะถึงเส้น)
-    const float DrawFastFrameTime = 0.08f;  // เฟรมช่วงต้น (ยกมือ / เลือดเริ่มไหล)
-    const float DrawSlowFrameTime = 0.12f;  // เฟรมช่วงท้ายก่อนเฟรมสุดท้าย (เลือดก่อตัวเป็นมีด)
-    const int DrawSlowFrameCount = 3;       // จำนวนเฟรมช่วงท้ายที่ใช้ความเร็วช้า
-    const float DrawFinalHoldTime = 0.35f;  // ค้างเฟรมสุดท้าย (ถือมีดเสร็จ) ก่อนเข้าท่าตั้งรับ
-    const float SheatheFps = 20f;
-    const float ThrowPoseTime = 0.35f;   // ค้างท่าขว้างกี่วินาที (โน้ตห่างกัน ~0.4 วิ ถ้ากดต่อเนื่องจะสลับท่าขว้างไปเลย ไม่เด้งกลับท่ารอ)
-    static readonly bool UseReloadPose = false;   // true = แทรกท่าชักมีดใหม่ (Attack 3) หลังขว้าง ดูละเอียดขึ้นแต่เปลี่ยนท่าถี่
-    const float ReloadPoseTime = 0.1f;   // ค้างท่าชักมีดเล่มใหม่กี่วินาที (ใช้เมื่อ UseReloadPose = true)
-    const float HitPoseTime = 0.3f;      // ค้างท่าโดนตี/เสียจังหวะ (Attack 3) ตอน MISS กี่วินาที
+    const float DrawFastFrameTime = 0.08f;
+    const float DrawSlowFrameTime = 0.12f;
+    const int DrawSlowFrameCount = 3;
+    const float DrawFinalHoldTime = 0.35f;
+    static readonly int[] SheatheFrames = { 2, 1, 0 };
+    const float SheatheFrameTime = 0.15f;
+    const float ThrowPoseTime = 0.35f;
+    static readonly bool UseReloadPose = false;
+    const float ReloadPoseTime = 0.1f;
+    const float HitPoseTime = 0.3f;
 
     struct FrameInfo
     {
         public string path;
         public int width, height;
-        public int groundY;      // แถวล่างสุดที่มีตัวละคร (นับจากล่าง)
+        public int groundY;
         public int topY;
         public float feetX;
         public int CharHeight => topY - groundY + 1;
@@ -61,19 +54,16 @@ public static class PlayerAnimationBuilder
             var attack = MeasureFolder("Attack");
             if (idle.Count == 0 || pull.Count == 0 || attack.Count < 5)
             {
-                Debug.LogError("[PlayerAnimationBuilder] ต้องมีรูปใน Idle, PullWeapon และ Attack (อย่างน้อย 5 รูป) ใต้ " + SpriteRoot);
+                Debug.LogError("[PlayerAnimationBuilder] Need sprites in Idle, PullWeapon and Attack (5+) under " + SpriteRoot);
                 return;
             }
 
-            // Attack วาดบน canvas ใหญ่กว่า เทียบความสูงท่ายืน (Attack/1) กับ Idle/1 เพื่อหา PPU ที่ทำให้ตัวละครขนาดเท่ากัน
             float attackPPU = BasePPU * attack[0].CharHeight / idle[0].CharHeight;
 
             EditorUtility.DisplayProgressBar("Player Animations", "Applying import settings...", 0.4f);
 
-            // Idle วาดตรงกันทุกเฟรมอยู่แล้ว ใช้ pivot เดียวกันทั้งชุด ไม่งั้นจะสั่นตามเส้นที่ขยับตอนหายใจ
             var idlePivot = PivotOf(idle[0]);
             foreach (var f in idle) ApplyImport(f.path, BasePPU, idlePivot);
-            // PullWeapon กับ Attack canvas ไม่เท่ากัน / เท้าไม่ตรงกัน ใช้ pivot ของแต่ละเฟรม
             foreach (var f in pull) ApplyImport(f.path, BasePPU / ScaleOf(f), PivotOf(f));
             foreach (var f in attack) ApplyImport(f.path, attackPPU / ScaleOf(f), PivotOf(f));
 
@@ -83,7 +73,6 @@ public static class PlayerAnimationBuilder
             var idleSprites = idle.Select(f => LoadSprite(f.path)).ToList();
             var pullSprites = pull.Select(f => LoadSprite(f.path)).ToList();
             var atk = attack.Select(f => LoadSprite(f.path)).ToList();
-            // Attack: [0]=ยืนถือมีด [1]=ขว้าง [2]=ย่อตัว (ใช้เป็นท่าโดนตีตอน MISS) [3]=ตั้งท่า [4]=หมุนขว้าง
 
             var clipIdle = BuildClip("Player_Idle", Evenly(idleSprites, IdleFps), true);
             var clipDraw = BuildClip("Player_Draw", DrawFrames(pullSprites), false);
@@ -91,27 +80,24 @@ public static class PlayerAnimationBuilder
             var clipThrowA = BuildClip("Player_ThrowA", ThrowFrames(atk[1], atk[2]), false);
             var clipThrowB = BuildClip("Player_ThrowB", ThrowFrames(atk[4], atk[2]), false);
             var clipHit = BuildClip("Player_Hit", new List<(Sprite, float)> { (atk[2], HitPoseTime) }, false);
-            var reversed = new List<Sprite>(pullSprites);
-            reversed.Reverse();
-            var clipSheathe = BuildClip("Player_Sheathe", Evenly(reversed, SheatheFps), false);
+            var sheatheSprites = SheatheFrames.Where(i => i < pullSprites.Count).Select(i => pullSprites[i]).ToList();
+            var clipSheathe = BuildClip("Player_Sheathe", Evenly(sheatheSprites, 1f / SheatheFrameTime), false);
 
             EditorUtility.DisplayProgressBar("Player Animations", "Building Animator Controller...", 0.9f);
             BuildController(clipIdle, clipDraw, clipReady, clipThrowA, clipThrowB, clipHit, clipSheathe);
 
             AssetDatabase.SaveAssets();
 
-            Debug.Log($"[PlayerAnimationBuilder] เสร็จแล้ว → {ControllerPath}\n" +
+            Debug.Log($"[PlayerAnimationBuilder] Done -> {ControllerPath}\n" +
                       $"Attack PPU = {attackPPU:F1} (Idle/PullWeapon = {BasePPU})\n" +
-                      $"ความสูงตัวละครในเกม: Idle {WorldCharHeight(idle[0], idleSprites[0]):F2} / Attack(ยืน) {WorldCharHeight(attack[0], atk[0]):F2} units (ควรใกล้กัน)\n" +
-                      "ขั้นต่อไป: ลาก PlayerMain.controller ใส่ช่อง Controller ของ Animator บนตัว Player");
+                      $"Character height: Idle {WorldCharHeight(idle[0], idleSprites[0]):F2} / Attack(stand) {WorldCharHeight(attack[0], atk[0]):F2} units (should match)\n" +
+                      "Next: assign PlayerMain.controller to the Player's Animator");
         }
         finally
         {
             EditorUtility.ClearProgressBar();
         }
     }
-
-    // ---------- วัดรูป ----------
 
     static List<FrameInfo> MeasureFolder(string folder)
     {
@@ -129,8 +115,8 @@ public static class PlayerAnimationBuilder
     static FrameInfo Measure(string path)
     {
         var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-        tex.LoadImage(File.ReadAllBytes(path)); // อ่านจากไฟล์ตรงๆ ไม่ขึ้นกับ import settings
-        var px = tex.GetPixels32();              // แถว 0 = ล่างสุด
+        tex.LoadImage(File.ReadAllBytes(path));
+        var px = tex.GetPixels32();
         int w = tex.width, h = tex.height;
         Object.DestroyImmediate(tex);
 
@@ -142,7 +128,7 @@ public static class PlayerAnimationBuilder
             for (int x = 0; x < w; x++)
                 if (px[y * w + x].a > AlphaThreshold) { top = y; break; }
 
-        if (ground < 0) // รูปว่าง
+        if (ground < 0)
             return new FrameInfo { path = path, width = w, height = h, groundY = 0, topY = h - 1, feetX = w * 0.5f };
 
         int band = Mathf.Max(1, Mathf.RoundToInt((top - ground) * FeetBandPercent));
@@ -167,11 +153,8 @@ public static class PlayerAnimationBuilder
 
     static Vector2 PivotOf(FrameInfo f) => new Vector2(f.feetX / f.width, (float)f.groundY / f.height);
 
-    // วัดจากขนาด sprite จริงหลัง import (รวมผลของ Max Size ที่ Unity ย่อรูปให้ด้วย)
     static float WorldCharHeight(FrameInfo f, Sprite s) =>
         s == null ? 0f : s.bounds.size.y * f.CharHeight / f.height;
-
-    // ---------- import settings ----------
 
     static void ApplyImport(string path, float ppu, Vector2 pivot)
     {
@@ -196,8 +179,6 @@ public static class PlayerAnimationBuilder
     }
 
     static Sprite LoadSprite(string path) => AssetDatabase.LoadAssetAtPath<Sprite>(path);
-
-    // ---------- clips ----------
 
     static List<(Sprite, float)> DrawFrames(List<Sprite> sprites)
     {
@@ -230,8 +211,9 @@ public static class PlayerAnimationBuilder
         if (clip == null)
         {
             clip = new AnimationClip();
-            AssetDatabase.CreateAsset(clip, path); // สร้างครั้งแรกเท่านั้น รันซ้ำจะแก้ของเดิม GUID ไม่เปลี่ยน
+            AssetDatabase.CreateAsset(clip, path);
         }
+        ClearAllCurves(clip);
         clip.frameRate = 60f;
 
         var keys = new List<ObjectReferenceKeyframe>();
@@ -241,7 +223,6 @@ public static class PlayerAnimationBuilder
             keys.Add(new ObjectReferenceKeyframe { time = t, value = sprite });
             t += duration;
         }
-        // key ปิดท้าย ให้เฟรมสุดท้ายค้างนานเท่ากับเฟรมอื่น
         keys.Add(new ObjectReferenceKeyframe { time = t, value = frames[frames.Count - 1].sprite });
 
         var binding = EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite");
@@ -255,7 +236,14 @@ public static class PlayerAnimationBuilder
         return clip;
     }
 
-    // ---------- controller ----------
+    static void ClearAllCurves(AnimationClip clip)
+    {
+        foreach (var binding in AnimationUtility.GetCurveBindings(clip))
+            AnimationUtility.SetEditorCurve(clip, binding, null);
+        foreach (var binding in AnimationUtility.GetObjectReferenceCurveBindings(clip))
+            AnimationUtility.SetObjectReferenceCurve(clip, binding, null);
+        AnimationUtility.SetAnimationEvents(clip, new AnimationEvent[0]);
+    }
 
     static void BuildController(AnimationClip idle, AnimationClip draw, AnimationClip ready,
                                 AnimationClip throwA, AnimationClip throwB, AnimationClip hit, AnimationClip sheathe)
@@ -266,7 +254,6 @@ public static class PlayerAnimationBuilder
         var sm = ctrl.layers[0].stateMachine;
         foreach (var child in sm.states.ToArray()) sm.RemoveState(child.state);
 
-        // ชื่อ state ต้องตรงกับที่ PlayerController เรียก Animator.Play()
         var sIdle = AddState(sm, "Player_Idle", idle, new Vector3(300, 0));
         var sDraw = AddState(sm, "Player_Draw", draw, new Vector3(300, 100));
         var sReady = AddState(sm, "Player_Ready", ready, new Vector3(300, 200));
@@ -276,7 +263,6 @@ public static class PlayerAnimationBuilder
         var sSheathe = AddState(sm, "Player_Sheathe", sheathe, new Vector3(50, 100));
         sm.defaultState = sIdle;
 
-        // ลูกศรพวกนี้แค่ "เล่นจบแล้วไปต่อ" โค้ดยังเป็นคนสั่งเริ่มท่าทั้งหมดด้วย Play()
         AutoNext(sDraw, sReady);
         AutoNext(sThrowA, sReady);
         AutoNext(sThrowB, sReady);

@@ -1,11 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// คุมด่าน 1 รอบ: เริ่ม → หลอด progress วิ่งตามความยาวด่าน → หมดเวลา (หยุดปล่อยไขมัน รอตัวสุดท้ายเคลียร์) → ไป scene Victory
-// เลือดหมดกลางทาง → ไป scene GameOver
-// ผลของรอบล่าสุด (คะแนน / คอมโบ / ด่านที่เล่น) เก็บไว้ใน LevelManager.LastResult ให้ scene Victory / GameOver อ่าน
-//
-// ใช้: Create Empty ในด่าน → Add Component → Level Manager
 [DefaultExecutionOrder(-150)]
 public class LevelManager : MonoBehaviour
 {
@@ -18,28 +13,26 @@ public class LevelManager : MonoBehaviour
         public int maxCombo;
         public int bestScore;
         public bool newBest;
-        public string levelScene; // ไว้ให้ปุ่ม Restart โหลดด่านเดิม
+        public string levelScene;
     }
     public static Result LastResult;
     public static bool HasResult;
 
-    [Header("ความยาวด่าน")]
-    [Tooltip("มีเพลงใน BeatManager = ด่านยาวเท่าเพลง (เพลงจะไม่วนลูป)")]
+    [Header("Level Length")]
     [SerializeField] private bool useMusicLength = true;
-    [Tooltip("ใช้เมื่อไม่มีเพลง หรือปิด Use Music Length (วินาที)")]
     [SerializeField] private float fallbackDurationSeconds = 80f;
-    [SerializeField] private ProgressTracker progressTracker; // ว่าง = หาในฉากให้เอง
+    [SerializeField] private ProgressTracker progressTracker;
 
-    [Header("Scene ปลายทาง (ชื่อต้องตรงกับใน Build Settings)")]
+    [Header("Result Scenes")]
     [SerializeField] private string victoryScene = "Victory";
     [SerializeField] private string gameOverScene = "GameOver";
-    [SerializeField] private float delayBeforeLoad = 1.2f; // รอให้เห็นท่าสุดท้าย / ตายก่อนเปลี่ยน scene
+    [SerializeField] private float delayBeforeLoad = 1.2f;
 
-    [Header("ปุ่มลัดทดสอบ (ใช้ได้เฉพาะใน Editor / Development Build)")]
+    [Header("Debug Keys (Editor / Development Build only)")]
     [SerializeField] private bool debugKeys = true;
-    [SerializeField] private KeyCode debugWinKey = KeyCode.F1;   // ชนะทันที → Victory
-    [SerializeField] private KeyCode debugLoseKey = KeyCode.F2;  // แพ้ทันที → GameOver
-    [SerializeField] private KeyCode debugSkipKey = KeyCode.F3;  // ข้ามไปช่วงท้ายด่าน (เหลือ 10 วิ)
+    [SerializeField] private KeyCode debugWinKey = KeyCode.F1;
+    [SerializeField] private KeyCode debugLoseKey = KeyCode.F2;
+    [SerializeField] private KeyCode debugSkipKey = KeyCode.F3;
 
     private enum State { Playing, WaitingForLastEnemy, Finished }
     private State state = State.Playing;
@@ -70,7 +63,6 @@ public class LevelManager : MonoBehaviour
         if (progressTracker == null) progressTracker = FindFirstObjectByType<ProgressTracker>();
         if (progressTracker != null) progressTracker.SetExternalControl();
 
-        // โหมดชาร์ต: ChartPlayer คุมเพลง/หลอดเอง เราแค่รอสัญญาณเพลงจบ
         chartPlayer = FindFirstObjectByType<ChartPlayer>();
         if (chartPlayer != null && chartPlayer.chart != null && !chartPlayer.recordMode)
         {
@@ -84,7 +76,7 @@ public class LevelManager : MonoBehaviour
 
         if (useMusicLength && music != null && music.clip != null)
         {
-            music.loop = false; // เพลงจบ = หมดเวลาด่าน
+            music.loop = false;
             duration = music.clip.length;
         }
         else
@@ -121,9 +113,7 @@ public class LevelManager : MonoBehaviour
         }
         else if (state == State.WaitingForLastEnemy)
         {
-            // หยุดปล่อยไขมันแล้ว รอตัวที่ยังอยู่บนจอสู้จนจบ
-            bool enemiesLeft = FindObjectsByType<LipidMovement>(FindObjectsSortMode.None).Length > 0
-                            || FindObjectsByType<MiniLipid>(FindObjectsSortMode.None).Length > 0;
+            bool enemiesLeft = LipidMovement.Active.Count > 0 || MiniLipid.Active.Count > 0;
             if (!enemiesLeft) Finish(true);
         }
     }
@@ -132,13 +122,13 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.GetKeyDown(debugWinKey))
         {
-            Debug.Log("[LevelManager] DEBUG: ชนะทันที");
+            Debug.Log("[LevelManager] DEBUG: instant win");
             if (progressTracker != null) progressTracker.SetProgress(1f);
             Finish(true);
         }
         else if (Input.GetKeyDown(debugLoseKey))
         {
-            Debug.Log("[LevelManager] DEBUG: แพ้ทันที");
+            Debug.Log("[LevelManager] DEBUG: instant lose");
             Finish(false);
         }
         else if (Input.GetKeyDown(debugSkipKey) && state == State.Playing)
@@ -146,15 +136,19 @@ public class LevelManager : MonoBehaviour
             float target = Mathf.Max(0f, duration - 10f);
             if (music != null && music.clip != null) music.time = Mathf.Min(target, music.clip.length - 0.1f);
             else elapsed = target;
-            Debug.Log($"[LevelManager] DEBUG: ข้ามไปวินาทีที่ {target:0} (เหลือ 10 วิ)");
+            Debug.Log($"[LevelManager] DEBUG: skipped to {target:0}s (10s left)");
         }
     }
 
-    // หมดเวลาด่าน (หลอดวิ่งสุด): ไม่ปล่อยไขมันตัวใหม่แล้ว
     void BeginEnding()
     {
         state = State.WaitingForLastEnemy;
         if (progressTracker != null) progressTracker.SetProgress(1f);
+        StopSpawners();
+    }
+
+    static void StopSpawners()
+    {
         foreach (var spawner in FindObjectsByType<LipidSpawner>(FindObjectsSortMode.None)) spawner.enabled = false;
     }
 
@@ -163,7 +157,6 @@ public class LevelManager : MonoBehaviour
         if (state != State.Finished) Finish(true);
     }
 
-    // PlayerController เรียกตอนเลือดหมด
     public void OnPlayerDied()
     {
         if (state != State.Finished) Finish(false);
@@ -173,8 +166,8 @@ public class LevelManager : MonoBehaviour
     {
         state = State.Finished;
         cleared = clear;
-        PlayerController.isGameOver = true; // หยุดรับปุ่ม / หยุดปล่อยของทุกอย่าง
-        foreach (var spawner in FindObjectsByType<LipidSpawner>(FindObjectsSortMode.None)) spawner.enabled = false;
+        PlayerController.isGameOver = true;
+        StopSpawners();
         if (!clear && music != null) music.Stop();
 
         SaveResult();
@@ -187,7 +180,6 @@ public class LevelManager : MonoBehaviour
         string level = SceneManager.GetActiveScene().name;
         int score = player != null ? player.score : 0;
 
-        // คะแนนสูงสุดแยกตามด่าน (นับเฉพาะรอบที่ผ่านด่าน)
         string key = "HighScore_" + level;
         int best = PlayerPrefs.GetInt(key, 0);
         bool newBest = cleared && score > best;
@@ -212,18 +204,6 @@ public class LevelManager : MonoBehaviour
 
     void LoadResultScene()
     {
-        LoadSceneSafe(cleared ? victoryScene : gameOverScene);
-    }
-
-    // เช็คก่อนว่า scene อยู่ใน Build Profiles แล้ว ไม่งั้น SceneTransition จะค้างที่หน้าโหลด
-    public static bool LoadSceneSafe(string sceneName)
-    {
-        if (!Application.CanStreamedLevelBeLoaded(sceneName))
-        {
-            Debug.LogError($"[LevelManager] โหลด scene '{sceneName}' ไม่ได้: ยังไม่ได้เพิ่มใน File > Build Profiles > Scene List (หรือชื่อไม่ตรง)");
-            return false;
-        }
-        SceneTransition.Load(sceneName);
-        return true;
+        SceneTransition.Load(cleared ? victoryScene : gameOverScene);
     }
 }

@@ -1,24 +1,14 @@
-using UnityEngine;
+๏ปฟusing UnityEngine;
 
-/// <summary>
-/// พื้นหลังเลื่อนจากขวาไปซ้ายแบบวนลูป (Parallax) แบบไม่มีรอยต่อ
-/// - ปรับความเร็วรวม (baseSpeed) และความเร็วแต่ละเลเยอร์ (speedMultiplier) ได้
-/// - ตำแหน่งทุกแผ่นคำนวณจากค่า offset ค่าเดียว จึงไม่คลาดสะสม
-/// - มี Overlap ให้แผ่นภาพซ้อนกันเล็กน้อย กลบรอยต่อ
-/// </summary>
 public class ScrollingBackground : MonoBehaviour
 {
     [System.Serializable]
     public class Layer
     {
         public string name = "Layer";
-        [Tooltip("SpriteRenderer ของภาพพื้นหลังเลเยอร์นี้ (pivot ควรอยู่กึ่งกลาง)")]
         public SpriteRenderer sprite;
-        [Tooltip("ตัวคูณความเร็ว: ไกล = น้อย (เช่น 0.3), ใกล้ = มาก (เช่น 1)")]
         [Range(0f, 3f)] public float speedMultiplier = 1f;
-        [Tooltip("ขยับตำแหน่งเลเยอร์ตอนเริ่มเกม (X, Y)")]
         public Vector2 positionOffset = Vector2.zero;
-        [Tooltip("ให้แผ่นภาพซ้อนกันกี่หน่วย (กลบรอยต่อ) ถ้ายังเห็นรอย ให้เพิ่มทีละนิด เช่น 0.02")]
         [Range(0f, 0.2f)] public float overlap = 0.02f;
 
         [HideInInspector] public Transform[] tiles;
@@ -29,10 +19,10 @@ public class ScrollingBackground : MonoBehaviour
         [HideInInspector] public float offset;
     }
 
-    [Header("ความเร็วรวม")]
+    [Header("Speed")]
     public float baseSpeed = 2f;
 
-    [Header("เลเยอร์ (เรียงจากไกล -> ใกล้)")]
+    [Header("Layers (far to near)")]
     public Layer[] layers;
 
     Camera cam;
@@ -60,7 +50,6 @@ public class ScrollingBackground : MonoBehaviour
         float camLeft = cam.transform.position.x - camHalfW;
         float camRight = cam.transform.position.x + camHalfW;
 
-        // เลื่อนจุดเริ่มไปทางซ้ายทีละ 1 แผ่น จนขอบซ้ายพ้นจอ (คงตำแหน่งที่วางไว้)
         float startX = st.position.x;
         int shift = Mathf.Max(0, Mathf.CeilToInt((startX - width * 0.5f - camLeft) / layer.spacing));
         layer.originX = startX - shift * layer.spacing;

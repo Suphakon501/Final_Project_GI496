@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(TMP_Text))]
@@ -21,7 +21,6 @@ public class TMPCharacterBeatPulse : MonoBehaviour
     {
         if (BeatManager.instance == null || miniLipid == null) return;
 
-        // เนื่องจาก MiniLipid 1 ตัว มี 1 ตัวอักษร ให้เลือกตัวอักษรตัวแรก (Index 0) มาเด้งตามจังหวะเพลงได้เลย
         int charIndex = 0;
 
         textComponent.ForceMeshUpdate();

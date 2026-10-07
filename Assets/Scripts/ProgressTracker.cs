@@ -1,47 +1,43 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-// หลอด progress ใต้จอ: ตัววิ่งสีแดงวิ่งจาก START ไป FINISH ผ่าน checkpoint
-// ตอนนี้ยังเป็นตัวอย่างชั่วคราว: ถึง checkpoint ถัดไปทุก segmentDuration วินาที
-// ของจริงภายหลัง: ปิด useInternalTimer แล้วเรียก SetProgress(0..1) จากเวลาเพลง/ด่านแทน
-// แปะบน Image ของหลอด (ProgressBar) แล้วมันสร้าง checkpoint / จุดผู้เล่น / ตัววิ่ง เป็นลูกให้เอง
 [ExecuteAlways]
 [RequireComponent(typeof(RectTransform))]
 public class ProgressTracker : MonoBehaviour
 {
-    [Header("เวลา (ตัวอย่างชั่วคราว)")]
+    [Header("Timer")]
     [SerializeField] private bool useInternalTimer = true;
-    [SerializeField] private float segmentDuration = 20f;    // กี่วินาทีถึงจุดถัดไป
-    [SerializeField] private int segmentCount = 4;           // จำนวนช่วง (checkpoint ตรงกลาง = segmentCount - 1)
-    [SerializeField] private bool smoothMovement = true;     // true = ค่อยๆ วิ่ง, false = กระโดดไปทีละจุดทุก segmentDuration
+    [SerializeField] private float segmentDuration = 20f;
+    [SerializeField] private int segmentCount = 4;
+    [SerializeField] private bool smoothMovement = true;
 
-    [Header("ระยะบนหลอด (หน่วย UI จากขอบซ้าย/ขวาของกรอบ)")]
-    [SerializeField] private float startInset = 30f;         // จุดเริ่ม (ตรงหัวหลอด)
-    [SerializeField] private float endInset = 30f;           // จุดจบ (ตรงท้ายหลอด)
-    [SerializeField] private float lineYOffset = 0f;         // เลื่อนเส้นที่วางของขึ้น/ลง
+    [Header("Bar Layout")]
+    [SerializeField] private float startInset = 30f;
+    [SerializeField] private float endInset = 30f;
+    [SerializeField] private float lineYOffset = 0f;
 
     [Header("Checkpoint (MarkProgress)")]
     [SerializeField] private Sprite checkpointSprite;
-    [SerializeField] private Sprite reachedCheckpointSprite; // ปล่อยว่างได้ ถ้าใส่ จะเปลี่ยนรูปตอนวิ่งผ่านแล้ว
+    [SerializeField] private Sprite reachedCheckpointSprite;
     [SerializeField] private float checkpointSize = 22f;
 
-    [Header("จุดผู้เล่นบนหลอด (MarkPlayer)")]
+    [Header("Player Mark")]
     [SerializeField] private Sprite playerMarkSprite;
     [SerializeField] private float playerMarkSize = 30f;
 
-    [Header("ตัววิ่ง (Run_1 - Run_8)")]
+    [Header("Runner")]
     [SerializeField] private Sprite[] runFrames = new Sprite[8];
     [SerializeField] private float runnerHeight = 70f;
-    [SerializeField] private float runnerYOffset = 8f;       // ยกตัววิ่งขึ้นจากเส้น
-    [SerializeField] private float runnerXOffset = 0f;       // เลื่อนตัววิ่งซ้าย/ขวาเทียบกับจุดผู้เล่น
-    [SerializeField] private float runFps = 8f;              // GIF ต้นฉบับประมาณ 120-130ms ต่อเฟรม
+    [SerializeField] private float runnerYOffset = 8f;
+    [SerializeField] private float runnerXOffset = 0f;
+    [SerializeField] private float runFps = 8f;
 
-    [Header("ถึง FINISH")]
+    [Header("Events")]
     public UnityEvent onFinished;
 
-    [Header("ตัวอย่างใน Editor (ตอนยังไม่กด Play)")]
+    [Header("Editor Preview")]
     [Range(0f, 1f)][SerializeField] private float previewProgress = 0.35f;
 
     const string CheckpointName = "Checkpoint";
@@ -116,13 +112,11 @@ public class ProgressTracker : MonoBehaviour
         AnimateRunner(paused);
     }
 
-    // LevelManager / ChartPlayer เรียก: เลิกจับเวลาเอง ให้ระบบด่านป้อนความคืบหน้าแทน
     public void SetExternalControl()
     {
         useInternalTimer = false;
     }
 
-    // สำหรับของจริงภายหลัง: ป้อนความคืบหน้า 0-1 เอง (ต้องปิด useInternalTimer)
     public void SetProgress(float value)
     {
         SetProgressInternal(value);
@@ -143,12 +137,10 @@ public class ProgressTracker : MonoBehaviour
         if (!finished && progress >= 1f)
         {
             finished = true;
-            Debug.Log("[ProgressTracker] ถึง FINISH แล้ว");
+            Debug.Log("[ProgressTracker] finished");
             onFinished?.Invoke();
         }
     }
-
-    // ---------- วาง / จัดตำแหน่ง ----------
 
     void Layout(float p)
     {
@@ -159,7 +151,6 @@ public class ProgressTracker : MonoBehaviour
         float right = r.xMax - endInset;
         float y = r.center.y + lineYOffset;
 
-        // checkpoint ตรงกลาง (ไม่รวมหัว/ท้าย เพราะมีป้าย START / FINISH อยู่แล้ว)
         int needed = Mathf.Max(0, segmentCount - 1);
         while (checkpoints.Count < needed) checkpoints.Add(CreateImage(CheckpointName));
         for (int i = 0; i < checkpoints.Count; i++)
@@ -189,7 +180,6 @@ public class ProgressTracker : MonoBehaviour
         runner.sprite = frame;
         runner.enabled = frame != null;
         float aspect = frame != null ? frame.rect.width / frame.rect.height : 1f;
-        // pivot ล่าง-กลาง: ตัววิ่งยืนอยู่บนจุดผู้เล่น
         Place(runner, rt, new Vector2(x + runnerXOffset, y + runnerYOffset), new Vector2(runnerHeight * aspect, runnerHeight), new Vector2(0.5f, 0f));
         runner.transform.SetAsLastSibling();
     }
@@ -197,13 +187,11 @@ public class ProgressTracker : MonoBehaviour
     static void Place(Image img, RectTransform parent, Vector2 pos, Vector2 size, Vector2 pivot)
     {
         var irt = img.rectTransform;
-        irt.anchorMin = irt.anchorMax = parent.pivot; // ให้ anchoredPosition ใช้พิกัดเดียวกับ parent.rect
+        irt.anchorMin = irt.anchorMax = parent.pivot;
         irt.pivot = pivot;
         irt.sizeDelta = size;
         irt.anchoredPosition = pos;
     }
-
-    // ---------- ตัววิ่ง ----------
 
     void AnimateRunner(bool paused)
     {
@@ -211,7 +199,7 @@ public class ProgressTracker : MonoBehaviour
 
         if (paused)
         {
-            if (finished && runFrame != 0) { runFrame = 0; runner.sprite = CurrentRunFrame(); } // ถึงเส้นชัยแล้วหยุดท่าแรก
+            if (finished && runFrame != 0) { runFrame = 0; runner.sprite = CurrentRunFrame(); }
             return;
         }
 
@@ -231,8 +219,6 @@ public class ProgressTracker : MonoBehaviour
         var s = runFrames[Mathf.Clamp(runFrame, 0, runFrames.Length - 1)];
         return s != null ? s : runFrames[0];
     }
-
-    // ---------- ลูก ----------
 
     void CollectChildren()
     {

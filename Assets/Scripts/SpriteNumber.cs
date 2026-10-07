@@ -1,11 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
-// แสดงตัวเลขด้วย sprite แทน Text: เรียก SetValue(1234) แล้วมันสร้าง/เรียงรูปตัวเลขให้เอง ไม่ต้องจัดมือ
-// แปะบน GameObject เปล่าใน Canvas แล้วลาก sprite 0-9 ใส่ตามลำดับ
-// รูปทุกตัวต้องสูงเท่ากัน (ครอปมาให้แล้วใน Assets/Sprites/Ui/Number) เส้นฐานจะได้ตรงกัน
 [ExecuteAlways]
 [RequireComponent(typeof(RectTransform))]
 public class SpriteNumber : MonoBehaviour
@@ -13,21 +10,21 @@ public class SpriteNumber : MonoBehaviour
     public enum Align { Left, Center, Right }
 
     [Header("Sprites")]
-    [SerializeField] private Sprite[] digitSprites = new Sprite[10]; // ช่อง 0-9 ตามลำดับ
+    [SerializeField] private Sprite[] digitSprites = new Sprite[10];
     [SerializeField] private Sprite commaSprite;
 
     [Header("Layout")]
-    [SerializeField] private float digitHeight = 60f;        // ความสูงตัวเลข (หน่วยเดียวกับ UI)
-    [SerializeField] private float spacing = -6f;            // ระยะห่างระหว่างตัว (ติดลบ = ชิดกันขึ้น)
-    [SerializeField] private Align alignment = Align.Right;  // ชิดขอบไหนของกรอบ RectTransform
-    [SerializeField] private bool useThousandsSeparator = true; // 12,345
-    [SerializeField] private Color color = Color.white;      // ขาว = สีเดิมของรูป
+    [SerializeField] private float digitHeight = 60f;
+    [SerializeField] private float spacing = -6f;
+    [SerializeField] private Align alignment = Align.Right;
+    [SerializeField] private bool useThousandsSeparator = true;
+    [SerializeField] private Color color = Color.white;
 
-    [Header("เด้งตอนค่าเปลี่ยน")]
-    [SerializeField] private float popScale = 1.15f;         // 1 = ไม่เด้ง
+    [Header("Pop On Change")]
+    [SerializeField] private float popScale = 1.15f;
     [SerializeField] private float popShrinkSpeed = 12f;
 
-    [Header("ค่าที่โชว์ใน Editor ตอนยังไม่กด Play")]
+    [Header("Editor Preview")]
     [SerializeField] private int previewValue = 12345;
 
     const string DigitObjectName = "Digit";
@@ -46,12 +43,12 @@ public class SpriteNumber : MonoBehaviour
 
     void OnValidate()
     {
-        dirty = true; // ห้ามสร้าง GameObject ใน OnValidate เลยไปทำใน Update แทน
+        dirty = true;
     }
 
     void OnRectTransformDimensionsChange()
     {
-        dirty = true; // ย่อ/ขยายกรอบแล้วจัดตำแหน่งใหม่
+        dirty = true;
     }
 
     void Update()
@@ -86,7 +83,6 @@ public class SpriteNumber : MonoBehaviour
             ? value.ToString("N0", CultureInfo.InvariantCulture)
             : value.ToString(CultureInfo.InvariantCulture);
 
-        // เลือก sprite ของแต่ละตัวอักษร (ข้ามตัวที่ไม่มีรูป)
         var sprites = new List<Sprite>(text.Length);
         foreach (char c in text)
         {
@@ -96,7 +92,6 @@ public class SpriteNumber : MonoBehaviour
             if (s != null) sprites.Add(s);
         }
 
-        // ความกว้างแต่ละตัวตามสัดส่วนรูป (เลข 1 แคบกว่าเลข 0)
         float totalWidth = 0f;
         var widths = new float[sprites.Count];
         for (int i = 0; i < sprites.Count; i++)
@@ -107,7 +102,7 @@ public class SpriteNumber : MonoBehaviour
         if (sprites.Count > 1) totalWidth += spacing * (sprites.Count - 1);
 
         var rt = (RectTransform)transform;
-        Rect r = rt.rect; // พิกัดเทียบกับ pivot ของกรอบ
+        Rect r = rt.rect;
         float x = alignment == Align.Left ? r.xMin
                 : alignment == Align.Right ? r.xMax - totalWidth
                 : r.center.x - totalWidth * 0.5f;
@@ -125,7 +120,7 @@ public class SpriteNumber : MonoBehaviour
             img.color = color;
 
             var irt = img.rectTransform;
-            irt.anchorMin = irt.anchorMax = rt.pivot; // ให้ anchoredPosition ใช้พิกัดเดียวกับ rt.rect
+            irt.anchorMin = irt.anchorMax = rt.pivot;
             irt.pivot = new Vector2(0f, 0.5f);
             irt.sizeDelta = new Vector2(widths[i], digitHeight);
             irt.anchoredPosition = new Vector2(x, r.center.y);
