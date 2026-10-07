@@ -36,6 +36,9 @@ public class LipidMovement : MonoBehaviour
     private bool chartControlled = false;
     private bool snappedToStop = false;
 
+    // ตัวจับเวลาความยากเป็น static เลยค้างข้ามรอบ: เริ่มด่าน / รีสตาร์ทต้องรีเซ็ต
+    public static void ResetDifficultyTimer() => globalGameTimer = 0f;
+
     public float MoveSpeed => moveSpeed;
     public float WalkInDuration => Mathf.Abs(spawnPosX - stopPosX) / Mathf.Max(0.01f, moveSpeed);
     public bool AllNotesSpawned => totalNotes > 0 && spawnedNotes >= totalNotes;

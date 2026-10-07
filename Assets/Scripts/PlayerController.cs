@@ -418,6 +418,13 @@ public class PlayerController : MonoBehaviour
         LipidMovement[] remainingLipids = Object.FindObjectsByType<LipidMovement>(FindObjectsSortMode.None);
         foreach (var lipid in remainingLipids) Destroy(lipid.gameObject);
 
+        // มี LevelManager = ไปหน้าจบด่าน (รีสตาร์ท / กลับเมนู) แทนการปิดเกม
+        if (LevelManager.instance != null)
+        {
+            LevelManager.instance.OnPlayerDied();
+            return;
+        }
+
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else

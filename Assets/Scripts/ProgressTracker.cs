@@ -116,6 +116,12 @@ public class ProgressTracker : MonoBehaviour
         AnimateRunner(paused);
     }
 
+    // LevelManager / ChartPlayer เรียก: เลิกจับเวลาเอง ให้ระบบด่านป้อนความคืบหน้าแทน
+    public void SetExternalControl()
+    {
+        useInternalTimer = false;
+    }
+
     // สำหรับของจริงภายหลัง: ป้อนความคืบหน้า 0-1 เอง (ต้องปิด useInternalTimer)
     public void SetProgress(float value)
     {

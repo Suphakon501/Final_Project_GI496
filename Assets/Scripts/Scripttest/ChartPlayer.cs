@@ -74,6 +74,8 @@ public class ChartPlayer : MonoBehaviour
             beat.musicSource.loop = false; // เพลงจบ = ด่านจบ
         }
 
+        if (progressTracker != null) progressTracker.SetExternalControl();
+
         // ปิดการสุ่มแบบเดิม
         foreach (var spawner in FindObjectsByType<LipidSpawner>(FindObjectsSortMode.None)) spawner.enabled = false;
 

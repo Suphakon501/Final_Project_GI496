@@ -97,6 +97,12 @@ public class BeatManager : MonoBehaviour
                 }
                 songPositionInSeconds = smoothRawTime - songOffsetSeconds;
             }
+            else if (smoothClockStarted)
+            {
+                // เพลงจบ/หยุดแล้ว: เดินเวลาต่อ ไม่งั้นไขมันที่รอบีทอยู่จะค้างไม่ปล่อยโน้ต ด่านจะไม่จบ
+                smoothRawTime += Time.unscaledDeltaTime;
+                songPositionInSeconds = smoothRawTime - songOffsetSeconds;
+            }
             else
             {
                 songPositionInSeconds = -songOffsetSeconds;
