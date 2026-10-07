@@ -2667,6 +2667,10 @@ MonoBehaviour:
   victoryScene: Victory
   gameOverScene: GameOver
   delayBeforeLoad: 1.2
+  debugKeys: 1
+  debugWinKey: 282
+  debugLoseKey: 283
+  debugSkipKey: 284
 --- !u!4 &921138107
 Transform:
   m_ObjectHideFlags: 0
@@ -2864,7 +2868,7 @@ Transform:
   m_GameObject: {fileID: 1179511880}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.68, y: -0.12, z: 0.016821023}
+  m_LocalPosition: {x: 21.68, y: -1.02, z: 0.016821023}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4266,7 +4270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7622060177345159761, guid: 176e2042d2f05b74da0ed2905bc657c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.4823927
+      value: -2.25
       objectReference: {fileID: 0}
     - target: {fileID: 7622060177345159761, guid: 176e2042d2f05b74da0ed2905bc657c6, type: 3}
       propertyPath: m_LocalPosition.z
