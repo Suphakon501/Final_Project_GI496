@@ -42,6 +42,8 @@ public class LevelManager : MonoBehaviour
     private float duration;
     private float elapsed;
     private bool musicStarted;
+    private float lastPlayingTime;
+    private const float SongEndTolerance = 1f;
     private bool cleared;
 
     public bool IsFinished => state == State.Finished;
@@ -98,9 +100,13 @@ public class LevelManager : MonoBehaviour
             bool timeUp;
             if (music != null)
             {
-                if (music.isPlaying) musicStarted = true;
-                elapsed = music.isPlaying ? music.time : (musicStarted ? duration : 0f);
-                timeUp = musicStarted && !music.isPlaying;
+                if (music.isPlaying)
+                {
+                    musicStarted = true;
+                    lastPlayingTime = music.time;
+                }
+                timeUp = musicStarted && !music.isPlaying && lastPlayingTime >= duration - SongEndTolerance;
+                elapsed = timeUp ? duration : lastPlayingTime;
             }
             else
             {

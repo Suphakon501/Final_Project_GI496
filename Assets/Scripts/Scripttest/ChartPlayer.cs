@@ -42,6 +42,8 @@ public class ChartPlayer : MonoBehaviour
     private float stopX;
     private bool finished = false;
     private bool musicStarted = false;
+    private float lastPlayingTime;
+    private const float SongEndTolerance = 1f;
 
     bool Active => chart != null;
 
@@ -125,7 +127,11 @@ public class ChartPlayer : MonoBehaviour
     {
         if (!Active || PlayerController.isGameOver || finished) return;
 
-        if (beat.musicSource != null && beat.musicSource.isPlaying) musicStarted = true;
+        if (beat.musicSource != null && beat.musicSource.isPlaying)
+        {
+            musicStarted = true;
+            lastPlayingTime = beat.musicSource.time;
+        }
         float t = beat.songPositionInSeconds;
 
         if (progressTracker != null && chart.music != null)
@@ -181,7 +187,8 @@ public class ChartPlayer : MonoBehaviour
 
     void CheckSongEnded(bool recording)
     {
-        bool musicDone = musicStarted && beat.musicSource != null && !beat.musicSource.isPlaying;
+        bool musicDone = musicStarted && beat.musicSource != null && !beat.musicSource.isPlaying
+                      && beat.musicSource.clip != null && lastPlayingTime >= beat.musicSource.clip.length - SongEndTolerance;
         bool notesDone = recording || (nextNote >= notes.Count && MiniLipid.Active.Count == 0);
         if (!musicDone || !notesDone) return;
 
