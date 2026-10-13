@@ -12,143 +12,725 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3023949f9a7d947bf8d8f4c357050b, type: 3}
   m_Name: RedVWhite
   m_EditorClassIdentifier: 
-  music: {fileID: 8300000, guid: 27fd6c2608122e9469102f79829918e7, type: 3}
-  bpm: 150
+  music: {fileID: 8300000, guid: 00437a0b5c1a3994b97d78a9490fe686, type: 3}
+  bpm: 120
   offsetSeconds: 0
   waveGapBeats: 3
   notes:
+  - beat: 3
+    key: 2
+    row: 0
+  - beat: 4
+    key: 3
+    row: 0
+  - beat: 5
+    key: 1
+    row: 0
+  - beat: 6
+    key: 0
+    row: 1
   - beat: 7
     key: 2
-    row: 2
-  - beat: 9
-    key: 0
-    row: 0
-  - beat: 10.5
+    row: 1
+  - beat: 8
     key: 1
     row: 1
-  - beat: 11.5
+  - beat: 9
     key: 3
     row: 1
-  - beat: 12.5
+  - beat: 10
+    key: 2
+    row: 1
+  - beat: 11
     key: 0
-    row: 0
+    row: 2
+  - beat: 12
+    key: 2
+    row: 2
+  - beat: 13
+    key: 3
+    row: 2
   - beat: 14
+    key: 1
+    row: 2
+  - beat: 15
     key: 0
     row: 0
   - beat: 16
-    key: 3
+    key: 1
     row: 1
+  - beat: 17
+    key: 3
+    row: 2
   - beat: 18
     key: 2
     row: 2
   - beat: 19
-    key: 2
-    row: 2
+    key: 1
+    row: 1
   - beat: 20
     key: 2
-    row: 2
-  - beat: 21.5
-    key: 1
-    row: 1
-  - beat: 23.5
-    key: 0
     row: 0
-  - beat: 25.5
+  - beat: 21
     key: 3
     row: 1
-  - beat: 26.5
-    key: 1
-    row: 1
-  - beat: 27.5
-    key: 2
-    row: 2
-  - beat: 28.5
-    key: 2
-    row: 2
-  - beat: 29.5
-    key: 1
-    row: 1
-  - beat: 31.5
-    key: 1
-    row: 1
-  - beat: 33.5
-    key: 1
-    row: 1
-  - beat: 34.5
+  - beat: 22
     key: 3
     row: 1
-  - beat: 35.5
+  - beat: 23
     key: 0
     row: 0
-  - beat: 36.5
+  - beat: 24
+    key: 2
+    row: 1
+  - beat: 25
+    key: 3
+    row: 1
+  - beat: 26
+    key: 1
+    row: 0
+  - beat: 27
+    key: 3
+    row: 1
+  - beat: 28
+    key: 2
+    row: 0
+  - beat: 29
+    key: 0
+    row: 0
+  - beat: 30
+    key: 3
+    row: 2
+  - beat: 31
+    key: 1
+    row: 0
+  - beat: 32
     key: 2
     row: 2
-  - beat: 37.5
+  - beat: 33
+    key: 3
+    row: 2
+  - beat: 34
+    key: 0
+    row: 0
+  - beat: 35
     key: 1
+    row: 0
+  - beat: 36
+    key: 2
+    row: 2
+  - beat: 37
+    key: 3
     row: 1
+  - beat: 38
+    key: 2
+    row: 2
   - beat: 39
-    key: 2
-    row: 2
+    key: 0
+    row: 0
   - beat: 40
-    key: 0
-    row: 0
-  - beat: 49
-    key: 3
-    row: 1
-  - beat: 51
-    key: 0
-    row: 0
-  - beat: 53
     key: 1
     row: 1
-  - beat: 53.5
+  - beat: 41
     key: 3
     row: 1
-  - beat: 54.5
+  - beat: 42
     key: 2
     row: 2
-  - beat: 55.5
+  - beat: 43
     key: 0
     row: 0
-  - beat: 56.5
+  - beat: 44
     key: 1
     row: 1
+  - beat: 45
+    key: 3
+    row: 1
+  - beat: 46
+    key: 2
+    row: 2
+  - beat: 47
+    key: 3
+    row: 1
+  - beat: 48
+    key: 2
+    row: 2
+  - beat: 49
+    key: 0
+    row: 0
+  - beat: 50
+    key: 2
+    row: 2
+  - beat: 51
+    key: 1
+    row: 1
+  - beat: 52
+    key: 2
+    row: 2
+  - beat: 53
+    key: 3
+    row: 1
+  - beat: 54
+    key: 3
+    row: 1
+  - beat: 55
+    key: 2
+    row: 2
+  - beat: 56
+    key: 3
+    row: 1
+  - beat: 57
+    key: 0
+    row: 0
   - beat: 58
     key: 3
     row: 1
+  - beat: 59
+    key: 1
+    row: 1
   - beat: 60
-    key: 2
-    row: 2
+    key: 3
+    row: 1
   - beat: 61
-    key: 0
-    row: 0
+    key: 1
+    row: 1
   - beat: 62
-    key: 1
-    row: 1
+    key: 2
+    row: 2
   - beat: 63
-    key: 3
-    row: 1
+    key: 0
+    row: 0
   - beat: 64
-    key: 2
-    row: 2
-  - beat: 66
-    key: 0
-    row: 0
-  - beat: 68
     key: 1
     row: 1
-  - beat: 69
+  - beat: 64.5
+    key: 2
+    row: 2
+  - beat: 65.5
     key: 3
     row: 1
-  - beat: 70
+  - beat: 66.5
+    key: 3
+    row: 1
+  - beat: 67.5
     key: 2
     row: 2
-  - beat: 71
+  - beat: 68.5
     key: 0
     row: 0
-  - beat: 72
+  - beat: 69.5
     key: 1
+    row: 1
+  - beat: 70.5
+    key: 1
+    row: 1
+  - beat: 71
+    key: 2
+    row: 2
+  - beat: 72
+    key: 3
     row: 1
   - beat: 73
+    key: 0
+    row: 0
+  - beat: 74
+    key: 2
+    row: 2
+  - beat: 75
+    key: 1
+    row: 1
+  - beat: 76
     key: 3
+    row: 1
+  - beat: 77
+    key: 2
+    row: 2
+  - beat: 78
+    key: 0
+    row: 0
+  - beat: 79
+    key: 2
+    row: 2
+  - beat: 80
+    key: 1
+    row: 1
+  - beat: 81
+    key: 2
+    row: 2
+  - beat: 82
+    key: 2
+    row: 2
+  - beat: 83
+    key: 0
+    row: 0
+  - beat: 84
+    key: 0
+    row: 0
+  - beat: 85
+    key: 1
+    row: 1
+  - beat: 86
+    key: 3
+    row: 1
+  - beat: 87
+    key: 0
+    row: 0
+  - beat: 88
+    key: 3
+    row: 1
+  - beat: 89
+    key: 2
+    row: 2
+  - beat: 90
+    key: 1
+    row: 1
+  - beat: 91
+    key: 0
+    row: 0
+  - beat: 92.5
+    key: 2
+    row: 2
+  - beat: 93
+    key: 3
+    row: 1
+  - beat: 94
+    key: 1
+    row: 1
+  - beat: 95
+    key: 2
+    row: 2
+  - beat: 96
+    key: 0
+    row: 0
+  - beat: 97
+    key: 3
+    row: 1
+  - beat: 98
+    key: 2
+    row: 2
+  - beat: 99
+    key: 1
+    row: 1
+  - beat: 100
+    key: 2
+    row: 2
+  - beat: 101
+    key: 3
+    row: 1
+  - beat: 102
+    key: 0
+    row: 0
+  - beat: 103
+    key: 2
+    row: 2
+  - beat: 104
+    key: 1
+    row: 1
+  - beat: 104.5
+    key: 1
+    row: 1
+  - beat: 106
+    key: 0
+    row: 0
+  - beat: 107
+    key: 2
+    row: 2
+  - beat: 108
+    key: 3
+    row: 1
+  - beat: 109
+    key: 2
+    row: 2
+  - beat: 110
+    key: 3
+    row: 1
+  - beat: 111
+    key: 1
+    row: 1
+  - beat: 112
+    key: 0
+    row: 0
+  - beat: 113
+    key: 3
+    row: 1
+  - beat: 114
+    key: 1
+    row: 1
+  - beat: 115
+    key: 3
+    row: 1
+  - beat: 116
+    key: 0
+    row: 0
+  - beat: 117
+    key: 3
+    row: 1
+  - beat: 118
+    key: 2
+    row: 2
+  - beat: 119
+    key: 1
+    row: 1
+  - beat: 120
+    key: 2
+    row: 2
+  - beat: 121
+    key: 3
+    row: 1
+  - beat: 122
+    key: 0
+    row: 0
+  - beat: 123
+    key: 3
+    row: 1
+  - beat: 124
+    key: 2
+    row: 2
+  - beat: 125
+    key: 3
+    row: 1
+  - beat: 126
+    key: 1
+    row: 1
+  - beat: 127
+    key: 3
+    row: 1
+  - beat: 128
+    key: 0
+    row: 0
+  - beat: 129
+    key: 2
+    row: 2
+  - beat: 130
+    key: 1
+    row: 1
+  - beat: 131
+    key: 2
+    row: 2
+  - beat: 132
+    key: 3
+    row: 1
+  - beat: 133
+    key: 0
+    row: 0
+  - beat: 134
+    key: 2
+    row: 2
+  - beat: 135
+    key: 0
+    row: 0
+  - beat: 136
+    key: 3
+    row: 1
+  - beat: 137.5
+    key: 2
+    row: 2
+  - beat: 138
+    key: 3
+    row: 1
+  - beat: 139
+    key: 1
+    row: 1
+  - beat: 140
+    key: 2
+    row: 2
+  - beat: 141
+    key: 3
+    row: 1
+  - beat: 142
+    key: 0
+    row: 0
+  - beat: 143
+    key: 3
+    row: 1
+  - beat: 144
+    key: 0
+    row: 0
+  - beat: 145
+    key: 2
+    row: 2
+  - beat: 146
+    key: 1
+    row: 1
+  - beat: 147
+    key: 2
+    row: 2
+  - beat: 148
+    key: 3
+    row: 1
+  - beat: 149
+    key: 0
+    row: 0
+  - beat: 150
+    key: 1
+    row: 1
+  - beat: 151
+    key: 0
+    row: 0
+  - beat: 152
+    key: 3
+    row: 1
+  - beat: 153
+    key: 2
+    row: 2
+  - beat: 154
+    key: 1
+    row: 1
+  - beat: 155
+    key: 3
+    row: 1
+  - beat: 156
+    key: 0
+    row: 0
+  - beat: 157
+    key: 2
+    row: 2
+  - beat: 158
+    key: 1
+    row: 1
+  - beat: 159
+    key: 2
+    row: 2
+  - beat: 160
+    key: 0
+    row: 0
+  - beat: 161
+    key: 2
+    row: 2
+  - beat: 162
+    key: 1
+    row: 1
+  - beat: 163
+    key: 3
+    row: 1
+  - beat: 164
+    key: 0
+    row: 0
+  - beat: 165
+    key: 2
+    row: 2
+  - beat: 166
+    key: 3
+    row: 1
+  - beat: 167
+    key: 1
+    row: 1
+  - beat: 168
+    key: 2
+    row: 2
+  - beat: 169
+    key: 3
+    row: 1
+  - beat: 170
+    key: 0
+    row: 0
+  - beat: 171
+    key: 2
+    row: 2
+  - beat: 172
+    key: 3
+    row: 1
+  - beat: 173
+    key: 1
+    row: 1
+  - beat: 174
+    key: 2
+    row: 2
+  - beat: 175
+    key: 3
+    row: 1
+  - beat: 176
+    key: 0
+    row: 0
+  - beat: 177
+    key: 1
+    row: 1
+  - beat: 178
+    key: 2
+    row: 2
+  - beat: 179
+    key: 2
+    row: 2
+  - beat: 180
+    key: 1
+    row: 1
+  - beat: 181
+    key: 0
+    row: 0
+  - beat: 182
+    key: 3
+    row: 1
+  - beat: 183
+    key: 3
+    row: 1
+  - beat: 184
+    key: 1
+    row: 1
+  - beat: 185
+    key: 2
+    row: 2
+  - beat: 186
+    key: 0
+    row: 0
+  - beat: 187
+    key: 3
+    row: 1
+  - beat: 188
+    key: 1
+    row: 1
+  - beat: 189
+    key: 2
+    row: 2
+  - beat: 190
+    key: 3
+    row: 1
+  - beat: 191
+    key: 1
+    row: 1
+  - beat: 191.5
+    key: 0
+    row: 0
+  - beat: 193
+    key: 3
+    row: 1
+  - beat: 194
+    key: 2
+    row: 2
+  - beat: 195
+    key: 1
+    row: 1
+  - beat: 196
+    key: 2
+    row: 2
+  - beat: 197
+    key: 3
+    row: 1
+  - beat: 198
+    key: 1
+    row: 1
+  - beat: 199
+    key: 0
+    row: 0
+  - beat: 200
+    key: 3
+    row: 1
+  - beat: 201
+    key: 3
+    row: 1
+  - beat: 202
+    key: 2
+    row: 2
+  - beat: 203
+    key: 1
+    row: 1
+  - beat: 204
+    key: 3
+    row: 1
+  - beat: 205
+    key: 0
+    row: 0
+  - beat: 206
+    key: 2
+    row: 2
+  - beat: 207
+    key: 3
+    row: 1
+  - beat: 208
+    key: 1
+    row: 1
+  - beat: 209
+    key: 2
+    row: 2
+  - beat: 210
+    key: 0
+    row: 0
+  - beat: 211
+    key: 3
+    row: 1
+  - beat: 212
+    key: 1
+    row: 1
+  - beat: 213
+    key: 2
+    row: 2
+  - beat: 214
+    key: 3
+    row: 1
+  - beat: 215
+    key: 0
+    row: 0
+  - beat: 216
+    key: 2
+    row: 2
+  - beat: 217
+    key: 1
+    row: 1
+  - beat: 218
+    key: 0
+    row: 0
+  - beat: 219
+    key: 3
+    row: 1
+  - beat: 220
+    key: 1
+    row: 1
+  - beat: 221
+    key: 2
+    row: 2
+  - beat: 222
+    key: 0
+    row: 0
+  - beat: 223
+    key: 3
+    row: 1
+  - beat: 224
+    key: 1
+    row: 1
+  - beat: 225
+    key: 2
+    row: 2
+  - beat: 226
+    key: 3
+    row: 1
+  - beat: 227
+    key: 0
+    row: 0
+  - beat: 228
+    key: 2
+    row: 2
+  - beat: 229
+    key: 1
+    row: 1
+  - beat: 230
+    key: 3
+    row: 1
+  - beat: 231
+    key: 0
+    row: 0
+  - beat: 232
+    key: 2
+    row: 2
+  - beat: 233
+    key: 3
+    row: 1
+  - beat: 234
+    key: 3
+    row: 1
+  - beat: 235
+    key: 2
+    row: 2
+  - beat: 236
+    key: 1
+    row: 1
+  - beat: 237
+    key: 0
+    row: 0
+  - beat: 238
+    key: 3
+    row: 1
+  - beat: 239
+    key: 2
+    row: 2
+  - beat: 240.5
+    key: 1
     row: 1
