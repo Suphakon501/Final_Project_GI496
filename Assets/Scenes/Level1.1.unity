@@ -561,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 197997219}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.99, y: -2.55, z: 0}
+  m_LocalPosition: {x: -6.5, y: -2.55, z: 0}
   m_LocalScale: {x: 0.14, y: 0.14, z: 0.14}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -588,7 +588,6 @@ MonoBehaviour:
   playerAnimator: {fileID: 197997223}
   idleAnimName: Player_Idle
   drawAnimName: Player_Draw
-  readyAnimName: Player_Ready
   throwAnimNames:
   - Player_ThrowA
   - Player_ThrowB
@@ -1263,8 +1262,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lipidPrefab: {fileID: 3639694726996431690, guid: 7322f7bf1a48bb748974290f2e4b4b4f, type: 3}
-  customSpawnPosX: 8
-  customSpawnPosY: 0
   spawnIntervalSeconds: 1
 --- !u!114 &375640310
 MonoBehaviour:
@@ -1293,18 +1290,16 @@ MonoBehaviour:
   bpm: 150
   musicSource: {fileID: 375640307}
   songOffsetSeconds: 0
-  offsetDownKey: 91
-  offsetUpKey: 93
-  calibrationTaps: 8
   songPositionInSeconds: 0
   songPositionInBeats: 0
   testTapKey: 270
+  offsetDownKey: 91
+  offsetUpKey: 93
+  calibrationTaps: 8
   lastTestGrade: 0
   lastTestOffset: 0
   perfectWindow: 0.2
   goodWindow: 0.45
-  targetPerfectWindowSeconds: 0.2
-  targetGoodWindowSeconds: 0.6
 --- !u!1 &411932661
 GameObject:
   m_ObjectHideFlags: 0

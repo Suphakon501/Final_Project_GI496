@@ -23,6 +23,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float fallbackDurationSeconds = 80f;
     [SerializeField] private ProgressTracker progressTracker;
 
+    [Header("Boss Phase Settings")]
+    [SerializeField] private GameObject hitLineObject; // ลากเส้นสีเขียว (HitLine) มาใส่ช่องนี้เพื่อซ่อนตอนสู้บอส
+
     [Header("Result Scenes")]
     [SerializeField] private string victoryScene = "Victory";
     [SerializeField] private string gameOverScene = "GameOver";
@@ -34,7 +37,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private KeyCode debugLoseKey = KeyCode.F2;
     [SerializeField] private KeyCode debugSkipKey = KeyCode.F3;
 
-    private enum State { Playing, WaitingForLastEnemy, Finished }
+    private enum State { Playing, WaitingForLastEnemy, BossPhase, Finished }
     private State state = State.Playing;
 
     private AudioSource music;
@@ -115,12 +118,22 @@ public class LevelManager : MonoBehaviour
             }
 
             if (progressTracker != null) progressTracker.SetProgress(Mathf.Clamp01(elapsed / duration));
-            if (timeUp) BeginEnding();
+
+            // เมื่อเวลาหมด ให้หยุดสปอนแล้วเปลี่ยนไปรอดักเคลียร์โน้ตตัวสุดท้ายบนจอก่อน
+            if (timeUp)
+            {
+                state = State.WaitingForLastEnemy;
+                StopSpawners();
+            }
         }
+        // รอจนกว่าโน้ตตัวสุดท้ายบนจอจะหมด ค่อยเรียก StartBossPhase()
         else if (state == State.WaitingForLastEnemy)
         {
             bool enemiesLeft = LipidMovement.Active.Count > 0 || MiniLipid.Active.Count > 0;
-            if (!enemiesLeft) Finish(true);
+            if (!enemiesLeft)
+            {
+                StartBossPhase();
+            }
         }
     }
 
@@ -146,11 +159,29 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void BeginEnding()
+    // เรียกใช้งานเมื่อโน้ตตัวสุดท้ายหมดแล้ว เพื่อเข้าสู่ช่วงรัวปุ่มสู้บอส
+    void StartBossPhase()
     {
-        state = State.WaitingForLastEnemy;
+        state = State.BossPhase;
         if (progressTracker != null) progressTracker.SetProgress(1f);
-        StopSpawners();
+
+        // 1. ซ่อนเส้นสีเขียว (HitLine)
+        if (hitLineObject != null) hitLineObject.SetActive(false);
+
+        // 2. เริ่มต้นช่วงรัวปุ่ม (กำหนดให้รัวได้ 6 วินาที หรือปรับเวลาได้ตามต้องการ)
+        if (BossMashManager.instance != null)
+        {
+            BossMashManager.instance.StartMash(6f);
+        }
+        else
+        {
+            Invoke(nameof(FinishBossPhase), 6f);
+        }
+    }
+
+    public void FinishBossPhase()
+    {
+        Finish(true); // จบเกมด้วยชัยชนะ (Victory)
     }
 
     static void StopSpawners()
@@ -160,7 +191,11 @@ public class LevelManager : MonoBehaviour
 
     void OnChartFinished()
     {
-        if (state != State.Finished) Finish(true);
+        if (state == State.Playing)
+        {
+            state = State.WaitingForLastEnemy;
+            StopSpawners();
+        }
     }
 
     public void OnPlayerDied()

@@ -125,6 +125,12 @@ public class PlayerController : MonoBehaviour
             HitResult result = target.EvaluateAccuracy();
             OnNoteHit(result, target.IsLastInRow());
             target.ConsumeMini(result);
+
+            // สั่งให้เส้นตัดสินเล่นอนิเมชั่นคลื่นเสียง/หัวใจ
+            if (HitLineAnimation.instance != null)
+            {
+                HitLineAnimation.instance.PlayHitEffect();
+            }
         }
         else
         {

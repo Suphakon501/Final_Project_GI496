@@ -14,8 +14,12 @@ public class MiniLipid : MonoBehaviour
 
     [Header("Settings")]
     public KeyCode assignedKey;
-    [SerializeField] private float moveSpeed = 3.0f;
+    [SerializeField] private float moveSpeed = 3.0f; // ความเร็วเริ่มต้น (Base Speed)
     public float hitLineX = -3.0f;
+
+    [Header("Progressive Speed Settings")]
+    [SerializeField] private float maxMoveSpeed = 13.0f;      // ความเร็วสูงสุดที่จะหยุดเพิ่ม (8.0ตามที่ต้องการ)
+    [SerializeField] private float speedIncreaseRate = 0.05f; // อัตราความเร็วที่เพิ่มขึ้นต่อวินาที
 
     [Header("Timing Window (seconds)")]
     [SerializeField] private float perfectWindow = 0.09f;
@@ -33,7 +37,16 @@ public class MiniLipid : MonoBehaviour
     private bool hasTargetTime = false;
     private float targetSongTime;
 
-    public float MoveSpeed => moveSpeed;
+    // คำนวณความเร็วอัตโนมัติในตัว โดยเริ่มจาก moveSpeed แล้วค่อยๆ เพิ่มขึ้นตามเวลาสูงสุดไม่เกิน maxMoveSpeed
+    public float MoveSpeed
+    {
+        get
+        {
+            float timePassed = Time.timeSinceLevelLoad; // นับเวลาตั้งแต่เริ่มเล่นฉาก
+            float calculatedSpeed = moveSpeed + (timePassed * speedIncreaseRate);
+            return Mathf.Min(calculatedSpeed, maxMoveSpeed);
+        }
+    }
 
     bool UsingSongClock => hasTargetTime && BeatManager.instance != null;
 
@@ -50,7 +63,7 @@ public class MiniLipid : MonoBehaviour
         if (PlayerController.isGameOver || isFinished) return;
 
         if (UsingSongClock) FollowSongTime();
-        else transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+        else transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
 
         if (SecondsUntilLine() < -missAfter)
         {
@@ -81,14 +94,14 @@ public class MiniLipid : MonoBehaviour
     float SecondsUntilLine()
     {
         if (UsingSongClock) return targetSongTime - BeatManager.instance.songPositionInSeconds;
-        return (transform.position.x - hitLineX) / Mathf.Max(0.01f, moveSpeed);
+        return (transform.position.x - hitLineX) / Mathf.Max(0.01f, MoveSpeed);
     }
 
     void FollowSongTime()
     {
         if (!UsingSongClock) return;
         var p = transform.position;
-        p.x = hitLineX + (targetSongTime - BeatManager.instance.songPositionInSeconds) * moveSpeed;
+        p.x = hitLineX + (targetSongTime - BeatManager.instance.songPositionInSeconds) * MoveSpeed;
         transform.position = p;
     }
 
