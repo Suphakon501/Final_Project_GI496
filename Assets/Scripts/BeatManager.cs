@@ -63,6 +63,10 @@ public class BeatManager : MonoBehaviour
 
     void Update()
     {
+        // ตอน pause ให้ค้างนาฬิกาไว้ ไม่งั้น smoothRawTime จะเดินต่อด้วย unscaledDeltaTime
+        // (ต้องเปิด Pause Audio ที่ PauseManager ด้วย เพลงจะได้หยุดและต่อจากจุดเดิม)
+        if (PauseMenu.IsPaused) return;
+
         songPositionInSeconds = HasMusic ? ReadMusicClock() : Time.time - virtualStartTime - songOffsetSeconds;
         songPositionInBeats = songPositionInSeconds / BeatDuration;
 

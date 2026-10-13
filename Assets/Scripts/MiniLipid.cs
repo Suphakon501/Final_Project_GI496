@@ -60,7 +60,7 @@ public class MiniLipid : MonoBehaviour
 
     void Update()
     {
-        if (PlayerController.isGameOver || isFinished) return;
+        if (PauseMenu.IsPaused || PlayerController.isGameOver || isFinished) return;
 
         if (UsingSongClock) FollowSongTime();
         else transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
