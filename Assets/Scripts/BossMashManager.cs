@@ -10,12 +10,15 @@ public class BossMashManager : MonoBehaviour
     [SerializeField] private GameObject mashUIPanel; // พาเนลปุ่มกดรัว
     [SerializeField] private TextMeshProUGUI infoText; // Text แสดงจำนวนครั้งที่กด
 
+    [Header("Boss Animation UI Reference")]
+    [SerializeField] private GameObject bossUIObject; // ลาก GameObject "BossUI" ที่ทำแอนิเมชันมาใส่ช่องนี้
+
     [Header("Score Display Reference")]
     [SerializeField] private SpriteNumber scoreSpriteNumber; // คอมโพเนนต์ SpriteNumber ของคะแนน
-    [SerializeField] private RectTransform scoreRectTransform; // ลาก GameObject "Score" มาใส่ช่องนี้
-    [SerializeField] private Vector2 bossPositionCenter = new Vector2(0f, 0f); // ตำแหน่งกึ่งกลางจอตอนสู้บอส (ปรับ X, Y ได้ตามต้องการ)
+    [SerializeField] private RectTransform scoreRectTransform; // ลาก GameObject "Score" มาใส่
+    [SerializeField] private Vector2 bossPositionCenter = new Vector2(0f, 0f); // พิกัด Score ตรงกลางจอตอนสู้บอส
 
-    private Vector2 originalScorePosition; // เก็บพิกัดเดิมของ Score
+    private Vector2 originalScorePosition;
     private bool hasSavedPosition = false;
 
     [Header("Visual Feedback Settings")]
@@ -36,8 +39,8 @@ public class BossMashManager : MonoBehaviour
     {
         instance = this;
         if (mashUIPanel != null) mashUIPanel.SetActive(false);
+        if (bossUIObject != null) bossUIObject.SetActive(false); // ซ่อนแอนิเมชันบอสไว้ตอนเริ่มเกม
 
-        // บันทึกตำแหน่ง anchoredPosition เดิมของ Score ไว้ตอนเริ่มเกม
         if (scoreRectTransform != null)
         {
             originalScorePosition = scoreRectTransform.anchoredPosition;
@@ -50,9 +53,11 @@ public class BossMashManager : MonoBehaviour
         isMashActive = true;
         totalMashCount = 0;
 
+        // สั่งเปิดพาเนลปุ่มกดรัวและแอนิเมชันบอส
         if (mashUIPanel != null) mashUIPanel.SetActive(true);
+        if (bossUIObject != null) bossUIObject.SetActive(true);
 
-        // ย้าย Score ไปไว้ตรงกลางจอตอนเข้าสู่ช่วงบอส
+        // ย้าย Score มาตรงกลางจอตอนเข้าสู่ช่วงบอส
         if (scoreRectTransform != null)
         {
             scoreRectTransform.anchoredPosition = bossPositionCenter;
@@ -70,6 +75,7 @@ public class BossMashManager : MonoBehaviour
 
         bool pressed = false;
 
+        // เมื่อกดปุ่ม A หรือ D
         if (Input.GetKeyDown(KeyCode.A))
         {
             totalMashCount++;
@@ -145,9 +151,12 @@ public class BossMashManager : MonoBehaviour
     void EndMash()
     {
         isMashActive = false;
-        if (mashUIPanel != null) mashUIPanel.SetActive(false);
 
-        // คืนตำแหน่ง Score กลับสู่ที่เดิมก่อนจบเกม
+        // ปิดพาเนลปุ่มและแอนิเมชันบอสเมื่อหมดเวลาช่วงบอส
+        if (mashUIPanel != null) mashUIPanel.SetActive(false);
+        if (bossUIObject != null) bossUIObject.SetActive(false);
+
+        // คืนตำแหน่ง Score กลับสู่ที่เดิม
         if (scoreRectTransform != null && hasSavedPosition)
         {
             scoreRectTransform.anchoredPosition = originalScorePosition;

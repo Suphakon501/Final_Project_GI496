@@ -2330,8 +2330,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fillImage: {fileID: 588254757}
-  maxHP: 100
-  startingHP: 100
+  maxHP: 40000
+  startingHP: 40000
   hpDrainPerSecond: 1.5
   drainOnlyDuringWaves: 1
   invincible: 0
