@@ -7,7 +7,14 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     public static bool isGameOver = false;
 
-    private static readonly KeyCode[] InputKeys = { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+    // รองรับปุ่ม W/ขึ้น, A/ซ้าย, D/ขวา, S/ลง
+    private static readonly KeyCode[] InputKeys = {
+        KeyCode.W, KeyCode.UpArrow,
+        KeyCode.A, KeyCode.LeftArrow,
+        KeyCode.D, KeyCode.RightArrow,
+        KeyCode.S, KeyCode.DownArrow
+    };
+
     private const int PerfectScore = 300;
     private const int GoodScore = 100;
     private const int BadScore = 25;
@@ -107,10 +114,21 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
-                TryHit(key);
+                KeyCode normalizedKey = NormalizeKey(key);
+                TryHit(normalizedKey);
                 break;
             }
         }
+    }
+
+    // แปลงปุ่มกดให้ตรงกับเลนของโน้ต
+    KeyCode NormalizeKey(KeyCode key)
+    {
+        if (key == KeyCode.W || key == KeyCode.UpArrow) return KeyCode.W;       // แถวบนสุด
+        if (key == KeyCode.A || key == KeyCode.LeftArrow) return KeyCode.A;     // แถวซ้าย
+        if (key == KeyCode.D || key == KeyCode.RightArrow) return KeyCode.D;    // แถวขวา
+        if (key == KeyCode.S || key == KeyCode.DownArrow) return KeyCode.S;     // แถวล่างสุด
+        return key;
     }
 
     void TryHit(KeyCode pressedKey)
@@ -125,12 +143,6 @@ public class PlayerController : MonoBehaviour
             HitResult result = target.EvaluateAccuracy();
             OnNoteHit(result, target.IsLastInRow());
             target.ConsumeMini(result);
-
-            // สั่งให้เส้นตัดสินเล่นอนิเมชั่นคลื่นเสียง/หัวใจ
-            if (HitLineAnimation.instance != null)
-            {
-                HitLineAnimation.instance.PlayHitEffect();
-            }
         }
         else
         {
@@ -264,7 +276,8 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
-    void UpdateScoreUI()
+    // เปลี่ยนจาก void เป็น public void
+  public void UpdateScoreUI()
     {
         if (scoreText != null) scoreText.text = "Score: " + score;
         if (scoreNumber != null) scoreNumber.SetValue(score);

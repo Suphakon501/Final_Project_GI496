@@ -6,98 +6,96 @@ public class BossMashManager : MonoBehaviour
 {
     public static BossMashManager instance;
 
-    [Header("UI Reference")]
-    [SerializeField] private GameObject mashUIPanel; // พาเนลปุ่มกดรัว
-    [SerializeField] private TextMeshProUGUI infoText; // Text แสดงจำนวนครั้งที่กด
+    [Header("Boss Prefab & Spawn Settings")]
+    [SerializeField] private GameObject bossPrefab;          // ลาก Prefab ของบอสมาใส่ตรงนี้
+    [SerializeField] private float spawnStartX = 30f;        // จุดเริ่มต้นทางขวาไกลๆ เพื่อให้พุ่งเข้ามา
+    [SerializeField] private float targetX = 13.26f;         // พิกัด X เป้าหมายที่จะหยุด
+    [SerializeField] private float fixedY = -0.25f;          // พิกัด Y คงที่ตลอดเวลา
+    [SerializeField] private float moveSpeed = 50f;          // ความเร็วพุ่งตัวเท่ากับ 50
 
-    [Header("Boss Animation UI Reference")]
-    [SerializeField] private GameObject bossUIObject; // ลาก GameObject "BossUI" ที่ทำแอนิเมชันมาใส่ช่องนี้
-
-    [Header("Score Display Reference")]
-    [SerializeField] private SpriteNumber scoreSpriteNumber; // คอมโพเนนต์ SpriteNumber ของคะแนน
-    [SerializeField] private RectTransform scoreRectTransform; // ลาก GameObject "Score" มาใส่
-    [SerializeField] private Vector2 bossPositionCenter = new Vector2(0f, 0f); // พิกัด Score ตรงกลางจอตอนสู้บอส
-
-    private Vector2 originalScorePosition;
-    private bool hasSavedPosition = false;
+    [Header("Particle System (Mash Feedback)")]
+    [SerializeField] private GameObject mashParticlePrefab;  // ลาก Prefab พาติเคิลที่จะให้แสดงตอนกด
+    [SerializeField] private float particleLifetime = 0.5f;  // เวลาในการทำลายพาติเคิลทิ้ง
 
     [Header("Visual Feedback Settings")]
-    [SerializeField] private Image keyABackground; // พื้นหลังปุ่ม A
-    [SerializeField] private Image keyDBackground; // พื้นหลังปุ่ม D
+    [SerializeField] private Image keyFeedbackBackground;
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private Color hitColor = Color.yellow;
 
     [Header("Settings")]
-    [SerializeField] private int scorePerPress = 50; // คะแนนโบนัสต่อการกด 1 ครั้ง
+    [SerializeField] private int scorePerPress = 50;
 
     private bool isMashActive = false;
+    private bool isBossMovingIn = false;
     private int totalMashCount = 0;
-    private float flashTimerA = 0f;
-    private float flashTimerD = 0f;
+    private float flashTimer = 0f;
+    private GameObject currentBossInstance;
 
     void Awake()
     {
         instance = this;
-        if (mashUIPanel != null) mashUIPanel.SetActive(false);
-        if (bossUIObject != null) bossUIObject.SetActive(false); // ซ่อนแอนิเมชันบอสไว้ตอนเริ่มเกม
-
-        if (scoreRectTransform != null)
-        {
-            originalScorePosition = scoreRectTransform.anchoredPosition;
-            hasSavedPosition = true;
-        }
     }
 
     public void StartMash(float duration)
     {
         isMashActive = true;
         totalMashCount = 0;
+        isBossMovingIn = true;
 
-        // สั่งเปิดพาเนลปุ่มกดรัวและแอนิเมชันบอส
-        if (mashUIPanel != null) mashUIPanel.SetActive(true);
-        if (bossUIObject != null) bossUIObject.SetActive(true);
-
-        // ย้าย Score มาตรงกลางจอตอนเข้าสู่ช่วงบอส
-        if (scoreRectTransform != null)
+        // 1. เสกบอสที่จุดเริ่มต้นทางขวาไกลๆ เพื่อเตรียมพุ่งเข้ามาด้วยความเร็ว 50
+        if (bossPrefab != null)
         {
-            scoreRectTransform.anchoredPosition = bossPositionCenter;
+            Vector3 spawnPos = new Vector3(spawnStartX, fixedY, 0f);
+            currentBossInstance = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
         }
 
-        UpdateUI();
-
-        // กำหนดเวลาช่วงรัวปุ่ม (เช่น 6 วินาที)
+        // กำหนดเวลาช่วงรัวปุ่ม
         Invoke(nameof(EndMash), duration);
     }
 
     void Update()
     {
+        // ให้บอสพุ่งเข้ามาด้วยความเร็ว 50 จนถึง X = 13.26, Y = -0.25
+        if (isBossMovingIn && currentBossInstance != null)
+        {
+            Vector3 targetPos = new Vector3(targetX, fixedY, currentBossInstance.transform.position.z);
+            currentBossInstance.transform.position = Vector3.MoveTowards(
+                currentBossInstance.transform.position,
+                targetPos,
+                moveSpeed * Time.deltaTime
+            );
+
+            // เมื่อถึงตำแหน่งเป้าหมายให้หยุดขยับ
+            if (Mathf.Abs(currentBossInstance.transform.position.x - targetX) < 0.01f)
+            {
+                isBossMovingIn = false;
+            }
+        }
+
         if (!isMashActive || PlayerController.isGameOver) return;
 
-        bool pressed = false;
-
-        // เมื่อกดปุ่ม A หรือ D
-        if (Input.GetKeyDown(KeyCode.A))
+        // กดปุ่มอะไรก็ได้บนคีย์บอร์ดรัวๆ
+        if (Input.anyKeyDown)
         {
-            totalMashCount++;
-            pressed = true;
-            TriggerVisualA();
-            AddScore();
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            totalMashCount++;
-            pressed = true;
-            TriggerVisualD();
-            AddScore();
-        }
-
-        if (pressed)
-        {
-            UpdateUI();
+            if (!Input.GetKeyDown(KeyCode.Escape))
+            {
+                totalMashCount++;
+                TriggerVisualFeedback();
+                SpawnMashParticleFromBoss(); // พาร์ติเคิลพุ่งออกจากตัวบอส
+                AddScore();
+            }
         }
 
         HandleVisualFlash();
+    }
+
+    void SpawnMashParticleFromBoss()
+    {
+        if (mashParticlePrefab == null || currentBossInstance == null) return;
+
+        Vector3 spawnPos = currentBossInstance.transform.position;
+        GameObject particleObj = Instantiate(mashParticlePrefab, spawnPos, Quaternion.identity);
+        Destroy(particleObj, particleLifetime);
     }
 
     void AddScore()
@@ -105,61 +103,35 @@ public class BossMashManager : MonoBehaviour
         if (PlayerController.instance != null)
         {
             PlayerController.instance.score += scorePerPress;
-
-            if (scoreSpriteNumber != null)
-            {
-                scoreSpriteNumber.SetValue(PlayerController.instance.score);
-            }
+            // เรียกสั่งอัปเดตหน้าจอคะแนนทันที
+            PlayerController.instance.UpdateScoreUI();
         }
     }
 
-    void TriggerVisualA()
+    void TriggerVisualFeedback()
     {
-        flashTimerA = 0.1f;
-        if (keyABackground != null) keyABackground.color = hitColor;
-    }
-
-    void TriggerVisualD()
-    {
-        flashTimerD = 0.1f;
-        if (keyDBackground != null) keyDBackground.color = hitColor;
+        flashTimer = 0.1f;
+        if (keyFeedbackBackground != null) keyFeedbackBackground.color = hitColor;
     }
 
     void HandleVisualFlash()
     {
-        if (flashTimerA > 0)
+        if (flashTimer > 0)
         {
-            flashTimerA -= Time.deltaTime;
-            if (flashTimerA <= 0 && keyABackground != null) keyABackground.color = normalColor;
-        }
-
-        if (flashTimerD > 0)
-        {
-            flashTimerD -= Time.deltaTime;
-            if (flashTimerD <= 0 && keyDBackground != null) keyDBackground.color = normalColor;
-        }
-    }
-
-    void UpdateUI()
-    {
-        if (infoText != null)
-        {
-            infoText.text = $"MASH A & D!\nHits: {totalMashCount}";
+            flashTimer -= Time.deltaTime;
+            if (flashTimer <= 0 && keyFeedbackBackground != null) keyFeedbackBackground.color = normalColor;
         }
     }
 
     void EndMash()
     {
         isMashActive = false;
+        isBossMovingIn = false;
 
-        // ปิดพาเนลปุ่มและแอนิเมชันบอสเมื่อหมดเวลาช่วงบอส
-        if (mashUIPanel != null) mashUIPanel.SetActive(false);
-        if (bossUIObject != null) bossUIObject.SetActive(false);
-
-        // คืนตำแหน่ง Score กลับสู่ที่เดิม
-        if (scoreRectTransform != null && hasSavedPosition)
+        // ลบ Prefab บอสทิ้งเมื่อหมดเวลา
+        if (currentBossInstance != null)
         {
-            scoreRectTransform.anchoredPosition = originalScorePosition;
+            Destroy(currentBossInstance);
         }
 
         if (LevelManager.instance != null)

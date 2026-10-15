@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public enum HitResult { Perfect, Good, Bad, Miss }
@@ -9,17 +8,20 @@ public class MiniLipid : MonoBehaviour
     private static readonly List<MiniLipid> active = new List<MiniLipid>();
     public static IReadOnlyList<MiniLipid> Active => active;
 
-    [Header("UI Reference")]
-    [SerializeField] private TextMeshProUGUI letterText;
-
     [Header("Settings")]
     public KeyCode assignedKey;
-    [SerializeField] private float moveSpeed = 3.0f; // ความเร็วเริ่มต้น (Base Speed)
+    [SerializeField] private float moveSpeed = 3.0f;
     public float hitLineX = -3.0f;
 
+    [Header("4-Lane Y Positions (Top to Bottom)")]
+    [SerializeField] private float yPosTop = 3.0f;    // แถวที่ 1 (บนสุด: ขึ้น / Q) -> พิกัด 3
+    [SerializeField] private float yPosMid1 = 1.0f;   // แถวที่ 2 (ถัดลงมา: ซ้าย / A) -> พิกัด 1
+    [SerializeField] private float yPosMid2 = -1.0f;  // แถวที่ 3 (ถัดลงมา: ขวา / D) -> พิกัด -1
+    [SerializeField] private float yPosBottom = -3.0f;// แถวที่ 4 (ล่างสุด: ลง / S) -> พิกัด -3
+
     [Header("Progressive Speed Settings")]
-    [SerializeField] private float maxMoveSpeed = 13.0f;      // ความเร็วสูงสุดที่จะหยุดเพิ่ม (8.0ตามที่ต้องการ)
-    [SerializeField] private float speedIncreaseRate = 0.05f; // อัตราความเร็วที่เพิ่มขึ้นต่อวินาที
+    [SerializeField] private float maxMoveSpeed = 13.0f;
+    [SerializeField] private float speedIncreaseRate = 0.05f;
 
     [Header("Timing Window (seconds)")]
     [SerializeField] private float perfectWindow = 0.09f;
@@ -37,12 +39,11 @@ public class MiniLipid : MonoBehaviour
     private bool hasTargetTime = false;
     private float targetSongTime;
 
-    // คำนวณความเร็วอัตโนมัติในตัว โดยเริ่มจาก moveSpeed แล้วค่อยๆ เพิ่มขึ้นตามเวลาสูงสุดไม่เกิน maxMoveSpeed
     public float MoveSpeed
     {
         get
         {
-            float timePassed = Time.timeSinceLevelLoad; // นับเวลาตั้งแต่เริ่มเล่นฉาก
+            float timePassed = Time.timeSinceLevelLoad;
             float calculatedSpeed = moveSpeed + (timePassed * speedIncreaseRate);
             return Mathf.Min(calculatedSpeed, maxMoveSpeed);
         }
@@ -52,11 +53,6 @@ public class MiniLipid : MonoBehaviour
 
     void OnEnable() => active.Add(this);
     void OnDisable() => active.Remove(this);
-
-    void Start()
-    {
-        UpdateVisual();
-    }
 
     void Update()
     {
@@ -76,7 +72,14 @@ public class MiniLipid : MonoBehaviour
     {
         assignedKey = key;
         parentLipid = owner;
-        UpdateVisual();
+
+        // จัดตำแหน่ง Y ตามพิกัด (3, 1, -1, -3)
+        Vector3 pos = transform.position;
+        if (assignedKey == KeyCode.W) pos.y = yPosTop;       // บนสุด (ขึ้น / W)
+        else if (assignedKey == KeyCode.A) pos.y = yPosMid1;  // ถัดลงมา (ซ้าย / A)
+        else if (assignedKey == KeyCode.D) pos.y = yPosMid2;  // ถัดลงมา (ขวา / D)
+        else if (assignedKey == KeyCode.S) pos.y = yPosBottom;// ล่างสุด (ลง / S)
+        transform.position = pos;
     }
 
     public void SetTargetSongTime(float songTime)
@@ -84,11 +87,6 @@ public class MiniLipid : MonoBehaviour
         hasTargetTime = true;
         targetSongTime = songTime;
         FollowSongTime();
-    }
-
-    void UpdateVisual()
-    {
-        if (letterText != null) letterText.text = assignedKey.ToString();
     }
 
     float SecondsUntilLine()
