@@ -19,6 +19,9 @@ public class SpriteNumber : MonoBehaviour
     [SerializeField] private Align alignment = Align.Right;
     [SerializeField] private bool useThousandsSeparator = true;
     [SerializeField] private Color color = Color.white;
+    [SerializeField] private Sprite suffixSprite;
+    [SerializeField] private float suffixHeight = 44f;
+    [SerializeField] private float suffixSpacing = 10f;
 
     [Header("Pop On Change")]
     [SerializeField] private float popScale = 1.15f;
@@ -28,8 +31,10 @@ public class SpriteNumber : MonoBehaviour
     [SerializeField] private int previewValue = 12345;
 
     const string DigitObjectName = "Digit";
+    const string SuffixObjectName = "Suffix";
 
     private readonly List<Image> pool = new List<Image>();
+    private Image suffixImage;
     private int currentValue = int.MinValue;
     private bool dirty = true;
 
@@ -37,6 +42,8 @@ public class SpriteNumber : MonoBehaviour
 
     void OnEnable()
     {
+        if (suffixSprite == null && gameObject.name == "ComboNumber")
+            suffixSprite = Resources.Load<Sprite>("ComboX");
         CollectPool();
         dirty = true;
     }
@@ -100,6 +107,8 @@ public class SpriteNumber : MonoBehaviour
             totalWidth += widths[i];
         }
         if (sprites.Count > 1) totalWidth += spacing * (sprites.Count - 1);
+        float suffixWidth = suffixSprite != null ? suffixHeight * suffixSprite.rect.width / suffixSprite.rect.height : 0f;
+        if (sprites.Count > 0 && suffixSprite != null) totalWidth += suffixSpacing + suffixWidth;
 
         var rt = (RectTransform)transform;
         Rect r = rt.rect;
@@ -126,6 +135,22 @@ public class SpriteNumber : MonoBehaviour
             irt.anchoredPosition = new Vector2(x, r.center.y);
             x += widths[i] + spacing;
         }
+
+        if (suffixSprite != null)
+        {
+            if (suffixImage == null) suffixImage = CreateSuffixImage();
+            bool showSuffix = sprites.Count > 0;
+            if (suffixImage.gameObject.activeSelf != showSuffix) suffixImage.gameObject.SetActive(showSuffix);
+            if (showSuffix)
+            {
+                suffixImage.sprite = suffixSprite;
+                RectTransform suffixRt = suffixImage.rectTransform;
+                suffixRt.anchorMin = suffixRt.anchorMax = rt.pivot;
+                suffixRt.pivot = new Vector2(0f, 0.5f);
+                suffixRt.sizeDelta = new Vector2(suffixWidth, suffixHeight);
+                suffixRt.anchoredPosition = new Vector2(x - spacing + suffixSpacing, r.center.y);
+            }
+        }
     }
 
     void CollectPool()
@@ -133,15 +158,27 @@ public class SpriteNumber : MonoBehaviour
         pool.Clear();
         foreach (Transform child in transform)
         {
-            if (child.name != DigitObjectName) continue;
             var img = child.GetComponent<Image>();
-            if (img != null) pool.Add(img);
+            if (img == null) continue;
+            if (child.name == DigitObjectName) pool.Add(img);
+            else if (child.name == SuffixObjectName) suffixImage = img;
         }
     }
 
     Image CreateDigitImage()
     {
         var go = new GameObject(DigitObjectName, typeof(RectTransform), typeof(Image));
+        go.layer = gameObject.layer;
+        go.transform.SetParent(transform, false);
+        var img = go.GetComponent<Image>();
+        img.raycastTarget = false;
+        img.preserveAspect = true;
+        return img;
+    }
+
+    Image CreateSuffixImage()
+    {
+        var go = new GameObject(SuffixObjectName, typeof(RectTransform), typeof(Image));
         go.layer = gameObject.layer;
         go.transform.SetParent(transform, false);
         var img = go.GetComponent<Image>();

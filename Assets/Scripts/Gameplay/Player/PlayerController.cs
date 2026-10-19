@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,8 +39,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string drawAnimName = "Player_Draw";
     [SerializeField] private string[] throwAnimNames = { "Player_ThrowA", "Player_ThrowB" };
     [SerializeField] private string hitAnimName = "Player_Hit";
+    [SerializeField] private string kickDownAnimName = "Player_KickDown";
+    [SerializeField] private string shootingAnimName = "Player_Shooting";
+    [SerializeField] private string jumpAttackAnimName = "Player_JumpAttack";
     [SerializeField] private string sheatheAnimName = "Player_Sheathe";
     [SerializeField] private float sheatheDelay = 0.5f;
+    [SerializeField] private float attackStopBeforeHitLine = 0.75f;
+    [SerializeField] private float jumpAttackLeftOffset = 0.25f;
+    [SerializeField] private float jumpAttackBelowNote = 1.5f;
+    [SerializeField] private float jumpAttackDuration = 0.35f;
 
     [Header("HP Balance")]
     [SerializeField] private float hpPerfect = 2f;
@@ -82,6 +90,8 @@ public class PlayerController : MonoBehaviour
     private int activeWaves = 0;
     private int currentPerfectStreak = 0;
     private bool warnedMissingCombo = false;
+    private Vector3 homePosition;
+    private bool isAwayFromHome;
 
     void Awake()
     {
@@ -91,6 +101,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        homePosition = transform.position;
         isGameOver = false;
         Time.timeScale = 1f;
         score = 0;
@@ -108,14 +119,17 @@ public class PlayerController : MonoBehaviour
     {
         ShrinkFeedbackSprite();
 
-        if (isGameOver || Time.time < nextAllowedPressTime) return;
+        if (isGameOver) return;
 
         foreach (var key in InputKeys)
         {
             if (Input.GetKeyDown(key))
             {
                 KeyCode normalizedKey = NormalizeKey(key);
-                TryHit(normalizedKey);
+                // Directional attacks stay at their attack point until the next input.
+                CancelInvoke(nameof(ReturnHome));
+                if (isAwayFromHome) ReturnHome();
+                if (Time.time >= nextAllowedPressTime) TryHit(normalizedKey);
                 break;
             }
         }
@@ -141,7 +155,7 @@ public class PlayerController : MonoBehaviour
         if (pressedKey == target.assignedKey)
         {
             HitResult result = target.EvaluateAccuracy();
-            OnNoteHit(result, target.IsLastInRow());
+            OnNoteHit(result, target.IsLastInRow(), pressedKey, target.hitLineX, target.transform.position.y);
             target.ConsumeMini(result);
         }
         else
@@ -153,9 +167,10 @@ public class PlayerController : MonoBehaviour
         UpdateScoreUI();
     }
 
-    void OnNoteHit(HitResult result, bool isLastOfWave)
+    void OnNoteHit(HitResult result, bool isLastOfWave, KeyCode pressedKey, float hitLineX, float noteY)
     {
-        PlayThrowAnimation();
+        if (result == HitResult.Bad) CancelDirectionalMove();
+        else PlayDirectionalAnimation(pressedKey, hitLineX, noteY);
         AddCombo();
         missStreak = 0;
 
@@ -180,6 +195,7 @@ public class PlayerController : MonoBehaviour
             default:
                 score += BadScore;
                 ChangeHealth(-badDamage);
+                PlayAnimation(hitAnimName);
                 currentPerfectStreak = 0;
                 ShowFeedbackSprite(badSprite);
                 PlaySound(badMissSound);
@@ -189,6 +205,7 @@ public class PlayerController : MonoBehaviour
 
     void OnNoteMissed()
     {
+        CancelDirectionalMove();
         currentPerfectStreak = 0;
         BreakCombo();
         ApplyMissDamage();
@@ -256,9 +273,10 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         isGameOver = true;
+        CancelDirectionalMove();
         HideFeedbackSprite();
         if (feedbackText != null) feedbackText.text = "GAME OVER!";
-        PlayAnimation(idleAnimName);
+        PlayAnimation("Player_Faint");
         Debug.Log("GAME OVER! Score: " + score);
 
         for (int i = MiniLipid.Active.Count - 1; i >= 0; i--) Destroy(MiniLipid.Active[i].gameObject);
@@ -340,6 +358,45 @@ public class PlayerController : MonoBehaviour
         if (throwAnimNames == null || throwAnimNames.Length == 0) return;
         PlayAnimation(throwAnimNames[throwStep % throwAnimNames.Length]);
         throwStep++;
+    }
+
+    void PlayDirectionalAnimation(KeyCode pressedKey, float hitLineX, float noteY)
+    {
+        switch (pressedKey)
+        {
+            case KeyCode.S:
+                StartDirectionalMove(new Vector3(hitLineX - attackStopBeforeHitLine, homePosition.y, homePosition.z));
+                PlayAnimation(kickDownAnimName);
+                break;
+            case KeyCode.A:
+                PlayAnimation(shootingAnimName);
+                break;
+            case KeyCode.W:
+                StartDirectionalMove(new Vector3(hitLineX - attackStopBeforeHitLine - jumpAttackLeftOffset, noteY - jumpAttackBelowNote, homePosition.z));
+                PlayAnimation(jumpAttackAnimName);
+                Invoke(nameof(ReturnHome), jumpAttackDuration);
+                break;
+            default:
+                PlayThrowAnimation();
+                break;
+        }
+    }
+
+    void StartDirectionalMove(Vector3 attackPosition)
+    {
+        transform.position = attackPosition;
+        isAwayFromHome = true;
+    }
+
+    void CancelDirectionalMove()
+    {
+        ReturnHome();
+    }
+
+    void ReturnHome()
+    {
+        transform.position = homePosition;
+        isAwayFromHome = false;
     }
 
     void PlayAnimation(string animName)

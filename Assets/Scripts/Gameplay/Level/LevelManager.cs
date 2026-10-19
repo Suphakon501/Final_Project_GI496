@@ -69,15 +69,19 @@ public class LevelManager : MonoBehaviour
         if (progressTracker != null) progressTracker.SetExternalControl();
 
         chartPlayer = FindFirstObjectByType<ChartPlayer>();
+        var beat = BeatManager.instance != null ? BeatManager.instance : FindFirstObjectByType<BeatManager>();
+        music = beat != null ? beat.musicSource : null;
         if (chartPlayer != null && chartPlayer.chart != null && !chartPlayer.recordMode)
         {
+            duration = chartPlayer.chart.music != null
+                ? chartPlayer.chart.music.length
+                : music != null && music.clip != null
+                    ? music.clip.length
+                    : Mathf.Max(1f, fallbackDurationSeconds);
             chartPlayer.onChartFinished.AddListener(OnChartFinished);
             return;
         }
         chartPlayer = null;
-
-        var beat = BeatManager.instance != null ? BeatManager.instance : FindFirstObjectByType<BeatManager>();
-        music = beat != null ? beat.musicSource : null;
 
         if (useMusicLength && music != null && music.clip != null)
         {
@@ -96,7 +100,12 @@ public class LevelManager : MonoBehaviour
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         if (debugKeys && state != State.Finished) HandleDebugKeys();
 #endif
-        if (state == State.Finished || chartPlayer != null) return;
+        if (state == State.Finished) return;
+        if (chartPlayer != null)
+        {
+            if (state == State.WaitingForLastEnemy) StartBossPhase();
+            return;
+        }
 
         if (state == State.Playing && !PlayerController.isGameOver)
         {
