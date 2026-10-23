@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: d4595981ccce81f4bb96a467d14c190c
+guid: a6f9bda1428faee468d118b0c9b4e30c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6857175498879082412
-    second: Left (1)_0
+      213: 8004564778311272886
+    second: Down2_0
+  - first:
+      213: -2144254843293757290
+    second: Down2_1
+  - first:
+      213: -2602267980639289912
+    second: Down2_2
+  - first:
+      213: 3628933592433615808
+    second: Down2_3
+  - first:
+      213: 427986693107226179
+    second: Down2_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Left (1)_0
+      name: Down2_0
       rect:
         serializedVersion: 2
-        x: 1928
-        y: 2158
-        width: 512
-        height: 503
+        x: 1941
+        y: 1096
+        width: 166
+        height: 183
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +140,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: caf133d09c4992f50800000000000000
-      internalID: 6857175498879082412
+      spriteID: 6b9c8d0814de51f60800000000000000
+      internalID: 8004564778311272886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Down2_1
+      rect:
+        serializedVersion: 2
+        x: 1961
+        y: 844
+        width: 492
+        height: 549
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 690909da4931e32e0800000000000000
+      internalID: -2144254843293757290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Down2_2
+      rect:
+        serializedVersion: 2
+        x: 2290
+        y: 1098
+        width: 175
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cd3f9b1f03e2ebd0800000000000000
+      internalID: -2602267980639289912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Down2_3
+      rect:
+        serializedVersion: 2
+        x: 1951
+        y: 835
+        width: 234
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c3ec7a10ef8c5230800000000000000
+      internalID: 3628933592433615808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Down2_4
+      rect:
+        serializedVersion: 2
+        x: 2195
+        y: 834
+        width: 283
+        height: 241
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 346104b31a380f500800000000000000
+      internalID: 427986693107226179
       vertices: []
       indices: 
       edges: []
@@ -148,7 +248,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Left (1)_0: 6857175498879082412
+      Down2_0: 8004564778311272886
+      Down2_1: -2144254843293757290
+      Down2_2: -2602267980639289912
+      Down2_3: 3628933592433615808
+      Down2_4: 427986693107226179
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

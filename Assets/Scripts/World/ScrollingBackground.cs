@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ScrollingBackground : MonoBehaviour
 {
@@ -6,17 +7,20 @@ public class ScrollingBackground : MonoBehaviour
     public class Layer
     {
         public string name = "Layer";
+        [Tooltip("Sprite ต้นแบบ (ลากจาก Project หรือจาก Hierarchy ก็ได้)")]
         public SpriteRenderer sprite;
         [Range(0f, 3f)] public float speedMultiplier = 1f;
         public Vector2 positionOffset = Vector2.zero;
         [Range(0f, 0.2f)] public float overlap = 0.02f;
 
-        [HideInInspector] public Transform[] tiles;
+        [HideInInspector] public List<Transform> tiles = new List<Transform>();
+        [HideInInspector] public SpriteRenderer template; // ตัว clone ในซีนที่ซ่อนไว้ ใช้สร้าง tile
+        [HideInInspector] public Transform parent;
+        [HideInInspector] public float width;
         [HideInInspector] public float spacing;
-        [HideInInspector] public float originX;
         [HideInInspector] public float y;
         [HideInInspector] public float z;
-        [HideInInspector] public float offset;
+        [HideInInspector] public int spawnCount;
     }
 
     [Header("Speed")]
@@ -24,6 +28,12 @@ public class ScrollingBackground : MonoBehaviour
 
     [Header("Layers (far to near)")]
     public Layer[] layers;
+
+    [Header("Culling")]
+    [Tooltip("ระยะเผื่อนอกขอบกล้อง ก่อนทำลาย/สร้าง tile (กันภาพกระตุกที่ขอบจอ)")]
+    public float margin = 1f;
+    [Tooltip("ปิดไว้ = tile ที่หลุดจอจะหายไปเฉย ๆ ไม่สร้างใหม่ (พื้นหลังจะหมด)")]
+    public bool respawn = true;
 
     Camera cam;
 
@@ -36,58 +46,102 @@ public class ScrollingBackground : MonoBehaviour
 
     void BuildLayer(Layer layer)
     {
-        if (layer.sprite == null) return;
+        if (layer.sprite == null || layer.sprite.sprite == null) return;
 
-        Transform st = layer.sprite.transform;
-        st.position += (Vector3)layer.positionOffset;
+        Transform src = layer.sprite.transform;
+        bool isSceneObject = layer.sprite.gameObject.scene.IsValid();
 
-        float width = layer.sprite.bounds.size.x;
-        layer.spacing = Mathf.Max(0.01f, width - layer.overlap);
-        layer.y = st.position.y;
-        layer.z = st.position.z;
+        // ไม่แตะต้อง/ไม่ทำลายตัวต้นฉบับ (อาจเป็น asset ใน Project)
+        Vector3 basePos = src.position + (Vector3)layer.positionOffset;
+        layer.parent = isSceneObject ? src.parent : transform;
 
-        float camHalfW = cam.orthographicSize * cam.aspect;
-        float camLeft = cam.transform.position.x - camHalfW;
-        float camRight = cam.transform.position.x + camHalfW;
+        // ใช้ขนาดจากตัว Sprite เอง เพราะ bounds ของ asset ไม่น่าเชื่อถือ
+        layer.width = layer.sprite.sprite.bounds.size.x * Mathf.Abs(src.lossyScale.x);
+        layer.spacing = Mathf.Max(0.01f, layer.width - layer.overlap);
+        layer.y = basePos.y;
+        layer.z = basePos.z;
 
-        float startX = st.position.x;
-        int shift = Mathf.Max(0, Mathf.CeilToInt((startX - width * 0.5f - camLeft) / layer.spacing));
-        layer.originX = startX - shift * layer.spacing;
+        // ต้นแบบในซีน (ซ่อนไว้) ใช้ clone tile ทั้งหมด
+        layer.template = Instantiate(layer.sprite, basePos, src.rotation, layer.parent);
+        layer.template.name = layer.sprite.name + "_template";
+        layer.template.gameObject.SetActive(false);
 
-        int count = Mathf.CeilToInt((camRight - (layer.originX - width * 0.5f)) / layer.spacing) + 2;
+        // ถ้าลากมาจากซีน ให้ซ่อนตัวเดิมไม่ให้ซ้อนกับ tile ที่สร้างใหม่
+        if (isSceneObject)
+            layer.sprite.gameObject.SetActive(false);
 
-        layer.tiles = new Transform[count];
-        layer.tiles[0] = st;
-        for (int i = 1; i < count; i++)
-        {
-            SpriteRenderer clone = Instantiate(layer.sprite, st.position, st.rotation, st.parent);
-            clone.name = layer.sprite.name + "_tile" + i;
-            layer.tiles[i] = clone.transform;
-        }
-
-        PositionTiles(layer);
+        // tile แรกเริ่มจากซ้ายสุดของกล้อง แล้วเติมไปทางขวาจนเต็มจอ
+        float camLeft = cam.transform.position.x - cam.orthographicSize * cam.aspect;
+        int shift = Mathf.Max(0, Mathf.CeilToInt((basePos.x - layer.width * 0.5f - camLeft) / layer.spacing));
+        SpawnTile(layer, basePos.x - shift * layer.spacing);
+        FillRight(layer);
     }
 
     void Update()
     {
         foreach (var layer in layers)
         {
-            if (layer.tiles == null) continue;
+            if (layer.template == null) continue;
 
             float move = baseSpeed * layer.speedMultiplier * Time.deltaTime;
-            layer.offset = Mathf.Repeat(layer.offset + move, layer.spacing);
-            PositionTiles(layer);
+
+            foreach (var t in layer.tiles)
+            {
+                Vector3 p = t.position;
+                p.x -= move;
+                t.position = p;
+            }
+
+            CullLeft(layer);
+            if (respawn) FillRight(layer);
         }
     }
 
-    void PositionTiles(Layer layer)
+    // ทำลาย tile ที่ขอบขวาพ้นขอบซ้ายของกล้องไปแล้ว (ทุกตัวเป็น clone ในซีน จึง Destroy ได้)
+    void CullLeft(Layer layer)
     {
-        for (int i = 0; i < layer.tiles.Length; i++)
+        float camLeft = cam.transform.position.x - cam.orthographicSize * cam.aspect;
+
+        for (int i = layer.tiles.Count - 1; i >= 0; i--)
         {
-            layer.tiles[i].position = new Vector3(
-                layer.originX + i * layer.spacing - layer.offset,
-                layer.y,
-                layer.z);
+            Transform t = layer.tiles[i];
+            if (t.position.x + layer.width * 0.5f < camLeft - margin)
+            {
+                layer.tiles.RemoveAt(i);
+                Destroy(t.gameObject);
+            }
         }
+    }
+
+    // สร้าง tile ใหม่ต่อท้ายทางขวา จนกว่าจะพ้นขอบขวาของกล้อง
+    void FillRight(Layer layer)
+    {
+        float camRight = cam.transform.position.x + cam.orthographicSize * cam.aspect;
+
+        while (true)
+        {
+            float nextX;
+            if (layer.tiles.Count > 0)
+            {
+                float lastX = layer.tiles[layer.tiles.Count - 1].position.x;
+                if (lastX + layer.width * 0.5f >= camRight + margin) break;
+                nextX = lastX + layer.spacing;
+            }
+            else
+            {
+                nextX = camRight; // ไม่เหลือ tile เลย
+            }
+
+            SpawnTile(layer, nextX);
+        }
+    }
+
+    void SpawnTile(Layer layer, float x)
+    {
+        SpriteRenderer clone = Instantiate(layer.template, layer.parent);
+        clone.gameObject.SetActive(true);
+        clone.name = layer.sprite.name + "_tile" + (++layer.spawnCount);
+        clone.transform.position = new Vector3(x, layer.y, layer.z);
+        layer.tiles.Add(clone.transform);
     }
 }
