@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 9d3c23e8f439d854c8d1589dfa8c9f41
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4796517985419416841
+    second: Front_Audios_0
+  - first:
+      213: 6956570393600290706
+    second: Front_Audios_1
+  - first:
+      213: -2134949578373918834
+    second: Front_Audios_2
+  - first:
+      213: 5023872717970964126
+    second: Front_Audios_3
+  - first:
+      213: -1713234062274012290
+    second: Front_Audios_4
+  - first:
+      213: -2625233922397618511
+    second: Front_Audios_5
+  - first:
+      213: -3376158960885030572
+    second: Front_Audios_6
+  - first:
+      213: 5113534887641470784
+    second: Front_Audios_7
+  - first:
+      213: -7749329751223525816
+    second: Front_Audios_8
+  - first:
+      213: 6236674746701742391
+    second: Front_Audios_9
+  - first:
+      213: -8095892022840749038
+    second: Front_Audios_10
+  - first:
+      213: 2581540864937838121
+    second: Front_Audios_11
+  - first:
+      213: 6084631973627942664
+    second: Front_Audios_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Front_Audios_0
+      rect:
+        serializedVersion: 2
+        x: 2229
+        y: 2879
+        width: 257
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90552b7d1b7a09240800000000000000
+      internalID: 4796517985419416841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_1
+      rect:
+        serializedVersion: 2
+        x: 2501
+        y: 2873
+        width: 225
+        height: 276
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29f6b8d5ae3ba8060800000000000000
+      internalID: 6956570393600290706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_2
+      rect:
+        serializedVersion: 2
+        x: 2770
+        y: 2879
+        width: 240
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8f07af7ba22f52e0800000000000000
+      internalID: -2134949578373918834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_3
+      rect:
+        serializedVersion: 2
+        x: 3031
+        y: 2879
+        width: 149
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9e7f6f8e9168b540800000000000000
+      internalID: 5023872717970964126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_4
+      rect:
+        serializedVersion: 2
+        x: 3201
+        y: 2873
+        width: 260
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7bde0d82be5938e0800000000000000
+      internalID: -1713234062274012290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_5
+      rect:
+        serializedVersion: 2
+        x: 3479
+        y: 2876
+        width: 216
+        height: 279
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be3f2b18ab419bd0800000000000000
+      internalID: -2625233922397618511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_6
+      rect:
+        serializedVersion: 2
+        x: 3916
+        y: 2876
+        width: 216
+        height: 279
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 451223f00597521d0800000000000000
+      internalID: -3376158960885030572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_7
+      rect:
+        serializedVersion: 2
+        x: 4156
+        y: 2879
+        width: 187
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 047df6c33ece6f640800000000000000
+      internalID: 5113534887641470784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_8
+      rect:
+        serializedVersion: 2
+        x: 4352
+        y: 2879
+        width: 448
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84e94f226a9d47490800000000000000
+      internalID: -7749329751223525816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_9
+      rect:
+        serializedVersion: 2
+        x: 4809
+        y: 2879
+        width: 149
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7318ec883ae1d8650800000000000000
+      internalID: 6236674746701742391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_10
+      rect:
+        serializedVersion: 2
+        x: 4994
+        y: 2879
+        width: 231
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21498ae591d95af80800000000000000
+      internalID: -8095892022840749038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_11
+      rect:
+        serializedVersion: 2
+        x: 5254
+        y: 2873
+        width: 241
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92646c33db973d320800000000000000
+      internalID: 2581540864937838121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Front_Audios_12
+      rect:
+        serializedVersion: 2
+        x: 5524
+        y: 2876
+        width: 217
+        height: 279
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 807d311da84f07450800000000000000
+      internalID: 6084631973627942664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 7e1db1ffef94da24bb397d5c7c254f13
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Front_Audios_0: 4796517985419416841
+      Front_Audios_1: 6956570393600290706
+      Front_Audios_10: -8095892022840749038
+      Front_Audios_11: 2581540864937838121
+      Front_Audios_12: 6084631973627942664
+      Front_Audios_2: -2134949578373918834
+      Front_Audios_3: 5023872717970964126
+      Front_Audios_4: -1713234062274012290
+      Front_Audios_5: -2625233922397618511
+      Front_Audios_6: -3376158960885030572
+      Front_Audios_7: 5113534887641470784
+      Front_Audios_8: -7749329751223525816
+      Front_Audios_9: 6236674746701742391
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -16,7 +16,6 @@ public class MenuButtonHover : MonoBehaviour,
     [SerializeField] private Vector2 hoverOffset = new Vector2(-12f, 0f);
 
     [Header("Sound (optional)")]
-    [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip hoverSound;
 
     private Image image;
@@ -74,8 +73,8 @@ public class MenuButtonHover : MonoBehaviour,
 
         image.sprite = (value && hoverSprite != null) ? hoverSprite : normalSprite;
 
-        if (value && !wasHovered && audioSource != null && hoverSound != null)
-            audioSource.PlayOneShot(hoverSound);
+        if (value && !wasHovered && hoverSound != null)
+            AudioSettingsRuntime.PlayEffect(hoverSound);
 
         if (instant)
         {

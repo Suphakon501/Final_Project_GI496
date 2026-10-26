@@ -5,24 +5,24 @@ using UnityEngine.InputSystem;
 #endif
 
 /// <summary>
-/// เมนู Pause ในด่าน: กด Esc (หรือปุ่ม UI) เพื่อหยุดเกม แล้วเลือก เล่นต่อ / เริ่มด่านใหม่ / เลือกด่าน / กลับเมนู
-/// วางสคริปต์นี้บน GameObject ที่ "เปิดอยู่ตลอด" (เช่น PauseManager) ห้ามวางบน pausePanel
-/// เพราะ Panel ที่ถูกปิดจะไม่รับการกดปุ่ม Esc
+/// ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Pause ในด๏ฟฝาน: ๏ฟฝ๏ฟฝ Esc (๏ฟฝ๏ฟฝ๏ฟฝอป๏ฟฝ๏ฟฝ๏ฟฝ UI) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝุด๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอก ๏ฟฝ๏ฟฝ่นต๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝ๏ฟฝาน / ๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
+/// ๏ฟฝางสค๏ฟฝิป๏ฟฝ๏ฟฝ๏ฟฝ้บน GameObject ๏ฟฝ๏ฟฝ๏ฟฝ "๏ฟฝิด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอด" (๏ฟฝ๏ฟฝ PauseManager) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาง๏ฟฝ๏ฟฝ pausePanel
+/// ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Panel ๏ฟฝ๏ฟฝ๏ฟฝูก๏ฟฝิด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝรก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Esc
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    /// <summary>สคริปต์อื่นเช่นตัวละครเช็คได้ว่าตอนนี้ pause อยู่ไหม: if (PauseMenu.IsPaused) return;</summary>
+    /// <summary>สค๏ฟฝิป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ่นต๏ฟฝ๏ฟฝ๏ฟฝะค๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาตอน๏ฟฝ๏ฟฝ๏ฟฝ pause ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ: if (PauseMenu.IsPaused) return;</summary>
     public static bool IsPaused { get; private set; }
 
     [Header("UI")]
-    [SerializeField] private GameObject pausePanel;      // Panel ที่มีปุ่มทั้งหมด (เริ่มต้นปิดไว้)
+    [SerializeField] private GameObject pausePanel;      // Panel ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝีป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ (๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ้นปิด๏ฟฝ๏ฟฝ๏ฟฝ)
 
-    [Header("เชื่อมกับ MenuManager (สคริปต์ MainMenu) ในด่านนี้")]
-    [SerializeField] private MainMenu menuManager;       // ใช้ตอนกลับเมนู / เลือกด่าน
+    [Header("๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝับ MenuManager (สค๏ฟฝิป๏ฟฝ๏ฟฝ MainMenu) ในด๏ฟฝาน๏ฟฝ๏ฟฝ๏ฟฝ")]
+    [SerializeField] private MainMenu menuManager;       // ๏ฟฝ๏ฟฝอน๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝ๏ฟฝาน
 
-    [Header("ตั้งค่า")]
-    [SerializeField] private bool pauseAudio = false;    // true = หยุดเสียงทั้งหมดตอน pause (ปกติให้เพลงเล่นต่อ)
-    [SerializeField] private bool unlockCursor = true;   // แสดงเมาส์ตอน pause
+    [Header("๏ฟฝ๏ฟฝ้งค๏ฟฝ๏ฟฝ")]
+    [SerializeField] private bool pauseAudio = false;    // true = ๏ฟฝ๏ฟฝุด๏ฟฝ๏ฟฝ๏ฟฝยง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอน pause (๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝลง๏ฟฝ๏ฟฝ่นต๏ฟฝ๏ฟฝ)
+    [SerializeField] private bool unlockCursor = true;   // ๏ฟฝสด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอน pause
 
     private CursorLockMode previousLockMode;
     private bool previousCursorVisible;
@@ -41,15 +41,15 @@ public class PauseMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        // กันกรณีเปลี่ยน Scene ตอนยัง pause อยู่ แล้วเกมค้าง
+        // ๏ฟฝัน๏ฟฝรณ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝยน Scene ๏ฟฝอน๏ฟฝัง pause ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาง
         IsPaused = false;
         Time.timeScale = 1f;
         AudioListener.pause = false;
     }
 
-    // ---------- ปุ่มใน Pause Panel (ผูกที่ On Click) ----------
+    // ---------- ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Pause Panel (๏ฟฝูก๏ฟฝ๏ฟฝ๏ฟฝ On Click) ----------
 
-    /// <summary>ปุ่มหยุดเกมบนหน้าจอ (สำหรับมือถือ/เมาส์) หรือเรียกจากที่อื่น</summary>
+    /// <summary>๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝุด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝหน๏ฟฝาจ๏ฟฝ (๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝอถ๏ฟฝ๏ฟฝ/๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝยก๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ</summary>
     public void TogglePause()
     {
         if (IsPaused) Resume();
@@ -74,7 +74,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    /// <summary>ปุ่ม "เล่นต่อ"</summary>
+    /// <summary>๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ "๏ฟฝ๏ฟฝ่นต๏ฟฝ๏ฟฝ"</summary>
     public void Resume()
     {
         if (!IsPaused) return;
@@ -82,7 +82,9 @@ public class PauseMenu : MonoBehaviour
 
         Time.timeScale = 1f;
         AudioListener.pause = false;
+
         if (pausePanel != null) pausePanel.SetActive(false);
+
 
         if (unlockCursor)
         {
@@ -91,38 +93,40 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    /// <summary>ปุ่ม "เริ่มด่านใหม่"</summary>
+    /// <summary>๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ "๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ"</summary>
     public void Restart()
     {
         ResetPauseState();
         SceneTransition.Load(SceneManager.GetActiveScene().name);
     }
 
-    /// <summary>ปุ่ม "เลือกด่าน" -> กลับเมนูแล้วเปิดหน้าเลือกด่านเลย</summary>
+    /// <summary>๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ "๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝ๏ฟฝาน" -> ๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝิดหน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝ๏ฟฝาน๏ฟฝ๏ฟฝ๏ฟฝ</summary>
     public void GoToLevelSelect()
     {
         ResetPauseState();
         if (menuManager != null) menuManager.GoToLevelSelect();
-        else Debug.LogWarning("PauseMenu: ยังไม่ได้ผูก Menu Manager");
+        else Debug.LogWarning("PauseMenu: ๏ฟฝัง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝูก Menu Manager");
     }
 
-    /// <summary>ปุ่ม "กลับเมนูหลัก"</summary>
+    /// <summary>๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ "๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝัก"</summary>
     public void GoToMainMenu()
     {
         ResetPauseState();
         if (menuManager != null) menuManager.GoToMenu();
-        else Debug.LogWarning("PauseMenu: ยังไม่ได้ผูก Menu Manager");
+        else Debug.LogWarning("PauseMenu: ๏ฟฝัง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝูก Menu Manager");
     }
 
-    // ---------- ฟังก์ชันช่วย ----------
+    // ---------- ๏ฟฝัง๏ฟฝ๏ฟฝัน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ ----------
 
     private void ResetPauseState()
     {
-        // คืนค่า timeScale ก่อนเปลี่ยน Scene (SceneTransition ใช้เวลาแบบ unscaled อยู่แล้ว)
+        // ๏ฟฝืน๏ฟฝ๏ฟฝ๏ฟฝ timeScale ๏ฟฝ๏ฟฝอน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝยน Scene (SceneTransition ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝแบบ unscaled ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ)
         IsPaused = false;
         Time.timeScale = 1f;
         AudioListener.pause = false;
+
         if (pausePanel != null) pausePanel.SetActive(false);
+
     }
 
     private static bool PausePressed()
@@ -134,3 +138,7 @@ public class PauseMenu : MonoBehaviour
 #endif
     }
 }
+
+
+
+
