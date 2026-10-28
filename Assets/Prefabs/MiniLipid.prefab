@@ -206,10 +206,10 @@ MonoBehaviour:
   assignedKey: 0
   moveSpeed: 9
   hitLineX: -3.5
-  yPosTop: 3
-  yPosMid1: 1
-  yPosMid2: -1
-  yPosBottom: -3
+  yPosTop: 2.25
+  yPosMid1: 0.75
+  yPosMid2: -0.75
+  yPosBottom: -2.25
   maxMoveSpeed: 19
   speedIncreaseRate: 0.05
   perfectWindow: 0.05

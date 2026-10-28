@@ -535,7 +535,7 @@ Transform:
   m_GameObject: {fileID: 126287416}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.06699991, y: 2.029, z: 0}
+  m_LocalPosition: {x: 0.06699991, y: 1.25, z: 0}
   m_LocalScale: {x: 0.24752928, y: 0.24752928, z: 0.24752928}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1559,17 +1559,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449193087}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.0035625845, w: -0.99999374}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 606633881}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.408}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 164.08018, y: 30.707397}
-  m_SizeDelta: {x: 1328.707, y: 127.5677}
+  m_AnchoredPosition: {x: 18.214966, y: 23}
+  m_SizeDelta: {x: 1036.8843, y: 98.355}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &449193089
 MonoBehaviour:
@@ -2040,7 +2040,7 @@ Transform:
   m_GameObject: {fileID: 526387221}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.049999952, y: -3.94, z: 0}
+  m_LocalPosition: {x: 0.049999952, y: -3.25, z: 0}
   m_LocalScale: {x: 0.2685, y: 0.2685, z: 0.2685}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2451,7 +2451,7 @@ Transform:
   m_GameObject: {fileID: 615474035}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.089999914, y: -1.9300001, z: 0}
+  m_LocalPosition: {x: -0.089999914, y: -1.75, z: 0}
   m_LocalScale: {x: 0.25307986, y: 0.25307986, z: 0.25307986}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2977,7 +2977,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  audioSource: {fileID: 375640307}
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &786603365
 GameObject:
@@ -3369,8 +3368,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.76323, y: 41}
-  m_SizeDelta: {x: 1226.7745, y: 50.66}
+  m_AnchoredPosition: {x: 31.801, y: 41}
+  m_SizeDelta: {x: 936.85, y: 50.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &957922182
 MonoBehaviour:
@@ -3436,7 +3435,7 @@ Transform:
   m_GameObject: {fileID: 1006660241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.119999886, y: -0.029999971, z: 0}
+  m_LocalPosition: {x: 0.119999886, y: -0.25, z: 0}
   m_LocalScale: {x: 0.25035012, y: 0.25035012, z: 0.25035012}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3815,7 +3814,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  audioSource: {fileID: 375640307}
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &1179511880
 GameObject:
@@ -4089,8 +4087,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.859}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 220.42776, y: 41.0002}
-  m_SizeDelta: {x: 1139.4371, y: 50.66}
+  m_AnchoredPosition: {x: 69.165596, y: 26.233818}
+  m_SizeDelta: {x: 864.2527, y: 35.6901}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1244814098
 MonoBehaviour:
@@ -4777,7 +4775,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  audioSource: {fileID: 375640307}
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &1582815480
 GameObject:
@@ -5081,7 +5078,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  audioSource: {fileID: 375640307}
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &1619992241
 GameObject:
@@ -5597,6 +5593,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainPanel: {fileID: 0}
   levelPanel: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  settingsBackdrop: {fileID: 0}
+  settingsNavigation: {fileID: 0}
+  settingsBackdropAlpha: 0.58
   menuScene: Menu
   level1Scene: Level1
   level2Scene: Level2

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum HitResult { Perfect, Good, Bad, Miss }
@@ -14,10 +14,10 @@ public class MiniLipid : MonoBehaviour
     public float hitLineX = -3.0f;
 
     [Header("4-Lane Y Positions (Top to Bottom)")]
-    [SerializeField] private float yPosTop = 3.0f;    // แถวที่ 1 (บนสุด: ขึ้น / Q) -> พิกัด 3
-    [SerializeField] private float yPosMid1 = 1.0f;   // แถวที่ 2 (ถัดลงมา: ซ้าย / A) -> พิกัด 1
-    [SerializeField] private float yPosMid2 = -1.0f;  // แถวที่ 3 (ถัดลงมา: ขวา / D) -> พิกัด -1
-    [SerializeField] private float yPosBottom = -3.0f;// แถวที่ 4 (ล่างสุด: ลง / S) -> พิกัด -3
+    [SerializeField] private float yPosTop = 2.25f;    // แถวที่ 1 (บนสุด: ขึ้น / Q) -> พิกัด 3
+    [SerializeField] private float yPosMid1 = 0.75f;   // แถวที่ 2 (ถัดลงมา: ซ้าย / A) -> พิกัด 1
+    [SerializeField] private float yPosMid2 = -0.75f;  // แถวที่ 3 (ถัดลงมา: ขวา / D) -> พิกัด -1
+    [SerializeField] private float yPosBottom = -2.25f;// แถวที่ 4 (ล่างสุด: ลง / S) -> พิกัด -3
 
     [Header("Progressive Speed Settings")]
     [SerializeField] private float maxMoveSpeed = 13.0f;
