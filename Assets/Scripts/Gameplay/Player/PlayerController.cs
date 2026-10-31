@@ -80,6 +80,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip goodSound;
     [SerializeField] private AudioClip badMissSound;
 
+    [Header("Directional Arrow Press Feedback")]
+    [SerializeField] private float arrowPressScale = 1.18f;
+    [SerializeField] private float arrowFlashBrightness = 1.8f;
+    [SerializeField] private float arrowFlashDuration = 0.18f;
+
+    [Header("Combo Screen Tint")]
+    [SerializeField] private Color comboTintColor = new Color(1f, 0f, 0f, 1f);
+    [SerializeField] private float tintAlphaPer50Combo = 0.1f;
+    [SerializeField] private float maxComboTintAlpha = 0.3f;
+    [SerializeField] private float comboTintFadeSpeed = 1.8f;
+
     [Header("Perfect Chain Sounds")]
     [SerializeField] private AudioClip[] perfectStepSounds = new AudioClip[5];
     [SerializeField] private AudioClip perfectEndSound;
@@ -92,11 +103,21 @@ public class PlayerController : MonoBehaviour
     private bool warnedMissingCombo = false;
     private Vector3 homePosition;
     private bool isAwayFromHome;
+    private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4]; // Up, Left, Right, Down
+    private readonly Vector3[] arrowBaseScales = new Vector3[4];
+    private readonly Color[] arrowBaseColors = new Color[4];
+    private readonly float[] arrowFlashTimers = new float[4];
+    private Image comboTintOverlay;
+    private readonly Image[] directionArrowScreenImages = new Image[4];
+    private Canvas comboTintCanvas;
+    private RectTransform comboTintCanvasRect;
 
     void Awake()
     {
         instance = this;
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        CacheDirectionArrows();
+        CreateComboTintOverlay();
     }
 
     void Start()
@@ -118,6 +139,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ShrinkFeedbackSprite();
+        UpdateDirectionArrowFeedback();
+        UpdateComboScreenTint();
 
         if (isGameOver) return;
 
@@ -126,12 +149,149 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(key))
             {
                 KeyCode normalizedKey = NormalizeKey(key);
+                FlashDirectionArrow(normalizedKey);
                 // Directional attacks stay at their attack point until the next input.
                 CancelInvoke(nameof(ReturnHome));
                 if (isAwayFromHome) ReturnHome();
                 if (Time.time >= nextAllowedPressTime) TryHit(normalizedKey);
                 break;
             }
+        }
+    }
+
+    private void CacheDirectionArrows()
+    {
+        Transform hitline = GameObject.Find("Hitline")?.transform;
+        if (hitline == null) return;
+
+        string[] names = { "Up2_1", "Left2_1", "Right2_0", "Down2_1" };
+        for (int i = 0; i < names.Length; i++)
+        {
+            Transform arrow = hitline.Find(names[i]);
+            if (arrow == null) continue;
+            directionArrows[i] = arrow.GetComponent<SpriteRenderer>();
+            if (directionArrows[i] == null) continue;
+            arrowBaseScales[i] = arrow.localScale;
+            arrowBaseColors[i] = directionArrows[i].color;
+        }
+    }
+
+    private void FlashDirectionArrow(KeyCode key)
+    {
+        int index = key == KeyCode.W ? 0 : key == KeyCode.A ? 1 : key == KeyCode.D ? 2 : key == KeyCode.S ? 3 : -1;
+        if (index >= 0 && directionArrows[index] != null)
+            arrowFlashTimers[index] = arrowFlashDuration;
+    }
+
+    private void UpdateDirectionArrowFeedback()
+    {
+        for (int i = 0; i < directionArrows.Length; i++)
+        {
+            SpriteRenderer arrow = directionArrows[i];
+            if (arrow == null) continue;
+
+            arrowFlashTimers[i] = Mathf.Max(0f, arrowFlashTimers[i] - Time.unscaledDeltaTime);
+            float flash = arrowFlashDuration > 0f ? arrowFlashTimers[i] / arrowFlashDuration : 0f;
+            arrow.transform.localScale = arrowBaseScales[i] * Mathf.Lerp(1f, arrowPressScale, flash);
+            Color brightColor = arrowBaseColors[i] * arrowFlashBrightness;
+            brightColor.a = arrowBaseColors[i].a;
+            arrow.color = Color.Lerp(arrowBaseColors[i], brightColor, flash);
+        }
+
+        UpdateDirectionArrowScreenImages();
+    }
+
+    private void UpdateComboScreenTint()
+    {
+        if (comboTintOverlay == null) return;
+
+        int milestones = Mathf.Max(0, combo) / 50;
+        float targetTint = Mathf.Min(milestones * tintAlphaPer50Combo, maxComboTintAlpha);
+        Color targetColor = new Color(comboTintColor.r, comboTintColor.g, comboTintColor.b, targetTint);
+        comboTintOverlay.color = Color.Lerp(comboTintOverlay.color, targetColor,
+            1f - Mathf.Exp(-comboTintFadeSpeed * Time.unscaledDeltaTime));
+    }
+
+    private void CreateComboTintOverlay()
+    {
+        comboTintCanvas = FindFirstObjectByType<Canvas>();
+        if (comboTintCanvas == null) return;
+
+        var overlayObject = new GameObject("ComboScreenTint", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        overlayObject.layer = comboTintCanvas.gameObject.layer;
+        RectTransform rect = (RectTransform)overlayObject.transform;
+        rect.SetParent(comboTintCanvas.transform, false);
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        rect.SetAsLastSibling();
+
+        // Draw UI button branches above the tint so their colors remain unchanged.
+        foreach (Button button in comboTintCanvas.GetComponentsInChildren<Button>(true))
+        {
+            Transform branch = button.transform;
+            while (branch.parent != null && branch.parent != comboTintCanvas.transform)
+                branch = branch.parent;
+            if (branch.parent == comboTintCanvas.transform)
+                branch.SetAsLastSibling();
+        }
+
+        comboTintOverlay = overlayObject.GetComponent<Image>();
+        comboTintOverlay.color = new Color(comboTintColor.r, comboTintColor.g, comboTintColor.b, 0f);
+        comboTintOverlay.raycastTarget = false;
+        comboTintCanvasRect = comboTintCanvas.transform as RectTransform;
+
+        // Re-render the four gameplay arrows above the tint while mirroring their live state.
+        for (int i = 0; i < directionArrows.Length; i++)
+        {
+            SpriteRenderer source = directionArrows[i];
+            if (source == null || source.sprite == null) continue;
+
+            var arrowObject = new GameObject(source.name + "_Untinted", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            arrowObject.layer = comboTintCanvas.gameObject.layer;
+            RectTransform arrowRect = (RectTransform)arrowObject.transform;
+            arrowRect.SetParent(comboTintCanvas.transform, false);
+            arrowRect.anchorMin = Vector2.zero;
+            arrowRect.anchorMax = Vector2.zero;
+            arrowRect.pivot = new Vector2(0.5f, 0.5f);
+
+            Image image = arrowObject.GetComponent<Image>();
+            image.sprite = source.sprite;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+            directionArrowScreenImages[i] = image;
+        }
+    }
+
+    private void UpdateDirectionArrowScreenImages()
+    {
+        if (comboTintCanvasRect == null) return;
+
+        Camera camera = Camera.main;
+        if (camera == null) return;
+
+        for (int i = 0; i < directionArrows.Length; i++)
+        {
+            SpriteRenderer source = directionArrows[i];
+            Image image = directionArrowScreenImages[i];
+            if (source == null || image == null) continue;
+
+            image.enabled = source.enabled && source.gameObject.activeInHierarchy;
+            image.color = source.color;
+            Vector3 screenCenter = camera.WorldToScreenPoint(source.bounds.center);
+            Vector3 screenMin = camera.WorldToScreenPoint(source.bounds.min);
+            Vector3 screenMax = camera.WorldToScreenPoint(source.bounds.max);
+            Camera uiCamera = comboTintCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : comboTintCanvas.worldCamera;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    comboTintCanvasRect, screenCenter, uiCamera, out Vector2 localPosition))
+                continue;
+
+            RectTransform imageRect = image.rectTransform;
+            imageRect.anchoredPosition = localPosition;
+            imageRect.sizeDelta = new Vector2(
+                Mathf.Abs(screenMax.x - screenMin.x), Mathf.Abs(screenMax.y - screenMin.y)) / comboTintCanvas.scaleFactor;
+            imageRect.localRotation = Quaternion.Euler(0f, 0f, source.transform.eulerAngles.z);
         }
     }
 
