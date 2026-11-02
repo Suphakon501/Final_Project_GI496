@@ -1,0 +1,494 @@
+fileFormatVersion: 2
+guid: 33a9baf715d160a4a87a26da79c4460e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7122614505692125026
+    second: neon-beat-hit_0000_0
+  - first:
+      213: 4043010031669086800
+    second: neon-beat-hit_0000_1
+  - first:
+      213: -80857427641032557
+    second: neon-beat-hit_0000_2
+  - first:
+      213: -2892108373836077513
+    second: neon-beat-hit_0000_3
+  - first:
+      213: -455721197811262392
+    second: neon-beat-hit_0000_4
+  - first:
+      213: 1081204216366333450
+    second: neon-beat-hit_0000_5
+  - first:
+      213: 3740177606184144867
+    second: neon-beat-hit_0000_6
+  - first:
+      213: 7424177315866290192
+    second: neon-beat-hit_0000_7
+  - first:
+      213: -5540818595235526278
+    second: neon-beat-hit_0000_8
+  - first:
+      213: 8887237398648740904
+    second: neon-beat-hit_0000_9
+  - first:
+      213: 1987215977678038888
+    second: neon-beat-hit_0000_10
+  - first:
+      213: 5637788633850991789
+    second: neon-beat-hit_0000_11
+  - first:
+      213: 8714171046702141935
+    second: neon-beat-hit_0000_12
+  - first:
+      213: 7595589754945615595
+    second: neon-beat-hit_0000_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_0
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 307
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e982d2428d3672d90800000000000000
+      internalID: -7122614505692125026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_1
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 262
+        width: 30
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05a0af8f338ab1830800000000000000
+      internalID: 4043010031669086800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_2
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 278
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3902104199cb0eef0800000000000000
+      internalID: -80857427641032557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_3
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 286
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 736619dc1ca2dd7d0800000000000000
+      internalID: -2892108373836077513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_4
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 226
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84c18df2cf3fca9f0800000000000000
+      internalID: -455721197811262392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_5
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 265
+        width: 16
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0e7b2e9185310f00800000000000000
+      internalID: 1081204216366333450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_6
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 268
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ef0a7d67b7c7e330800000000000000
+      internalID: 3740177606184144867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_7
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 267
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01829bd0fe9f70760800000000000000
+      internalID: 7424177315866290192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_8
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 245
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a798b1a18de0b13b0800000000000000
+      internalID: -5540818595235526278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_9
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 250
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82c5605d35fc55b70800000000000000
+      internalID: 8887237398648740904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_10
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 229
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 867ea792762049b10800000000000000
+      internalID: 1987215977678038888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_11
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 238
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da45c6764e27d3e40800000000000000
+      internalID: 5637788633850991789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_12
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 219
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe1dca6b564fee870800000000000000
+      internalID: 8714171046702141935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neon-beat-hit_0000_13
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 220
+        width: 32
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be6312393a4f86960800000000000000
+      internalID: 7595589754945615595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      neon-beat-hit_0000_0: -7122614505692125026
+      neon-beat-hit_0000_1: 4043010031669086800
+      neon-beat-hit_0000_10: 1987215977678038888
+      neon-beat-hit_0000_11: 5637788633850991789
+      neon-beat-hit_0000_12: 8714171046702141935
+      neon-beat-hit_0000_13: 7595589754945615595
+      neon-beat-hit_0000_2: -80857427641032557
+      neon-beat-hit_0000_3: -2892108373836077513
+      neon-beat-hit_0000_4: -455721197811262392
+      neon-beat-hit_0000_5: 1081204216366333450
+      neon-beat-hit_0000_6: 3740177606184144867
+      neon-beat-hit_0000_7: 7424177315866290192
+      neon-beat-hit_0000_8: -5540818595235526278
+      neon-beat-hit_0000_9: 8887237398648740904
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

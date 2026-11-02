@@ -829,7 +829,7 @@ MonoBehaviour:
   arrowPressScale: 1.18
   arrowFlashBrightness: 1.8
   arrowFlashDuration: 0.18
-  pressVfxPrefab: {fileID: 7488655516727816491, guid: a6c488b9b515e3842ab7880a8c3c3cba, type: 3}
+  pressVfxPrefab: {fileID: 0}
   pressVfxOffset: {x: 0, y: 0, z: 0}
   comboTintColor: {r: 1, g: 0, b: 0, a: 1}
   tintAlphaPer50Combo: 0.1
