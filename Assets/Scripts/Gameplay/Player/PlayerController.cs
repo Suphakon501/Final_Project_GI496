@@ -85,6 +85,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float arrowFlashBrightness = 1.8f;
     [SerializeField] private float arrowFlashDuration = 0.18f;
 
+    [Header("Press VFX")]
+    [SerializeField] private GameObject pressVfxPrefab;
+    [SerializeField] private Vector3 pressVfxOffset = Vector3.zero;
+
     [Header("Combo Screen Tint")]
     [SerializeField] private Color comboTintColor = new Color(1f, 0f, 0f, 1f);
     [SerializeField] private float tintAlphaPer50Combo = 0.1f;
@@ -180,7 +184,16 @@ public class PlayerController : MonoBehaviour
     {
         int index = key == KeyCode.W ? 0 : key == KeyCode.A ? 1 : key == KeyCode.D ? 2 : key == KeyCode.S ? 3 : -1;
         if (index >= 0 && directionArrows[index] != null)
+        {
             arrowFlashTimers[index] = arrowFlashDuration;
+            SpawnPressVfx(directionArrows[index].transform.position);
+        }
+    }
+
+    private void SpawnPressVfx(Vector3 position)
+    {
+        if (pressVfxPrefab == null) return;
+        Instantiate(pressVfxPrefab, position + pressVfxOffset, Quaternion.identity);
     }
 
     private void UpdateDirectionArrowFeedback()
@@ -455,7 +468,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // เปลี่ยนจาก void เป็น public void
-  public void UpdateScoreUI()
+    public void UpdateScoreUI()
     {
         if (scoreText != null) scoreText.text = "Score: " + score;
         if (scoreNumber != null) scoreNumber.SetValue(score);

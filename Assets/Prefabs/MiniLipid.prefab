@@ -215,9 +215,9 @@ MonoBehaviour:
   perfectWindow: 0.05
   goodWindow: 0.15
   missAfter: 0.23
-  goodParticlePrefab: {fileID: 391463048371747209, guid: cbee7d3a7c0c7bf4e9e546932f8ce9fd, type: 3}
-  perfectParticlePrefab: {fileID: 391463048371747209, guid: 09f670a2135db2f439171abf32cbe0e8, type: 3}
-  badMissParticlePrefab: {fileID: 391463048371747209, guid: ba6db130da4e91346a038af7f5d15300, type: 3}
+  goodParticlePrefab: {fileID: 0}
+  perfectParticlePrefab: {fileID: 0}
+  badMissParticlePrefab: {fileID: 0}
   particleLifetime: 0.6
 --- !u!95 &2852543963476431068
 Animator:

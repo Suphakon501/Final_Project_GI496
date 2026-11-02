@@ -584,7 +584,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: 2553686643817382577, guid: c866a4b3932689044b282914f625f5a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -826,6 +826,15 @@ MonoBehaviour:
   audioSource: {fileID: 197997224}
   goodSound: {fileID: 8300000, guid: a974c3f8c0af48a4b90724a069b75325, type: 3}
   badMissSound: {fileID: 8300000, guid: 8768d7d505ffc564eb4573f0c8e65f34, type: 3}
+  arrowPressScale: 1.18
+  arrowFlashBrightness: 1.8
+  arrowFlashDuration: 0.18
+  pressVfxPrefab: {fileID: 7488655516727816491, guid: a6c488b9b515e3842ab7880a8c3c3cba, type: 3}
+  pressVfxOffset: {x: 0, y: 0, z: 0}
+  comboTintColor: {r: 1, g: 0, b: 0, a: 1}
+  tintAlphaPer50Combo: 0.1
+  maxComboTintAlpha: 0.3
+  comboTintFadeSpeed: 1.8
   perfectStepSounds:
   - {fileID: 8300000, guid: 8e600b2a9545af44f88316ebb8102e16, type: 3}
   - {fileID: 8300000, guid: 620bb7ddb09274441bdb0f76f1fbba34, type: 3}
@@ -2089,7 +2098,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: -2144254843293757290, guid: a6f9bda1428faee468d118b0c9b4e30c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2500,7 +2509,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: 4733911985479738554, guid: 0ee49c60c036e88418995976ef6c4c10, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2977,10 +2986,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  pressScale: 1.12
-  pressBrightness: 1.7
-  pressFlashSpeed: 18
-  pressPulseDuration: 0.16
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &786603365
 GameObject:
@@ -3488,7 +3493,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: 5183489020248344462, guid: 39fc93940ebe3874ca0179bfb58721b5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3818,10 +3823,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  pressScale: 1.12
-  pressBrightness: 1.7
-  pressFlashSpeed: 18
-  pressPulseDuration: 0.16
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &1179511880
 GameObject:
@@ -4935,10 +4936,6 @@ MonoBehaviour:
   hoverScale: 1.06
   animSpeed: 14
   hoverOffset: {x: -12, y: 0}
-  pressScale: 1.12
-  pressBrightness: 1.7
-  pressFlashSpeed: 18
-  pressPulseDuration: 0.16
   hoverSound: {fileID: 8300000, guid: c4658b6b1d238874f860041a4492f6e1, type: 3}
 --- !u!1 &1619992241
 GameObject:
