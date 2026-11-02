@@ -229,4 +229,3 @@ public class SettingsMenuController : MonoBehaviour
         if (gameplayLabel != null) gameplayLabelText = gameplayLabel.text.Replace("▶ ", "").Replace("> ", "");
     }
 }
-

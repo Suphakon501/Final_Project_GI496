@@ -94,6 +94,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float tintAlphaPer50Combo = 0.1f;
     [SerializeField] private float maxComboTintAlpha = 0.3f;
     [SerializeField] private float comboTintFadeSpeed = 1.8f;
+    [SerializeField, Range(0f, 0.2f)] private float comboMilestoneFlash = 0.045f;
+    [SerializeField, Min(0f)] private float comboFlashFadeSpeed = 3f;
+    [SerializeField, Range(0f, 0.1f)] private float comboTintFlicker = 0.015f;
+    [SerializeField, Min(0f)] private float comboTintFlickerSpeed = 5f;
 
     [Header("Perfect Chain Sounds")]
     [SerializeField] private AudioClip[] perfectStepSounds = new AudioClip[5];
@@ -115,6 +119,8 @@ public class PlayerController : MonoBehaviour
     private readonly Image[] directionArrowScreenImages = new Image[4];
     private Canvas comboTintCanvas;
     private RectTransform comboTintCanvasRect;
+    private int lastComboTintMilestone;
+    private float comboMilestoneFlashAmount;
 
     void Awake()
     {
@@ -219,7 +225,18 @@ public class PlayerController : MonoBehaviour
         if (comboTintOverlay == null) return;
 
         int milestones = Mathf.Max(0, combo) / 50;
+        if (milestones > lastComboTintMilestone)
+            comboMilestoneFlashAmount = 1f;
+        lastComboTintMilestone = milestones;
+        comboMilestoneFlashAmount = Mathf.MoveTowards(
+            comboMilestoneFlashAmount, 0f, comboFlashFadeSpeed * Time.unscaledDeltaTime);
+
         float targetTint = Mathf.Min(milestones * tintAlphaPer50Combo, maxComboTintAlpha);
+        float pulse = comboMilestoneFlash * comboMilestoneFlashAmount;
+        float flicker = targetTint > 0f
+            ? Mathf.Sin(Time.unscaledTime * comboTintFlickerSpeed * Mathf.PI * 2f) * comboTintFlicker
+            : 0f;
+        targetTint = Mathf.Clamp(targetTint + pulse + flicker, 0f, maxComboTintAlpha + comboMilestoneFlash);
         Color targetColor = new Color(comboTintColor.r, comboTintColor.g, comboTintColor.b, targetTint);
         comboTintOverlay.color = Color.Lerp(comboTintOverlay.color, targetColor,
             1f - Mathf.Exp(-comboTintFadeSpeed * Time.unscaledDeltaTime));

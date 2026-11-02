@@ -832,9 +832,13 @@ MonoBehaviour:
   pressVfxPrefab: {fileID: 0}
   pressVfxOffset: {x: 0, y: 0, z: 0}
   comboTintColor: {r: 1, g: 0, b: 0, a: 1}
-  tintAlphaPer50Combo: 0.1
-  maxComboTintAlpha: 0.3
+  tintAlphaPer50Combo: 0.02
+  maxComboTintAlpha: 0.1
   comboTintFadeSpeed: 1.8
+  comboMilestoneFlash: 0.1037
+  comboFlashFadeSpeed: 3
+  comboTintFlicker: 0.1
+  comboTintFlickerSpeed: 5
   perfectStepSounds:
   - {fileID: 8300000, guid: 8e600b2a9545af44f88316ebb8102e16, type: 3}
   - {fileID: 8300000, guid: 620bb7ddb09274441bdb0f76f1fbba34, type: 3}
@@ -1823,6 +1827,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 985544559}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3418,6 +3423,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957922180}
   m_CullTransparentMesh: 1
+--- !u!114 &985544559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3e912b88dce4d79a1ef0689124d19a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lowHealthThreshold: 0.55
+  shakeAmplitude: 0.06
+  shakeFrequency: 16
+  intensityChangeSpeed: 4
+  shakeHorizontally: 1
+  shakeVertically: 1
+  maximumDarkness: 0.46
+  darknessPulseSpeed: 2.5
+  darknessChangeSpeed: 3
 --- !u!1 &1006660241
 GameObject:
   m_ObjectHideFlags: 0
@@ -4783,7 +4809,7 @@ MonoBehaviour:
   suffixSprite: {fileID: 0}
   suffixHeight: 44
   suffixSpacing: 10
-  popScale: 1.15
+  popScale: 1.35
   popShrinkSpeed: 12
   previewValue: 12345
 --- !u!1 &1599540705

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -19,9 +20,13 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private string level3Scene = "Level3";
 
     private static bool openLevelSelectOnStart;
+    private Animator levelPanelAnimator;
+    private readonly Button[] mainMenuOptions = new Button[3];
 
     private void Awake()
     {
+        ConfigureMainMenuKeyboardNavigation();
+
         if (settingsPanel == null)
         {
             foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -47,6 +52,17 @@ public class MainMenu : MonoBehaviour
         }
 
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (levelPanel != null)
+        {
+            levelPanelAnimator = levelPanel.GetComponent<Animator>();
+            if (levelPanelAnimator != null) levelPanelAnimator.enabled = false;
+        }
+        if (levelPanel != null)
+        {
+            var carousel = levelPanel.GetComponent<SongSelectCarousel>();
+            if (carousel == null) carousel = levelPanel.AddComponent<SongSelectCarousel>();
+            carousel.Initialize(this);
+        }
         if (levelPanel != null) levelPanel.SetActive(false);
         if (settingsNavigation == null) settingsNavigation = GetComponent<SettingsMenuController>();
         if (settingsNavigation == null && settingsPanel != null)
@@ -95,9 +111,12 @@ public class MainMenu : MonoBehaviour
     }
 
     public void OnLevel1Clicked() => LoadScene(level1Scene);
-    public void OnLevel2Clicked() => LoadScene(level2Scene);
-    public void OnLevel3Clicked() => LoadScene(level3Scene);
+    // The second available song is stored in the Level1.1 scene in this project.
+    public void OnLevel2Clicked() => LoadScene("Level1.1");
+    // Level 3 is currently a Coming Soon slot in the song selector.
+    public void OnLevel3Clicked() { }
     public void OnBackClicked() => ShowMainPanel();
+    public void LoadSongScene(string sceneName) => LoadScene(sceneName);
 
     public void GoToMenu()
     {
@@ -114,15 +133,57 @@ public class MainMenu : MonoBehaviour
     private void ShowMainPanel()
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (EventSystem.current != null) EventSystem.current.sendNavigationEvents = true;
         if (mainPanel != null) mainPanel.SetActive(true);
         if (levelPanel != null) levelPanel.SetActive(false);
+        FocusFirstMainMenuOption();
+    }
+
+    private void ConfigureMainMenuKeyboardNavigation()
+    {
+        if (mainPanel == null) return;
+
+        string[] buttonNames = { "PlayBT", "SettingBT", "ExitBT" };
+        for (int i = 0; i < buttonNames.Length; i++)
+        {
+            Transform buttonTransform = mainPanel.transform.Find(buttonNames[i]);
+            if (buttonTransform != null) mainMenuOptions[i] = buttonTransform.GetComponent<Button>();
+        }
+
+        for (int i = 0; i < mainMenuOptions.Length; i++)
+        {
+            Button button = mainMenuOptions[i];
+            if (button == null) continue;
+
+            Navigation navigation = button.navigation;
+            navigation.mode = Navigation.Mode.Explicit;
+            navigation.selectOnUp = mainMenuOptions[(i + mainMenuOptions.Length - 1) % mainMenuOptions.Length];
+            navigation.selectOnDown = mainMenuOptions[(i + 1) % mainMenuOptions.Length];
+            button.navigation = navigation;
+        }
+    }
+
+    private void FocusFirstMainMenuOption()
+    {
+        if (EventSystem.current == null || mainMenuOptions[0] == null) return;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(mainMenuOptions[0].gameObject);
     }
 
     private void ShowLevelPanel()
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (mainPanel != null) mainPanel.SetActive(false);
-        if (levelPanel != null) levelPanel.SetActive(true);
+        if (levelPanel != null)
+        {
+            levelPanel.SetActive(true);
+            if (levelPanelAnimator != null)
+            {
+                levelPanelAnimator.enabled = true;
+                levelPanelAnimator.Play("LevelSelectUI", 0, 0f);
+                levelPanelAnimator.Update(0f);
+            }
+        }
     }
 
     private void LoadScene(string sceneName) => SceneTransition.Load(sceneName);

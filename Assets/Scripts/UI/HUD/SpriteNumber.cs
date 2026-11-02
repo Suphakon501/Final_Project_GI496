@@ -24,7 +24,7 @@ public class SpriteNumber : MonoBehaviour
     [SerializeField] private float suffixSpacing = 10f;
 
     [Header("Pop On Change")]
-    [SerializeField] private float popScale = 1.15f;
+    [SerializeField] private float popScale = 1.35f;
     [SerializeField] private float popShrinkSpeed = 12f;
 
     [Header("Editor Preview")]
