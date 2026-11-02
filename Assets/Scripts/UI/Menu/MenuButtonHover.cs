@@ -22,6 +22,7 @@ public class MenuButtonHover : MonoBehaviour,
     private Button button;
     private RectTransform rect;
     private Vector2 basePosition;
+    private Vector3 baseScale;
     private bool hovered;
 
     private void Awake()
@@ -30,6 +31,7 @@ public class MenuButtonHover : MonoBehaviour,
         button = GetComponent<Button>();
         rect = (RectTransform)transform;
         basePosition = rect.anchoredPosition;
+        baseScale = rect.localScale;
 
         if (normalSprite == null) normalSprite = image.sprite;
         image.preserveAspect = true;
@@ -52,8 +54,7 @@ public class MenuButtonHover : MonoBehaviour,
         Vector2 targetPos = hovered ? basePosition + hoverOffset : basePosition;
         float t = 1f - Mathf.Exp(-animSpeed * Time.unscaledDeltaTime);
 
-        float s = Mathf.Lerp(rect.localScale.x, targetScale, t);
-        rect.localScale = new Vector3(s, s, 1f);
+        rect.localScale = Vector3.Lerp(rect.localScale, baseScale * targetScale, t);
         rect.anchoredPosition = Vector2.Lerp(rect.anchoredPosition, targetPos, t);
     }
 
@@ -78,7 +79,7 @@ public class MenuButtonHover : MonoBehaviour,
 
         if (instant)
         {
-            rect.localScale = Vector3.one;
+            rect.localScale = baseScale;
             rect.anchoredPosition = basePosition;
         }
     }

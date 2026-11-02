@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int minComboToShow = 2;
     public int combo { get; private set; }
     public int maxCombo { get; private set; }
+    public int perfectCount { get; private set; }
+    public int goodCount { get; private set; }
+    public int badCount { get; private set; }
+    public int missCount { get; private set; }
 
     [Header("Animation System (Animator state names)")]
     public Animator playerAnimator;
@@ -138,6 +142,10 @@ public class PlayerController : MonoBehaviour
         score = 0;
         combo = 0;
         maxCombo = 0;
+        perfectCount = 0;
+        goodCount = 0;
+        badCount = 0;
+        missCount = 0;
 
         UpdateScoreUI();
         UpdateComboUI();
@@ -367,6 +375,7 @@ public class PlayerController : MonoBehaviour
         switch (result)
         {
             case HitResult.Perfect:
+                perfectCount++;
                 score += PerfectScore;
                 ChangeHealth(hpPerfect);
                 currentPerfectStreak++;
@@ -375,6 +384,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case HitResult.Good:
+                goodCount++;
                 score += GoodScore;
                 ChangeHealth(hpGood);
                 currentPerfectStreak = 0;
@@ -383,6 +393,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             default:
+                badCount++;
                 score += BadScore;
                 ChangeHealth(-badDamage);
                 PlayAnimation(hitAnimName);
@@ -395,6 +406,7 @@ public class PlayerController : MonoBehaviour
 
     void OnNoteMissed()
     {
+        missCount++;
         CancelDirectionalMove();
         currentPerfectStreak = 0;
         BreakCombo();

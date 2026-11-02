@@ -11,6 +11,10 @@ public class LevelManager : MonoBehaviour
         public bool cleared;
         public int score;
         public int maxCombo;
+        public int perfectCount;
+        public int goodCount;
+        public int badCount;
+        public int missCount;
         public int bestScore;
         public bool newBest;
         public string levelScene;
@@ -232,7 +236,7 @@ public class LevelManager : MonoBehaviour
 
         string key = "HighScore_" + level;
         int best = PlayerPrefs.GetInt(key, 0);
-        bool newBest = cleared && score > best;
+        bool newBest = score > best;
         if (newBest)
         {
             best = score;
@@ -245,6 +249,10 @@ public class LevelManager : MonoBehaviour
             cleared = cleared,
             score = score,
             maxCombo = player != null ? player.maxCombo : 0,
+            perfectCount = player != null ? player.perfectCount : 0,
+            goodCount = player != null ? player.goodCount : 0,
+            badCount = player != null ? player.badCount : 0,
+            missCount = player != null ? player.missCount : 0,
             bestScore = best,
             newBest = newBest,
             levelScene = level,
