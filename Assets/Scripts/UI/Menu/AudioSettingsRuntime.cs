@@ -34,10 +34,10 @@ public class AudioSettingsRuntime : MonoBehaviour
         if (instance != null) return;
         var runtimeObject = new GameObject("AudioSettingsRuntime");
         DontDestroyOnLoad(runtimeObject);
-        var effectsSource = runtimeObject.AddComponent<AudioSource>();
-        effectsSource.playOnAwake = false;
-        effectsSource.loop = false;
-        effectsSource.spatialBlend = 0f;
+        var createdEffectsSource = runtimeObject.AddComponent<AudioSource>();
+        createdEffectsSource.playOnAwake = false;
+        createdEffectsSource.loop = false;
+        createdEffectsSource.spatialBlend = 0f;
         instance = runtimeObject.AddComponent<AudioSettingsRuntime>();
     }
 

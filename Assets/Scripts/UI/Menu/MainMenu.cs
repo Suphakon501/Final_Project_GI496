@@ -19,8 +19,6 @@ public class MainMenu : MonoBehaviour
     [Header("Scene Names")]
     [SerializeField] private string menuScene = "MainMenu";
     [SerializeField] private string level1Scene = "Level1";
-    [SerializeField] private string level2Scene = "Level2";
-    [SerializeField] private string level3Scene = "Level3";
 
     private static bool openLevelSelectOnStart;
     private Animator levelPanelAnimator;
@@ -70,7 +68,7 @@ public class MainMenu : MonoBehaviour
         if (settingsNavigation == null) settingsNavigation = GetComponent<SettingsMenuController>();
         if (settingsNavigation == null && settingsPanel != null)
             settingsNavigation = settingsPanel.GetComponentInChildren<SettingsMenuController>(true);
-        if (settingsNavigation == null) settingsNavigation = FindObjectOfType<SettingsMenuController>();
+        if (settingsNavigation == null) settingsNavigation = FindFirstObjectByType<SettingsMenuController>(FindObjectsInactive.Include);
     }
 
     private void Start()

@@ -41,7 +41,7 @@ public class SettingsMenuController : MonoBehaviour
     private void Awake()
     {
         if (mainMenu == null) mainMenu = FindFirstObjectByType<MainMenu>(FindObjectsInactive.Include);
-        if (audioSettings == null) audioSettings = FindObjectOfType<AudioSettingsPanel>();
+        if (audioSettings == null) audioSettings = FindFirstObjectByType<AudioSettingsPanel>(FindObjectsInactive.Include);
         FindOptionReferences();
         OpenCategories();
     }
