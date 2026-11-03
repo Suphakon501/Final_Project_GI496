@@ -4075,7 +4075,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000038387745}
+  m_AnchoredPosition: {x: 0, y: -0.000072792485}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1315359702
@@ -5032,8 +5032,6 @@ MonoBehaviour:
   settingsBackdropAlpha: 1
   menuScene: MainMenu
   level1Scene: Level1
-  level2Scene: Level2
-  level3Scene: Level3
 --- !u!224 &1573329469
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5984,7 +5982,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 340232236}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9998985
+  m_Size: 0.9999986
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6385,7 +6383,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1469, y: -16.2502}
+  m_AnchoredPosition: {x: 1474, y: 39.416}
   m_SizeDelta: {x: 645.9284, y: 936.832}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2125386920
