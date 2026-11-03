@@ -96,6 +96,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject pressVfxPrefab;
     [SerializeField] private Vector3 pressVfxOffset = Vector3.zero;
 
+    [Header("Jump VFX")]
+    [Tooltip("เว้นว่างได้ ระบบจะโหลด Resources/Vfx/JumpWind ให้เอง")]
+    [SerializeField] private GameObject jumpVfxPrefab;
+    [SerializeField] private Vector3 jumpVfxOffset = new Vector3(0f, -1.2f, 0f);
+    [SerializeField] private float jumpVfxScale = 3.4f;
+    [SerializeField] private float landVfxScale = 4.2f;
+
     [Header("Combo Screen Tint")]
     [SerializeField] private Color comboTintColor = new Color(1f, 0f, 0f, 1f);
     [SerializeField] private float tintAlphaPer50Combo = 0.1f;
@@ -130,11 +137,13 @@ public class PlayerController : MonoBehaviour
     private RectTransform comboTintCanvasRect;
     private int lastComboTintMilestone;
     private float comboMilestoneFlashAmount;
+    private bool jumpVfxPending;
 
     void Awake()
     {
         instance = this;
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (jumpVfxPrefab == null) jumpVfxPrefab = Resources.Load<GameObject>("Vfx/JumpWind");
         CacheDirectionArrows();
         CreateComboTintOverlay();
     }
@@ -646,6 +655,9 @@ public class PlayerController : MonoBehaviour
                     homePosition.z));
                 PlayAnimation(jumpAttackAnimName);
                 Invoke(nameof(ReturnHome), jumpAttackDuration);
+                jumpVfxPending = true;
+                SpawnJumpVfx(homePosition, jumpVfxScale);
+                ProcParticles.Burst(homePosition + jumpVfxOffset, new Color(0.9f, 0.95f, 1f), 8, 3.5f, 0.3f, 0.28f);
                 break;
             case KeyCode.W:
                 PlayAnimation(shootingAnimName);
@@ -682,6 +694,23 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = homePosition;
         isAwayFromHome = false;
+
+        if (jumpVfxPending)
+        {
+            jumpVfxPending = false;
+            SpawnJumpVfx(homePosition, landVfxScale);
+
+            Vector3 feet = homePosition + jumpVfxOffset;
+            ProcParticles.Shockwave(feet, new Color(1f, 1f, 1f, 0.75f), 0.4f, 2.6f, 0.3f);
+            ProcParticles.Burst(feet, new Color(0.95f, 0.95f, 1f), 10, 4.5f, 0.35f, 0.3f);
+        }
+    }
+
+    void SpawnJumpVfx(Vector3 position, float scale)
+    {
+        if (jumpVfxPrefab == null) return;
+        GameObject vfx = Instantiate(jumpVfxPrefab, position + jumpVfxOffset, Quaternion.identity);
+        vfx.transform.localScale = Vector3.one * Mathf.Max(0.01f, scale);
     }
 
     void PlayAnimation(string animName)

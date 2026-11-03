@@ -248,6 +248,8 @@ public class MiniLipid : MonoBehaviour
             Destroy(effect, particleLifetime);
         }
 
+        SpawnImpactBurst(result);
+
         if (parentLipid != null) parentLipid.OnMiniFinished(result);
 
         if (result == HitResult.Miss || !knockAwayOnHit)
@@ -259,6 +261,27 @@ public class MiniLipid : MonoBehaviour
         // กดโดนแล้วโน้ตจะเด้งขึ้นก่อน แล้วแรงดึงดูดพาร่วงตกหลุดจากกล้อง
         active.Remove(this);
         StartCoroutine(KnockAwayRoutine());
+    }
+
+    void SpawnImpactBurst(HitResult result)
+    {
+        Color sparkColor;
+        int count;
+        switch (result)
+        {
+            case HitResult.Perfect: sparkColor = new Color(1f, 0.88f, 0.45f); count = 18; break;
+            case HitResult.Good: sparkColor = new Color(0.45f, 0.95f, 1f); count = 12; break;
+            case HitResult.Bad: sparkColor = new Color(1f, 0.45f, 0.4f); count = 9; break;
+            default: sparkColor = new Color(0.8f, 0.25f, 0.35f); count = 8; break;
+        }
+
+        bool perfect = result == HitResult.Perfect;
+        ProcParticles.Burst(transform.position, sparkColor, count, perfect ? 8f : 5.5f, 0.45f, 0.42f);
+
+        if (perfect)
+            ProcParticles.Shockwave(transform.position, new Color(1f, 0.92f, 0.6f, 0.85f), 0.3f, 2f, 0.3f);
+        else if (result == HitResult.Miss)
+            ProcParticles.Shockwave(transform.position, new Color(0.9f, 0.25f, 0.3f, 0.7f), 0.25f, 1.3f, 0.35f);
     }
 
     IEnumerator KnockAwayRoutine()

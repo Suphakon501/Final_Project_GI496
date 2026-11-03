@@ -1,0 +1,609 @@
+fileFormatVersion: 2
+guid: 4eff2ae6570eb5f40a815c744095513b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6966700119929983010
+    second: jump-wind-sheet_0
+  - first:
+      213: 6802180296787063992
+    second: jump-wind-sheet_1
+  - first:
+      213: 562946207900811509
+    second: jump-wind-sheet_2
+  - first:
+      213: -6791112590079795048
+    second: jump-wind-sheet_3
+  - first:
+      213: -1637847797565050291
+    second: jump-wind-sheet_4
+  - first:
+      213: -328394539512413557
+    second: jump-wind-sheet_5
+  - first:
+      213: -6619247140318427360
+    second: jump-wind-sheet_6
+  - first:
+      213: -4933004841053779664
+    second: jump-wind-sheet_7
+  - first:
+      213: -2644832600764640024
+    second: jump-wind-sheet_8
+  - first:
+      213: -770598296311345249
+    second: jump-wind-sheet_9
+  - first:
+      213: -4845692554580913010
+    second: jump-wind-sheet_10
+  - first:
+      213: 1429526983242517309
+    second: jump-wind-sheet_11
+  - first:
+      213: 270580533261628316
+    second: jump-wind-sheet_12
+  - first:
+      213: -2279859417535410106
+    second: jump-wind-sheet_13
+  - first:
+      213: -5037924161781375883
+    second: jump-wind-sheet_14
+  - first:
+      213: -294665874015922817
+    second: jump-wind-sheet_15
+  - first:
+      213: 8255847468558915662
+    second: jump-wind-sheet_16
+  - first:
+      213: -6623452946296813221
+    second: jump-wind-sheet_17
+  - first:
+      213: -5842829871031322438
+    second: jump-wind-sheet_18
+  - first:
+      213: 1923621208109722292
+    second: jump-wind-sheet_19
+  - first:
+      213: -5308559747952664752
+    second: jump-wind-sheet_20
+  - first:
+      213: 6211633031533436508
+    second: jump-wind-sheet_21
+  - first:
+      213: -197305534456690859
+    second: jump-wind-sheet_22
+  - first:
+      213: -8413414643595421966
+    second: jump-wind-sheet_23
+  - first:
+      213: -5347187232356042405
+    second: jump-wind-sheet_24
+  - first:
+      213: -7037769133111090357
+    second: jump-wind-sheet_25
+  - first:
+      213: -6438383952859459861
+    second: jump-wind-sheet_26
+  - first:
+      213: -5526435959804187672
+    second: jump-wind-sheet_27
+  - first:
+      213: 4971470527779559275
+    second: jump-wind-sheet_28
+  - first:
+      213: 5953441296020713623
+    second: jump-wind-sheet_29
+  - first:
+      213: -6784140747563885107
+    second: jump-wind-sheet_30
+  - first:
+      213: -5160092096724787643
+    second: jump-wind-sheet_31
+  - first:
+      213: -6447236412999122782
+    second: jump-wind-sheet_32
+  - first:
+      213: 8774955245881798718
+    second: jump-wind-sheet_33
+  - first:
+      213: 1748535305497780002
+    second: jump-wind-sheet_34
+  - first:
+      213: 268765613189205016
+    second: jump-wind-sheet_35
+  - first:
+      213: -315912677643550280
+    second: jump-wind-sheet_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: jump-wind-sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 459
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edfe6eee62f415f90800000000000000
+      internalID: -6966700119929983010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_1
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 459
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b47720c0f2366e50800000000000000
+      internalID: 6802180296787063992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_2
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 459
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f0c49de79cffc700800000000000000
+      internalID: 562946207900811509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_3
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 459
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8906c96841f11c1a0800000000000000
+      internalID: -6791112590079795048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_4
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 459
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d42baf51b123549e0800000000000000
+      internalID: -1637847797565050291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 306
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b824f2ef7ee417bf0800000000000000
+      internalID: -328394539512413557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_6
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 306
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 027ccc0dbc5b324a0800000000000000
+      internalID: -6619247140318427360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_7
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 306
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03905b5bb327a8bb0800000000000000
+      internalID: -4933004841053779664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_8
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 306
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e41d0533caab4bd0800000000000000
+      internalID: -2644832600764640024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_9
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 306
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9f47dbaee84e45f0800000000000000
+      internalID: -770598296311345249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 153
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8413719b44a0ccb0800000000000000
+      internalID: -4845692554580913010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_11
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 153
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3b8101a733b6d310800000000000000
+      internalID: 1429526983242517309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_12
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 153
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c93f138bf8b41c300800000000000000
+      internalID: 270580533261628316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_13
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 153
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64019ff50ff4c50e0800000000000000
+      internalID: -2279859417535410106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_14
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 153
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57cd9abbaa2b51ab0800000000000000
+      internalID: -5037924161781375883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump-wind-sheet_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 68
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f75d9d3e2f229ebf0800000000000000
+      internalID: -294665874015922817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 598682ee4a17f5647918140b5e983c3d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      jump-wind-sheet_0: -6966700119929983010
+      jump-wind-sheet_1: 6802180296787063992
+      jump-wind-sheet_10: -4845692554580913010
+      jump-wind-sheet_11: 1429526983242517309
+      jump-wind-sheet_12: 270580533261628316
+      jump-wind-sheet_13: -2279859417535410106
+      jump-wind-sheet_14: -5037924161781375883
+      jump-wind-sheet_15: -294665874015922817
+      jump-wind-sheet_2: 562946207900811509
+      jump-wind-sheet_3: -6791112590079795048
+      jump-wind-sheet_4: -1637847797565050291
+      jump-wind-sheet_5: -328394539512413557
+      jump-wind-sheet_6: -6619247140318427360
+      jump-wind-sheet_7: -4933004841053779664
+      jump-wind-sheet_8: -2644832600764640024
+      jump-wind-sheet_9: -770598296311345249
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
