@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     public static bool isGameOver = false;
 
-    // รองรับปุ่ม W/ขึ้น, A/ซ้าย, D/ขวา, S/ลง
+    // รองรับปุ่มตามลำดับเลนใหม่: ซ้าย (A), ล่าง (S), ขึ้น (W), ขวา (D)
     private static readonly KeyCode[] InputKeys = {
-        KeyCode.W, KeyCode.UpArrow,
         KeyCode.A, KeyCode.LeftArrow,
-        KeyCode.D, KeyCode.RightArrow,
-        KeyCode.S, KeyCode.DownArrow
+        KeyCode.S, KeyCode.DownArrow,
+        KeyCode.W, KeyCode.UpArrow,
+        KeyCode.D, KeyCode.RightArrow
     };
 
     private const int PerfectScore = 300;
@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int minComboToShow = 2;
     public int combo { get; private set; }
     public int maxCombo { get; private set; }
+
     public int perfectCount { get; private set; }
     public int goodCount { get; private set; }
     public int badCount { get; private set; }
@@ -119,7 +120,7 @@ public class PlayerController : MonoBehaviour
     private int holdTicksAwarded;
     private Vector3 homePosition;
     private bool isAwayFromHome;
-    private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4]; // Up, Left, Right, Down
+    private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4];
     private readonly Vector3[] arrowBaseScales = new Vector3[4];
     private readonly Color[] arrowBaseColors = new Color[4];
     private readonly float[] arrowFlashTimers = new float[4];
@@ -174,7 +175,6 @@ public class PlayerController : MonoBehaviour
             {
                 KeyCode normalizedKey = NormalizeKey(key);
                 FlashDirectionArrow(normalizedKey);
-                // Directional attacks stay at their attack point until the next input.
                 CancelInvoke(nameof(ReturnHome));
                 if (isAwayFromHome) ReturnHome();
                 if (Time.time >= nextAllowedPressTime) TryHit(normalizedKey);
@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour
 
     private void FlashDirectionArrow(KeyCode key)
     {
-        int index = key == KeyCode.W ? 0 : key == KeyCode.A ? 1 : key == KeyCode.D ? 2 : key == KeyCode.S ? 3 : -1;
+        int index = key == KeyCode.A ? 0 : key == KeyCode.S ? 1 : key == KeyCode.W ? 2 : key == KeyCode.D ? 3 : -1;
         if (index >= 0 && directionArrows[index] != null)
         {
             arrowFlashTimers[index] = arrowFlashDuration;
@@ -271,7 +271,6 @@ public class PlayerController : MonoBehaviour
         rect.offsetMax = Vector2.zero;
         rect.SetAsLastSibling();
 
-        // Draw UI button branches above the tint so their colors remain unchanged.
         foreach (Button button in comboTintCanvas.GetComponentsInChildren<Button>(true))
         {
             Transform branch = button.transform;
@@ -286,7 +285,6 @@ public class PlayerController : MonoBehaviour
         comboTintOverlay.raycastTarget = false;
         comboTintCanvasRect = comboTintCanvas.transform as RectTransform;
 
-        // Re-render the four gameplay arrows above the tint while mirroring their live state.
         for (int i = 0; i < directionArrows.Length; i++)
         {
             SpriteRenderer source = directionArrows[i];
@@ -339,13 +337,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // แปลงปุ่มกดให้ตรงกับเลนของโน้ต
+    // แปลงปุ่มกดให้ตรงกับเลนใหม่ (A=ซ้าย, S=ล่าง, W=ขึ้น, D=ขวา)
     KeyCode NormalizeKey(KeyCode key)
     {
-        if (key == KeyCode.W || key == KeyCode.UpArrow) return KeyCode.W;       // แถวบนสุด
-        if (key == KeyCode.A || key == KeyCode.LeftArrow) return KeyCode.A;     // แถวซ้าย
-        if (key == KeyCode.D || key == KeyCode.RightArrow) return KeyCode.D;    // แถวขวา
-        if (key == KeyCode.S || key == KeyCode.DownArrow) return KeyCode.S;     // แถวล่างสุด
+        if (key == KeyCode.A || key == KeyCode.LeftArrow) return KeyCode.A;     // บนสุด: ซ้าย
+        if (key == KeyCode.S || key == KeyCode.DownArrow) return KeyCode.S;     // ถัดมา: ล่าง
+        if (key == KeyCode.W || key == KeyCode.UpArrow) return KeyCode.W;       // ถัดมา: ขึ้น
+        if (key == KeyCode.D || key == KeyCode.RightArrow) return KeyCode.D;    // ล่างสุด: ขวา
         return key;
     }
 
@@ -422,7 +420,6 @@ public class PlayerController : MonoBehaviour
             MissActiveHold();
             return;
         }
-
     }
 
     void CompleteHoldNote()
@@ -574,7 +571,6 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
-    // เปลี่ยนจาก void เป็น public void
     public void UpdateScoreUI()
     {
         if (scoreText != null) scoreText.text = "Score: " + score;
@@ -633,13 +629,6 @@ public class PlayerController : MonoBehaviour
             feedbackImage.transform.localScale, Vector3.one, feedbackShrinkSpeed * Time.deltaTime);
     }
 
-    void PlayThrowAnimation()
-    {
-        if (throwAnimNames == null || throwAnimNames.Length == 0) return;
-        PlayAnimation(throwAnimNames[throwStep % throwAnimNames.Length]);
-        throwStep++;
-    }
-
     void PlayDirectionalAnimation(KeyCode pressedKey, float hitLineX, float noteY)
     {
         switch (pressedKey)
@@ -657,7 +646,11 @@ public class PlayerController : MonoBehaviour
                 Invoke(nameof(ReturnHome), jumpAttackDuration);
                 break;
             default:
-                PlayThrowAnimation();
+                if (throwAnimNames != null && throwAnimNames.Length > 0)
+                {
+                    PlayAnimation(throwAnimNames[throwStep % throwAnimNames.Length]);
+                    throwStep++;
+                }
                 break;
         }
     }

@@ -13,11 +13,11 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private float moveSpeed = 3.0f;
     public float hitLineX = -3.0f;
 
-    [Header("4-Lane Y Positions (Top to Bottom)")]
-    [SerializeField] private float yPosTop = 2.25f;    // แถวที่ 1 (บนสุด: ขึ้น / Q) -> พิกัด 3
-    [SerializeField] private float yPosMid1 = 0.75f;   // แถวที่ 2 (ถัดลงมา: ซ้าย / A) -> พิกัด 1
-    [SerializeField] private float yPosMid2 = -0.75f;  // แถวที่ 3 (ถัดลงมา: ขวา / D) -> พิกัด -1
-    [SerializeField] private float yPosBottom = -2.25f;// แถวที่ 4 (ล่างสุด: ลง / S) -> พิกัด -3
+    [Header("4-Lane Y Positions (Top to Bottom: ซ้าย -> ล่าง -> ขึ้น -> ขวา)")]
+    [SerializeField] private float yPosTop = 3.0f;     // แถวที่ 1 (บนสุด: ซ้าย / A) -> พิกัด 3.0
+    [SerializeField] private float yPosMid1 = 1.0f;    // แถวที่ 2 (ถัดลงมา: ล่าง / S) -> พิกัด 1.0
+    [SerializeField] private float yPosMid2 = -1.0f;   // แถวที่ 3 (ถัดลงมา: ขึ้น / W) -> พิกัด -1.0
+    [SerializeField] private float yPosBottom = -3.0f; // แถวที่ 4 (ล่างสุด: ขวา / D) -> พิกัด -3.0
 
     [Header("Progressive Speed Settings")]
     [SerializeField] private float maxMoveSpeed = 13.0f;
@@ -86,12 +86,12 @@ public class MiniLipid : MonoBehaviour
         assignedKey = key;
         parentLipid = owner;
 
-        // จัดตำแหน่ง Y ตามพิกัด (3, 1, -1, -3)
+        // จัดตำแหน่ง Y ตามเลนใหม่ (ซ้าย -> ล่าง -> ขึ้น -> ขวา)
         Vector3 pos = transform.position;
-        if (assignedKey == KeyCode.W) pos.y = yPosTop;       // บนสุด (ขึ้น / W)
-        else if (assignedKey == KeyCode.A) pos.y = yPosMid1;  // ถัดลงมา (ซ้าย / A)
-        else if (assignedKey == KeyCode.D) pos.y = yPosMid2;  // ถัดลงมา (ขวา / D)
-        else if (assignedKey == KeyCode.S) pos.y = yPosBottom;// ล่างสุด (ลง / S)
+        if (assignedKey == KeyCode.A) pos.y = yPosTop;       // บนสุด (ซ้าย) -> 3.0
+        else if (assignedKey == KeyCode.S) pos.y = yPosMid1;  // ถัดลงมา (ล่าง) -> 1.0
+        else if (assignedKey == KeyCode.W) pos.y = yPosMid2;  // ถัดลงมา (ขึ้น) -> -1.0
+        else if (assignedKey == KeyCode.D) pos.y = yPosBottom;// ล่างสุด (ขวา) -> -3.0
         transform.position = pos;
     }
 
