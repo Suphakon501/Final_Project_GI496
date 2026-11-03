@@ -1,6 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
 
+using UnityEngine.UI;
+
 public class ResultScreen : MonoBehaviour
 {
     [Header("Result Display (optional)")]
@@ -19,6 +21,14 @@ public class ResultScreen : MonoBehaviour
     [SerializeField] private TMP_Text missCountText;
     [SerializeField] private TMP_Text maxComboCountText;
 
+    [Header("Selected Song Info")]
+    [SerializeField] private TMP_Text songNameText;
+    [SerializeField] private TMP_Text modeText;
+    [SerializeField] private Image modeImage;
+    [SerializeField] private Sprite normalModeSprite;
+    [SerializeField] private Sprite easyModeSprite;
+    [SerializeField] private Sprite hardModeSprite;
+
     [Header("Calories Estimate")]
     [SerializeField] private TMP_Text kcalText;
     [SerializeField, Min(1)] private int scorePointsPerKcal = 3000;
@@ -35,6 +45,42 @@ public class ResultScreen : MonoBehaviour
     {
         Time.timeScale = 1f;
         var r = LevelManager.LastResult;
+
+        if (songNameText == null || modeText == null)
+        {
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas != null)
+            {
+                if (songNameText == null)
+                {
+                    Transform songObject = canvas.transform.Find("SongName");
+                    if (songObject != null) songNameText = songObject.GetComponent<TMP_Text>();
+                }
+                if (modeText == null)
+                {
+                    Transform modeObject = canvas.transform.Find("Mode");
+                    if (modeObject != null)
+                    {
+                        modeText = modeObject.GetComponent<TMP_Text>();
+                        if (modeImage == null) modeImage = modeObject.GetComponent<Image>();
+                    }
+                }
+            }
+        }
+
+        if (songNameText != null && !string.IsNullOrWhiteSpace(MainMenu.SelectedSongName))
+            songNameText.text = MainMenu.SelectedSongName;
+        if (modeText != null && !string.IsNullOrWhiteSpace(MainMenu.SelectedModeName))
+            modeText.text = MainMenu.SelectedModeName;
+        if (modeImage != null && !string.IsNullOrWhiteSpace(MainMenu.SelectedModeName))
+        {
+            switch (MainMenu.SelectedModeName.Trim().ToUpperInvariant())
+            {
+                case "NORMAL": if (normalModeSprite != null) modeImage.sprite = normalModeSprite; break;
+                case "EASY": if (easyModeSprite != null) modeImage.sprite = easyModeSprite; break;
+                case "HARD": if (hardModeSprite != null) modeImage.sprite = hardModeSprite; break;
+            }
+        }
 
         if (scoreNumber != null) scoreNumber.SetValue(r.score, false);
         if (comboNumber != null) comboNumber.SetValue(r.maxCombo, false);

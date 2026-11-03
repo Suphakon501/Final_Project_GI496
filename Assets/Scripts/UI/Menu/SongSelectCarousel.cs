@@ -18,6 +18,10 @@ public class SongSelectCarousel : MonoBehaviour
     [Header("Scene to load for each button. Leave blank for Coming Soon entries.")]
     [SerializeField] private string[] sceneNames = { "Level1", "Level1.1", "" };
 
+    [Header("Result labels for each song button")]
+    [SerializeField] private string[] songNames = { "Sub Urban - Cradles", "Red VS White", "Coming Soon..." };
+    [SerializeField] private string[] modeNames = { "NORMAL", "EASY", "NORMAL" };
+
     [Header("Selection animation")]
     [SerializeField] private float selectedScale = 1.08f;
     [SerializeField] private float unselectedScale = 0.88f;
@@ -166,6 +170,15 @@ public class SongSelectCarousel : MonoBehaviour
     {
         if (mainMenu == null || sceneNames == null || selectedIndex < 0 || selectedIndex >= sceneNames.Length) return;
         string sceneName = sceneNames[selectedIndex];
-        if (!string.IsNullOrWhiteSpace(sceneName)) mainMenu.LoadSongScene(sceneName);
+        if (!string.IsNullOrWhiteSpace(sceneName))
+        {
+            string songName = songNames != null && selectedIndex < songNames.Length
+                ? songNames[selectedIndex]
+                : sceneName;
+            string modeName = modeNames != null && selectedIndex < modeNames.Length
+                ? modeNames[selectedIndex]
+                : "NORMAL";
+            mainMenu.LoadSongScene(sceneName, songName, modeName);
+        }
     }
 }

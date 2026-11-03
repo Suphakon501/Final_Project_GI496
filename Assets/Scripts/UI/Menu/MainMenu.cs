@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    public static string SelectedSongName { get; private set; }
+    public static string SelectedModeName { get; private set; }
+
     [Header("Panels (assign these in the Inspector)")]
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject levelPanel;
@@ -110,13 +113,28 @@ public class MainMenu : MonoBehaviour
 #endif
     }
 
-    public void OnLevel1Clicked() => LoadScene(level1Scene);
+    public void OnLevel1Clicked() => LoadSongScene(level1Scene, "Sub Urban - Cradles", "NORMAL");
     // The second available song is stored in the Level1.1 scene in this project.
-    public void OnLevel2Clicked() => LoadScene("Level1.1");
+    public void OnLevel2Clicked() => LoadSongScene("Level1.1", "Red VS White", "EASY");
     // Level 3 is currently a Coming Soon slot in the song selector.
     public void OnLevel3Clicked() { }
     public void OnBackClicked() => ShowMainPanel();
-    public void LoadSongScene(string sceneName) => LoadScene(sceneName);
+    public void LoadSongScene(string sceneName)
+    {
+        if (sceneName == level1Scene || sceneName == "Level1")
+            LoadSongScene(sceneName, "Sub Urban - Cradles", "NORMAL");
+        else if (sceneName == "Level1.1")
+            LoadSongScene(sceneName, "Red VS White", "EASY");
+        else
+            LoadSongScene(sceneName, sceneName, "NORMAL");
+    }
+
+    public void LoadSongScene(string sceneName, string songName, string modeName)
+    {
+        SelectedSongName = songName;
+        SelectedModeName = modeName;
+        LoadScene(sceneName);
+    }
 
     public void GoToMenu()
     {

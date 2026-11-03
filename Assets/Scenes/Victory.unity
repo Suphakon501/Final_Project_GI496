@@ -667,6 +667,12 @@ MonoBehaviour:
   badCountText: {fileID: 1584299005}
   missCountText: {fileID: 1163052366}
   maxComboCountText: {fileID: 890710243}
+  songNameText: {fileID: 1014238786}
+  modeText: {fileID: 0}
+  modeImage: {fileID: 1796723009}
+  normalModeSprite: {fileID: 9095853184155359625, guid: a3cf451377f64db4db9cdcb1feef081f, type: 3}
+  easyModeSprite: {fileID: -5798597686317507224, guid: 064d83c1bf2942045ae91f326102a009, type: 3}
+  hardModeSprite: {fileID: 5412257750835826718, guid: f05dd8a093228264294dc80342804cf4, type: 3}
   kcalText: {fileID: 1122673587}
   scorePointsPerKcal: 3000
   menuScene: Menu
@@ -1506,7 +1512,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sub Urban - Cradles
+  m_text: SongName
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3116,8 +3122,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 9095853184155359625, guid: a3cf451377f64db4db9cdcb1feef081f, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

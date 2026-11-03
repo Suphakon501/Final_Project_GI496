@@ -5890,6 +5890,14 @@ MonoBehaviour:
   - Level1
   - Level1.1
   - 
+  songNames:
+  - Sub Urban - Cradles
+  - Red VS White
+  - Coming Soon...
+  modeNames:
+  - NORMAL
+  - EASY
+  - NORMAL
   selectedScale: 1.08
   unselectedScale: 0.88
   animationSpeed: 12
