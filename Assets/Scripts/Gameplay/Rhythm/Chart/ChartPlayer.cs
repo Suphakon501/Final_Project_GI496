@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 [DefaultExecutionOrder(-200)]
 public class ChartPlayer : MonoBehaviour
@@ -9,10 +10,13 @@ public class ChartPlayer : MonoBehaviour
     public SongChart chart;
     public GameObject lipidPrefab;
 
-    [Header("Row Heights")]
-    [SerializeField] private float topRowY = 1.5f;
-    [SerializeField] private float middleRowY = 0f;
-    [SerializeField] private float bottomRowY = -1.5f;
+    [Header("Row Heights (4 lanes, top to bottom)")]
+    [Tooltip("ถ้าเปิด จะอ่าน Y ของลูกศรบน Hitline มาใช้เอง (ถ้าไม่เจอจะใช้ค่าด้านล่าง)")]
+    [SerializeField] private bool useHitlineArrowY = true;
+    [FormerlySerializedAs("topRowY")][SerializeField] private float rowYUp = 1.5f;      // W / Up
+    [FormerlySerializedAs("middleRowY")][SerializeField] private float rowYLeft = 0f;      // A / Left
+    [SerializeField] private float rowYRight = -0.75f;                                      // D / Right
+    [FormerlySerializedAs("bottomRowY")][SerializeField] private float rowYDown = -1.5f;   // S / Down
 
     [Header("Enemy Lead-In (seconds)")]
     [SerializeField] private float enemyLeadIn = 0.3f;
@@ -81,6 +85,8 @@ public class ChartPlayer : MonoBehaviour
     void Start()
     {
         if (!Active || recordMode || !enabled) return;
+
+        ReadRowYFromHitline();
 
         var lipid = lipidPrefab != null ? lipidPrefab.GetComponent<LipidMovement>() : null;
         if (lipid == null || lipid.miniLipidPrefab == null)
@@ -173,9 +179,45 @@ public class ChartPlayer : MonoBehaviour
         CheckSongEnded(false);
     }
 
+    // แต่ละปุ่มมีแถวของตัวเอง (W=บนสุด, A=แถวที่ 2, D=แถวที่ 3, S=ล่างสุด)
+    float RowYFor(NoteKey k)
+    {
+        switch (k)
+        {
+            case NoteKey.W: return rowYUp;
+            case NoteKey.A: return rowYLeft;
+            case NoteKey.D: return rowYRight;
+            default: return rowYDown;
+        }
+    }
+
+    // อ่านตำแหน่ง Y ของลูกศรบน Hitline (ชื่อเดียวกับที่ PlayerController ใช้) ให้โน้ตวิ่งตรงแถวลูกศร
+    void ReadRowYFromHitline()
+    {
+        if (!useHitlineArrowY) return;
+
+        GameObject hitline = GameObject.Find("Hitline");
+        if (hitline == null) return;
+
+        if (!TryArrowY(hitline.transform, "Up2_1", out float up)) return;
+        if (!TryArrowY(hitline.transform, "Left2_1", out float left)) return;
+        if (!TryArrowY(hitline.transform, "Right2_0", out float right)) return;
+        if (!TryArrowY(hitline.transform, "Down2_1", out float down)) return;
+
+        rowYUp = up; rowYLeft = left; rowYRight = right; rowYDown = down;
+        Debug.Log($"[ChartPlayer] Row Y from Hitline: W={up:0.##} A={left:0.##} D={right:0.##} S={down:0.##}");
+    }
+
+    static bool TryArrowY(Transform hitline, string childName, out float y)
+    {
+        Transform t = hitline.Find(childName);
+        y = t != null ? t.position.y : 0f;
+        return t != null;
+    }
+
     void SpawnNote(ChartNote n, LipidMovement owner, float arriveAt)
     {
-        float y = n.row == NoteRow.Top ? topRowY : n.row == NoteRow.Bottom ? bottomRowY : middleRowY;
+        float y = RowYFor(n.key);
         var go = Instantiate(miniPrefab, new Vector3(stopX, y, 0f), Quaternion.identity);
         owner.RegisterSpawnedNote();
 
