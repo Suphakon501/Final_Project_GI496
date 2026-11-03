@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +34,22 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private GameObject perfectParticlePrefab;
     [SerializeField] private GameObject badMissParticlePrefab;
     [SerializeField] private float particleLifetime = 0.6f;
+
+    [Header("Hit Knock-Away (เด้งขึ้นแล้วร่วงตกจากจอ)")]
+    [Tooltip("กดโดนโน้ตแล้วให้โน้ตเด้งขึ้นและร่วงหลุดกล้อง แทนการหายทันที")]
+    [SerializeField] private bool knockAwayOnHit = true;
+    [SerializeField] private float knockUpSpeed = 9f;
+    [Tooltip("ความเร็วที่เด้งไปทางซ้าย (เข้าหาตัวละคร)")]
+    [SerializeField] private float knockLeftSpeed = 3.5f;
+    [Tooltip("สุ่มเบี่ยงซ้าย-ขวาเพิ่มเล็กน้อย (±)")]
+    [SerializeField] private float knockSideJitter = 1f;
+    [SerializeField] private float knockGravity = 26f;
+    [Tooltip("ความเร็วหมุน (องศา/วินาที)")]
+    [SerializeField] private float knockSpinSpeed = 540f;
+    [SerializeField] private float knockLifetime = 1.2f;
+    [Tooltip("ขนาดตอนเด้งสุด (1 = เท่าเดิม)")]
+    [SerializeField] private float knockPopScale = 1.35f;
+    [SerializeField, Range(0.01f, 0.5f)] private float knockPopPhase = 0.12f;
 
     private LipidMovement parentLipid;
     private bool isFinished = false;
@@ -232,6 +249,55 @@ public class MiniLipid : MonoBehaviour
         }
 
         if (parentLipid != null) parentLipid.OnMiniFinished(result);
+
+        if (result == HitResult.Miss || !knockAwayOnHit)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // กดโดนแล้วโน้ตจะเด้งขึ้นก่อน แล้วแรงดึงดูดพาร่วงตกหลุดจากกล้อง
+        active.Remove(this);
+        StartCoroutine(KnockAwayRoutine());
+    }
+
+    IEnumerator KnockAwayRoutine()
+    {
+        if (holdTrail != null) holdTrail.enabled = false;
+        foreach (var col in GetComponentsInChildren<Collider2D>()) col.enabled = false;
+
+        // เด้งไปทางซ้ายเข้าหาตัวละครเป็นหลัก แล้วเบี่ยงซ้าย-ขวานิดหน่อยให้ดูเป็นธรรมชาติ
+        float drift = -Mathf.Abs(knockLeftSpeed) + Random.Range(-knockSideJitter, knockSideJitter);
+        Vector3 velocity = new Vector3(drift, knockUpSpeed, 0f);
+        Vector3 startScale = transform.localScale;
+        float spin = knockSpinSpeed * (Random.value < 0.5f ? -1f : 1f);
+        float popPhase = Mathf.Max(0.0001f, knockPopPhase);
+        float elapsed = 0f;
+
+        while (elapsed < knockLifetime)
+        {
+            if (PauseMenu.IsPaused)
+            {
+                yield return null;
+                continue;
+            }
+
+            float dt = Time.deltaTime;
+            elapsed += dt;
+
+            velocity.y -= knockGravity * dt;
+            transform.position += velocity * dt;
+            transform.Rotate(0f, 0f, spin * dt);
+
+            float t = Mathf.Clamp01(elapsed / knockLifetime);
+            float scale = t < popPhase
+                ? Mathf.Lerp(1f, knockPopScale, t / popPhase)
+                : Mathf.Lerp(knockPopScale, 0.2f, (t - popPhase) / (1f - popPhase));
+            transform.localScale = startScale * Mathf.Max(0.01f, scale);
+
+            yield return null;
+        }
+
         Destroy(gameObject);
     }
 

@@ -20,7 +20,7 @@ MonoBehaviour:
   - beat: 6.5
     key: 0
     row: 0
-    holdBeats: 5
+    holdBeats: 1
   - beat: 7
     key: 2
     row: 2

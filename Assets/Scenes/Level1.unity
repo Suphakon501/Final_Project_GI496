@@ -4368,12 +4368,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chart: {fileID: 11400000, guid: 81d94e305038d9241bb9cb7d3d60cf2b, type: 2}
   lipidPrefab: {fileID: 3639694726996431690, guid: 7322f7bf1a48bb748974290f2e4b4b4f, type: 3}
-  topRowY: 1.5
-  middleRowY: 0
-  bottomRowY: -1.5
+  useHitlineArrowY: 1
+  rowYUp: 1.5
+  rowYLeft: 0
+  rowYRight: -0.75
+  rowYDown: -1.5
   enemyLeadIn: 0.3
   recordMode: 0
   recordSnapBeats: 0.5
+  recordHoldThresholdSeconds: 0.2
   clearChartBeforeRecording: 1
   progressTracker: {fileID: 1699540644}
   onChartFinished:
