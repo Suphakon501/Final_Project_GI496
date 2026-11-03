@@ -11,6 +11,7 @@ public class ChartNote
     public float beat;
     public NoteKey key;
     public NoteRow row = NoteRow.Middle;
+    [Min(0f)] public float holdBeats;
 
     public KeyCode KeyCode
     {

@@ -182,6 +182,7 @@ public class ChartPlayer : MonoBehaviour
         var mini = go.GetComponent<MiniLipid>();
         if (mini == null) return;
         mini.InitializeMini(n.KeyCode, owner);
+        mini.SetHoldDuration(Mathf.Max(0f, n.holdBeats) * chart.BeatDuration);
         mini.SetTargetSongTime(arriveAt);
     }
 

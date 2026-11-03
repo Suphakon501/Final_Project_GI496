@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private const int PerfectScore = 300;
     private const int GoodScore = 100;
     private const int BadScore = 25;
+    private const int HoldTickScore = 10;
+    private const int HoldTailBonus = 25;
     private const int PerfectChainLength = 6;
 
     [Header("Score System")]
@@ -113,6 +115,8 @@ public class PlayerController : MonoBehaviour
     private int activeWaves = 0;
     private int currentPerfectStreak = 0;
     private bool warnedMissingCombo = false;
+    private MiniLipid activeHold;
+    private int holdTicksAwarded;
     private Vector3 homePosition;
     private bool isAwayFromHome;
     private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4]; // Up, Left, Right, Down
@@ -161,6 +165,8 @@ public class PlayerController : MonoBehaviour
         UpdateComboScreenTint();
 
         if (isGameOver) return;
+
+        UpdateHoldNote();
 
         foreach (var key in InputKeys)
         {
@@ -352,6 +358,25 @@ public class PlayerController : MonoBehaviour
 
         if (pressedKey == target.assignedKey)
         {
+            if (target.IsHold)
+            {
+                if (target.TryStartHold())
+                {
+                    HitResult headResult = target.EvaluateAccuracy();
+                    OnNoteHit(headResult, false, pressedKey, target.hitLineX, target.transform.position.y);
+                    activeHold = target;
+                    holdTicksAwarded = 0;
+                    UpdateScoreUI();
+                }
+                else if (target.IsOutsideTimingWindow)
+                {
+                    OnNoteMissed();
+                    target.ConsumeMini(HitResult.Miss);
+                    UpdateScoreUI();
+                }
+                return;
+            }
+
             HitResult result = target.EvaluateAccuracy();
             OnNoteHit(result, target.IsLastInRow(), pressedKey, target.hitLineX, target.transform.position.y);
             target.ConsumeMini(result);
@@ -362,6 +387,59 @@ public class PlayerController : MonoBehaviour
             target.ConsumeMini(HitResult.Miss);
         }
 
+        UpdateScoreUI();
+    }
+
+    void UpdateHoldNote()
+    {
+        if (activeHold == null) return;
+        if (!activeHold.gameObject.activeInHierarchy)
+        {
+            activeHold = null;
+            return;
+        }
+
+        float endOffset = activeHold.HoldEndOffsetSeconds;
+        int holdTicksNow = activeHold.HoldTickCount;
+        if (holdTicksNow > holdTicksAwarded)
+        {
+            score += (holdTicksNow - holdTicksAwarded) * HoldTickScore;
+            holdTicksAwarded = holdTicksNow;
+            UpdateScoreUI();
+        }
+
+        if (activeHold.HoldKeyReleasedThisFrame)
+        {
+            if (Mathf.Abs(endOffset) <= activeHold.HoldReleaseWindow)
+                CompleteHoldNote();
+            else
+                MissActiveHold();
+            return;
+        }
+
+        if (endOffset > activeHold.HoldReleaseWindow || !activeHold.IsHoldButtonStillDown)
+        {
+            MissActiveHold();
+            return;
+        }
+
+    }
+
+    void CompleteHoldNote()
+    {
+        MiniLipid completed = activeHold;
+        activeHold = null;
+        score += HoldTailBonus;
+        completed.ConsumeMini(HitResult.Perfect);
+        UpdateScoreUI();
+    }
+
+    void MissActiveHold()
+    {
+        MiniLipid missed = activeHold;
+        activeHold = null;
+        OnNoteMissed();
+        missed.ConsumeMini(HitResult.Miss);
         UpdateScoreUI();
     }
 

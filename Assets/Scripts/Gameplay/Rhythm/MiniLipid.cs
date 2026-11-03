@@ -38,6 +38,16 @@ public class MiniLipid : MonoBehaviour
     private bool isFinished = false;
     private bool hasTargetTime = false;
     private float targetSongTime;
+    private float holdDuration;
+    private bool holdStarted;
+    private LineRenderer holdTrail;
+    private SpriteRenderer noteRenderer;
+
+    public bool IsHold => holdDuration > 0f;
+    public bool HoldStarted => holdStarted;
+    public int HoldTickCount => !holdStarted || !UsingSongClock
+        ? 0
+        : Mathf.FloorToInt(Mathf.Max(0f, BeatManager.instance.songPositionInSeconds - targetSongTime) / BeatManager.instance.BeatDuration * 2f);
 
     public float MoveSpeed
     {
@@ -59,9 +69,12 @@ public class MiniLipid : MonoBehaviour
         if (PauseMenu.IsPaused || PlayerController.isGameOver || isFinished) return;
 
         if (UsingSongClock) FollowSongTime();
-        else transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
+        else if (!holdStarted)
+        {
+            transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
+        }
 
-        if (SecondsUntilLine() < -missAfter)
+        if (!holdStarted && SecondsUntilLine() < -missAfter)
         {
             if (PlayerController.instance != null) PlayerController.instance.RegisterMissedNote();
             ConsumeMini(HitResult.Miss);
@@ -87,6 +100,82 @@ public class MiniLipid : MonoBehaviour
         hasTargetTime = true;
         targetSongTime = songTime;
         FollowSongTime();
+    }
+
+    public void SetHoldDuration(float seconds)
+    {
+        holdDuration = Mathf.Max(0f, seconds);
+        if (holdDuration <= 0f) return;
+
+        var trailObject = new GameObject("HoldTrail");
+        trailObject.transform.SetParent(transform, false);
+        trailObject.transform.localPosition = Vector3.zero;
+        holdTrail = trailObject.AddComponent<LineRenderer>();
+        holdTrail.useWorldSpace = false;
+        holdTrail.positionCount = 2;
+        holdTrail.SetPosition(0, Vector3.zero);
+        holdTrail.SetPosition(1, Vector3.right * (holdDuration * MoveSpeed));
+        holdTrail.startWidth = 0.16f;
+        holdTrail.endWidth = 0.16f;
+        holdTrail.startColor = new Color(1f, 0.82f, 0.2f, 0.9f);
+        holdTrail.endColor = new Color(1f, 0.45f, 0.05f, 0.45f);
+        holdTrail.sortingOrder = 4;
+        Shader shader = Shader.Find("Sprites/Default");
+        if (shader != null) holdTrail.material = new Material(shader);
+    }
+
+    public bool TryStartHold()
+    {
+        if (!IsHold || holdStarted || Mathf.Abs(SecondsUntilLine()) > missAfter) return false;
+        holdStarted = true;
+        noteRenderer = GetComponent<SpriteRenderer>();
+        if (noteRenderer != null)
+            noteRenderer.color = new Color(0.45f, 1f, 0.45f, noteRenderer.color.a);
+        if (holdTrail != null)
+        {
+            holdTrail.startColor = Color.green;
+            holdTrail.endColor = new Color(0.2f, 1f, 0.4f, 0.7f);
+        }
+        var p = transform.position;
+        p.x = hitLineX;
+        transform.position = p;
+        return true;
+    }
+
+    public float HoldEndOffsetSeconds => !UsingSongClock
+        ? -float.MaxValue
+        : BeatManager.instance.songPositionInSeconds - (targetSongTime + holdDuration);
+    public float HoldReleaseWindow => missAfter;
+    public bool HoldKeyReleasedThisFrame => holdStarted && IsAssignedKeyUp();
+
+    public bool IsOutsideTimingWindow => Mathf.Abs(SecondsUntilLine()) > missAfter;
+
+    public bool IsHoldButtonStillDown
+    {
+        get
+        {
+            if (!holdStarted) return false;
+            switch (assignedKey)
+            {
+                case KeyCode.W: return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+                case KeyCode.A: return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+                case KeyCode.D: return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+                case KeyCode.S: return Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+                default: return Input.GetKey(assignedKey);
+            }
+        }
+    }
+
+    bool IsAssignedKeyUp()
+    {
+        switch (assignedKey)
+        {
+            case KeyCode.W: return Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow);
+            case KeyCode.A: return Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow);
+            case KeyCode.D: return Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow);
+            case KeyCode.S: return Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow);
+            default: return Input.GetKeyUp(assignedKey);
+        }
     }
 
     float SecondsUntilLine()
