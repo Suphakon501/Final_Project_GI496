@@ -1,6 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ResultScreen : MonoBehaviour
@@ -46,41 +46,7 @@ public class ResultScreen : MonoBehaviour
         Time.timeScale = 1f;
         var r = LevelManager.LastResult;
 
-        if (songNameText == null || modeText == null)
-        {
-            Canvas canvas = FindFirstObjectByType<Canvas>();
-            if (canvas != null)
-            {
-                if (songNameText == null)
-                {
-                    Transform songObject = canvas.transform.Find("SongName");
-                    if (songObject != null) songNameText = songObject.GetComponent<TMP_Text>();
-                }
-                if (modeText == null)
-                {
-                    Transform modeObject = canvas.transform.Find("Mode");
-                    if (modeObject != null)
-                    {
-                        modeText = modeObject.GetComponent<TMP_Text>();
-                        if (modeImage == null) modeImage = modeObject.GetComponent<Image>();
-                    }
-                }
-            }
-        }
-
-        if (songNameText != null && !string.IsNullOrWhiteSpace(MainMenu.SelectedSongName))
-            songNameText.text = MainMenu.SelectedSongName;
-        if (modeText != null && !string.IsNullOrWhiteSpace(MainMenu.SelectedModeName))
-            modeText.text = MainMenu.SelectedModeName;
-        if (modeImage != null && !string.IsNullOrWhiteSpace(MainMenu.SelectedModeName))
-        {
-            switch (MainMenu.SelectedModeName.Trim().ToUpperInvariant())
-            {
-                case "NORMAL": if (normalModeSprite != null) modeImage.sprite = normalModeSprite; break;
-                case "EASY": if (easyModeSprite != null) modeImage.sprite = easyModeSprite; break;
-                case "HARD": if (hardModeSprite != null) modeImage.sprite = hardModeSprite; break;
-            }
-        }
+        ApplySongInfo(r);
 
         if (scoreNumber != null) scoreNumber.SetValue(r.score, false);
         if (comboNumber != null) comboNumber.SetValue(r.maxCombo, false);
@@ -102,6 +68,75 @@ public class ResultScreen : MonoBehaviour
         }
 
         if (newBestObject != null) newBestObject.SetActive(r.newBest);
+    }
+
+    void ApplySongInfo(LevelManager.Result result)
+    {
+        if (songNameText == null) songNameText = FindTextByName("SongName");
+        if (modeText == null) modeText = FindTextByName("Mode");
+        if (modeImage == null) modeImage = FindImageByName("Mode");
+
+        string levelScene = !string.IsNullOrEmpty(result.levelScene)
+            ? result.levelScene
+            : SceneManager.GetActiveScene().name;
+
+        string songName = MainMenu.SelectedSongName;
+        string modeName = MainMenu.SelectedModeName;
+
+        // ถ้าเริ่มเล่นจาก Editor หรือโหลดซีนตรงๆ ค่าที่เมนูส่งมาจะว่าง -> เดาจากซีนที่เล่น
+        if (string.IsNullOrWhiteSpace(songName)) songName = SongNameForScene(levelScene);
+        if (string.IsNullOrWhiteSpace(modeName)) modeName = ModeForScene(levelScene);
+
+        if (songNameText != null && !string.IsNullOrWhiteSpace(songName)) songNameText.text = songName;
+        if (modeText != null && !string.IsNullOrWhiteSpace(modeName)) modeText.text = modeName;
+
+        if (modeImage != null && !string.IsNullOrWhiteSpace(modeName))
+        {
+            Sprite sprite = SpriteForMode(modeName);
+            if (sprite != null)
+            {
+                modeImage.sprite = sprite;
+                modeImage.enabled = true;
+            }
+        }
+    }
+
+    static TMP_Text FindTextByName(string objectName)
+    {
+        foreach (var text in FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (text.gameObject.name == objectName) return text;
+        return null;
+    }
+
+    static Image FindImageByName(string objectName)
+    {
+        foreach (var image in FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (image.gameObject.name == objectName) return image;
+        return null;
+    }
+
+    Sprite SpriteForMode(string modeName)
+    {
+        switch (modeName.Trim().ToUpperInvariant())
+        {
+            case "NORMAL": return normalModeSprite;
+            case "EASY": return easyModeSprite;
+            case "HARD": return hardModeSprite;
+            default: return null;
+        }
+    }
+
+    static string SongNameForScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName)) return null;
+        if (sceneName.Contains("1.1") || sceneName.ToUpperInvariant().Contains("LEVEL2")) return "Red VS White";
+        return "Sub Urban - Cradles";
+    }
+
+    static string ModeForScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName)) return null;
+        return sceneName.Contains("1.1") || sceneName.ToUpperInvariant().Contains("LEVEL2") ? "EASY" : "NORMAL";
     }
 
     void Update()

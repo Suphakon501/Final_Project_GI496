@@ -37,6 +37,16 @@ public class CameraImpact : MonoBehaviour
     [Header("Roll (เอียงกล้อง)")]
     [SerializeField] private float maxRoll = 1.6f;
 
+    [Header("Beat Pulse (เต้นตาม BPM)")]
+    [Tooltip("เปิดให้กล้องซูมวูบตามจังหวะเพลง")]
+    [SerializeField] private bool beatPulse = true;
+    [SerializeField, Min(0f)] private float beatZoom = 0.06f;
+    [SerializeField, Min(0.05f)] private float beatPulseDuration = 0.22f;
+    [Tooltip("ทุกกี่บีตถึงจะแรงเป็นพิเศษ (1 = ทุกบีตเท่ากันหมด)")]
+    [SerializeField, Min(1)] private int strongBeatEvery = 4;
+    [SerializeField, Min(1f)] private float strongBeatMultiplier = 1.9f;
+    [SerializeField, Min(0f)] private float strongBeatShake = 0.06f;
+
     private Camera cam;
     private LowHealthCameraShake lowHealth;
     private Vector3 baseLocalPosition;
@@ -45,6 +55,10 @@ public class CameraImpact : MonoBehaviour
     private float trauma;
     private float zoomPunch;
     private float noiseSeed;
+    private int lastBeatIndex = int.MinValue;
+    private float beatPulseTimer;
+    private float beatPulseAmount;
+    private float beatZoomOffset;
 
     // ใส่คอมโพเนนต์ให้กล้องหลักอัตโนมัติ ทุกซีน ไม่ต้องแก้ไฟล์ซีน
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -112,6 +126,8 @@ public class CameraImpact : MonoBehaviour
         if (PauseMenu.IsPaused) return;
 
         float dt = Time.unscaledDeltaTime;
+        UpdateBeatPulse(dt);
+
         float strength = trauma * trauma;
 
         trauma = Mathf.Max(0f, trauma - traumaDecay * dt);
@@ -129,6 +145,36 @@ public class CameraImpact : MonoBehaviour
         transform.localRotation = baseRotation * Quaternion.Euler(0f, 0f, roll * maxRoll * strength);
 
         if (cam != null)
-            cam.orthographicSize = baseOrthoSize - zoomPunch;
+            cam.orthographicSize = baseOrthoSize - zoomPunch - beatZoomOffset;
+    }
+
+    /// <summary>ซูมวูบตามจังหวะเพลง (อ่าน beat จาก BeatManager ไม่ต้องตั้งค่าจังหวะซ้ำ)</summary>
+    void UpdateBeatPulse(float deltaTime)
+    {
+        if (beatPulseTimer > 0f)
+        {
+            beatPulseTimer = Mathf.Max(0f, beatPulseTimer - deltaTime);
+            float progress = 1f - beatPulseTimer / Mathf.Max(0.05f, beatPulseDuration);
+            beatZoomOffset = beatPulseAmount * Mathf.Sin(Mathf.Clamp01(progress) * Mathf.PI);
+        }
+        else
+        {
+            beatZoomOffset = 0f;
+        }
+
+        BeatManager beat = BeatManager.instance;
+        if (!beatPulse || beat == null) return;
+
+        int beatIndex = Mathf.FloorToInt(beat.songPositionInBeats);
+        if (beatIndex == lastBeatIndex) return;
+        lastBeatIndex = beatIndex;
+        if (beatIndex < 0) return;
+
+        bool strong = strongBeatEvery > 1 && beatIndex % strongBeatEvery == 0;
+        beatPulseAmount = beatZoom * (strong ? strongBeatMultiplier : 1f);
+        beatPulseTimer = Mathf.Max(0.05f, beatPulseDuration);
+
+        if (strong && strongBeatShake > 0f)
+            trauma = Mathf.Clamp01(trauma + strongBeatShake);
     }
 }

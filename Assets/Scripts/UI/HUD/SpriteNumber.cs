@@ -37,6 +37,9 @@ public class SpriteNumber : MonoBehaviour
     private Image suffixImage;
     private int currentValue = int.MinValue;
     private bool dirty = true;
+    private float popTimer;
+    private float popDuration = 0.2f;
+    private float activePopScale = 1.35f;
 
     public int Value => currentValue;
 
@@ -68,8 +71,29 @@ public class SpriteNumber : MonoBehaviour
 
         if (dirty && currentValue != int.MinValue) Render(currentValue);
 
-        if (transform.localScale != Vector3.one)
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, popShrinkSpeed * Time.deltaTime);
+        if (popTimer > 0f)
+        {
+            popTimer -= Time.deltaTime;
+            float t = 1f - Mathf.Clamp01(popTimer / popDuration);
+            float curve = Mathf.Sin(t * Mathf.PI);
+            transform.localScale = Vector3.one * Mathf.Lerp(1f, activePopScale, curve);
+            if (popTimer <= 0f) transform.localScale = Vector3.one;
+        }
+    }
+
+    /// <summary>เด้งตัวเลขขึ้นหนึ่งครั้ง (ใช้ตอนโน้ตบินมาถึง UI คะแนน)</summary>
+    public void PlayPop() => PlayPop(popScale, 0f);
+
+    /// <summary>เด้งตามขนาด/เวลาที่กำหนด (duration = 0 → คำนวณจาก popShrinkSpeed)</summary>
+    public void PlayPop(float scale, float duration)
+    {
+        if (!Application.isPlaying) return;
+
+        activePopScale = Mathf.Max(1f, scale);
+        popDuration = duration > 0f
+            ? duration
+            : Mathf.Clamp(3f / Mathf.Max(1f, popShrinkSpeed), 0.08f, 0.5f);
+        popTimer = popDuration;
     }
 
     public void SetValue(int value, bool pop = true)
@@ -79,8 +103,7 @@ public class SpriteNumber : MonoBehaviour
         currentValue = value;
         Render(value);
 
-        if (pop && !firstTime && Application.isPlaying && popScale != 1f)
-            transform.localScale = Vector3.one * popScale;
+        if (pop && !firstTime) PlayPop();
     }
 
     void Render(int value)

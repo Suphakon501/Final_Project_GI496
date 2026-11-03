@@ -51,6 +51,14 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private float knockPopScale = 1.35f;
     [SerializeField, Range(0.01f, 0.5f)] private float knockPopPhase = 0.12f;
 
+    [Header("Fly To Score UI")]
+    [Tooltip("กดโดนแล้วให้โน้ตบินโค้งไปที่ตัวเลขคะแนน แล้วให้ UI คะแนนเด้ง")]
+    [SerializeField] private bool flyToScore = true;
+    [SerializeField] private float flyDuration = 0.35f;
+    [SerializeField] private float flyArcHeight = 1.2f;
+    [SerializeField] private float flySpinSpeed = 260f;
+    [SerializeField, Range(0.05f, 1f)] private float flyEndScale = 0.3f;
+
     private LipidMovement parentLipid;
     private bool isFinished = false;
     private bool hasTargetTime = false;
@@ -258,9 +266,13 @@ public class MiniLipid : MonoBehaviour
             return;
         }
 
-        // กดโดนแล้วโน้ตจะเด้งขึ้นก่อน แล้วแรงดึงดูดพาร่วงตกหลุดจากกล้อง
+        // กดโดนแล้วโน้ตจะบินโค้งไปที่ตัวเลขคะแนน (ถ้าหาจุดหมายไม่เจอจะเด้งร่วงแทน)
         active.Remove(this);
-        StartCoroutine(KnockAwayRoutine());
+
+        if (flyToScore && PlayerController.TryGetScoreWorldPosition(out Vector3 scorePosition))
+            StartCoroutine(FlyToScoreRoutine(scorePosition));
+        else
+            StartCoroutine(KnockAwayRoutine());
     }
 
     void SpawnImpactBurst(HitResult result)
@@ -282,6 +294,43 @@ public class MiniLipid : MonoBehaviour
             ProcParticles.Shockwave(transform.position, new Color(1f, 0.92f, 0.6f, 0.85f), 0.3f, 2f, 0.3f);
         else if (result == HitResult.Miss)
             ProcParticles.Shockwave(transform.position, new Color(0.9f, 0.25f, 0.3f, 0.7f), 0.25f, 1.3f, 0.35f);
+    }
+
+    IEnumerator FlyToScoreRoutine(Vector3 target)
+    {
+        if (holdTrail != null) holdTrail.enabled = false;
+        foreach (var col in GetComponentsInChildren<Collider2D>()) col.enabled = false;
+
+        Vector3 start = transform.position;
+        Vector3 startScale = transform.localScale;
+        Quaternion startRotation = transform.rotation;
+        float duration = Mathf.Max(0.12f, flyDuration);
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            if (PauseMenu.IsPaused)
+            {
+                yield return null;
+                continue;
+            }
+
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float eased = t * t * (3f - 2f * t);
+
+            Vector3 position = Vector3.Lerp(start, target, eased);
+            position.y += flyArcHeight * Mathf.Sin(t * Mathf.PI);
+            transform.position = position;
+            transform.rotation = startRotation * Quaternion.Euler(0f, 0f, flySpinSpeed * t);
+            transform.localScale = startScale * Mathf.Lerp(1f, flyEndScale, eased);
+
+            yield return null;
+        }
+
+        PlayerController.PopScoreUI();
+        ProcParticles.Shockwave(target, new Color(1f, 0.95f, 0.7f, 0.9f), 0.15f, 0.9f, 0.2f);
+        Destroy(gameObject);
     }
 
     IEnumerator KnockAwayRoutine()

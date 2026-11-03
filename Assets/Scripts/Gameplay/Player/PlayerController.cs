@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour
     public int score = 0;
     public TextMeshProUGUI scoreText;
     [SerializeField] private SpriteNumber scoreNumber;
+    [Header("Score Pop (ตอนโน้ตบินมาถึง)")]
+    [SerializeField] private float scorePopScale = 1.45f;
+    [SerializeField] private float scorePopDuration = 0.28f;
 
     [Header("Combo System")]
     [SerializeField] private SpriteNumber comboNumber;
@@ -138,6 +141,9 @@ public class PlayerController : MonoBehaviour
     private int lastComboTintMilestone;
     private float comboMilestoneFlashAmount;
     private bool jumpVfxPending;
+    private Transform scorePopTarget;
+    private Vector3 scorePopBaseScale = Vector3.one;
+    private Coroutine scorePopRoutine;
 
     void Awake()
     {
@@ -160,6 +166,13 @@ public class PlayerController : MonoBehaviour
         goodCount = 0;
         badCount = 0;
         missCount = 0;
+
+        // ถ้าใช้ SpriteNumber ให้มันเด้งด้วยระบบ pop ของมันเอง (ไม่ให้แย่งกันเขียน scale)
+        if (scoreNumber == null)
+        {
+            scorePopTarget = ScorePopTransform();
+            if (scorePopTarget != null) scorePopBaseScale = scorePopTarget.localScale;
+        }
 
         UpdateScoreUI();
         UpdateComboUI();
@@ -589,6 +602,82 @@ public class PlayerController : MonoBehaviour
     {
         if (scoreText != null) scoreText.text = "Score: " + score;
         if (scoreNumber != null) scoreNumber.SetValue(score);
+    }
+
+    Transform ScorePopTransform()
+    {
+        if (scoreNumber != null) return scoreNumber.transform;
+        if (scoreText != null) return scoreText.rectTransform;
+        return null;
+    }
+
+    /// <summary>ตำแหน่ง world ของตัวเลขคะแนน (ใช้เป็นจุดหมายให้โน้ตบินมา)</summary>
+    public static bool TryGetScoreWorldPosition(out Vector3 worldPosition)
+    {
+        worldPosition = Vector3.zero;
+        if (instance == null) return false;
+
+        Transform target = instance.ScorePopTransform();
+        if (target == null) return false;
+
+        Canvas canvas = target.GetComponentInParent<Canvas>();
+        Camera cam = Camera.main;
+        if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay && cam != null)
+        {
+            Vector3 screenPoint = target.position;
+            float depth = Mathf.Abs(cam.transform.position.z);
+            worldPosition = cam.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, depth));
+        }
+        else
+        {
+            worldPosition = target.position;
+        }
+
+        worldPosition.z = 0f;
+        return true;
+    }
+
+    /// <summary>ให้ UI คะแนนเด้งขึ้นแล้วกลับมา (เรียกตอนโน้ตบินมาถึง)</summary>
+    public static void PopScoreUI()
+    {
+        if (instance != null) instance.PlayScorePop();
+    }
+
+    void PlayScorePop()
+    {
+        if (scoreNumber != null)
+        {
+            scoreNumber.PlayPop(scorePopScale, scorePopDuration);
+            return;
+        }
+
+        if (scorePopTarget == null)
+        {
+            scorePopTarget = ScorePopTransform();
+            if (scorePopTarget != null) scorePopBaseScale = scorePopTarget.localScale;
+        }
+        if (scorePopTarget == null) return;
+
+        if (scorePopRoutine != null) StopCoroutine(scorePopRoutine);
+        scorePopRoutine = StartCoroutine(ScorePopRoutine());
+    }
+
+    IEnumerator ScorePopRoutine()
+    {
+        float duration = Mathf.Max(0.05f, scorePopDuration);
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float curve = Mathf.Sin(t * Mathf.PI);
+            scorePopTarget.localScale = scorePopBaseScale * (1f + (scorePopScale - 1f) * curve);
+            yield return null;
+        }
+
+        scorePopTarget.localScale = scorePopBaseScale;
+        scorePopRoutine = null;
     }
 
     void AddCombo()

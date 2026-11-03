@@ -786,6 +786,8 @@ MonoBehaviour:
   score: 0
   scoreText: {fileID: 0}
   scoreNumber: {fileID: 1599429135}
+  scorePopScale: 1.18
+  scorePopDuration: 0.18
   comboNumber: {fileID: 1619992243}
   comboRoot: {fileID: 1690900385}
   minComboToShow: 2
@@ -829,8 +831,12 @@ MonoBehaviour:
   arrowPressScale: 1.18
   arrowFlashBrightness: 1.8
   arrowFlashDuration: 0.18
-  pressVfxPrefab: {fileID: 0}
+  pressVfxPrefab: {fileID: 4565648641364146407, guid: 64636b7af5f7e854e9228202c99c0db4, type: 3}
   pressVfxOffset: {x: 0, y: 0, z: 0}
+  jumpVfxPrefab: {fileID: 0}
+  jumpVfxOffset: {x: 0, y: -0.5, z: 0}
+  jumpVfxScale: 2
+  landVfxScale: 2.4
   comboTintColor: {r: 1, g: 0, b: 0, a: 1}
   tintAlphaPer50Combo: 0.02
   maxComboTintAlpha: 0.1
@@ -5486,8 +5492,6 @@ MonoBehaviour:
   settingsBackdropAlpha: 0.58
   menuScene: Menu
   level1Scene: Level1
-  level2Scene: Level2
-  level3Scene: Level3
 --- !u!4 &1716451134
 Transform:
   m_ObjectHideFlags: 0
