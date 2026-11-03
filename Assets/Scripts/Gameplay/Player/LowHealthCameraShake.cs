@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>Gently shakes only the gameplay camera while player health is low.</summary>
+[DefaultExecutionOrder(-100)]
 public class LowHealthCameraShake : MonoBehaviour
 {
     [Header("Trigger")]
@@ -21,6 +22,10 @@ public class LowHealthCameraShake : MonoBehaviour
 
     private Vector3 initialLocalPosition;
     private float currentIntensity;
+    private CameraImpact cameraImpact;
+
+    /// <summary>ระยะสั่นจากเลือดน้อยในเฟรมนี้ ให้ CameraImpact (ถ้ามี) รวมแรงกับ impact อื่น</summary>
+    public Vector3 CurrentOffset { get; private set; }
     private float noiseSeed;
     private Image darknessOverlay;
     private float currentDarkness;
@@ -28,6 +33,7 @@ public class LowHealthCameraShake : MonoBehaviour
     private void Awake()
     {
         initialLocalPosition = transform.localPosition;
+        cameraImpact = GetComponent<CameraImpact>();
         noiseSeed = Random.Range(0f, 1000f);
         CreateDarknessOverlay();
     }
@@ -46,7 +52,12 @@ public class LowHealthCameraShake : MonoBehaviour
         float x = shakeHorizontally ? (Mathf.PerlinNoise(noiseSeed, time) - 0.5f) * 2f : 0f;
         float y = shakeVertically ? (Mathf.PerlinNoise(time, noiseSeed) - 0.5f) * 2f : 0f;
         Vector3 offset = new Vector3(x, y, 0f) * (shakeAmplitude * currentIntensity);
-        transform.localPosition = initialLocalPosition + offset;
+        CurrentOffset = offset;
+
+        // ถ้ากล้องตัวเดียวกันมี CameraImpact ให้มันเป็นคนรวมแรงสั่นทั้งหมดแล้วเขียนตำแหน่งแทน
+        // (ไม่ให้สองสคริปต์แย่งกันเขียน transform.localPosition)
+        if (cameraImpact == null || !cameraImpact.enabled)
+            transform.localPosition = initialLocalPosition + offset;
     }
 
     private void CreateDarknessOverlay()
@@ -104,6 +115,7 @@ public class LowHealthCameraShake : MonoBehaviour
 
     private void OnDisable()
     {
+        CurrentOffset = Vector3.zero;
         transform.localPosition = initialLocalPosition;
         if (darknessOverlay != null)
             darknessOverlay.color = new Color(0f, 0f, 0f, 0f);

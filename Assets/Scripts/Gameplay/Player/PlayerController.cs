@@ -478,6 +478,8 @@ public class PlayerController : MonoBehaviour
                 PlaySound(badMissSound);
                 break;
         }
+
+        CameraImpact.Hit(result, combo);
     }
 
     void OnNoteMissed()
@@ -490,6 +492,7 @@ public class PlayerController : MonoBehaviour
         PlayAnimation(hitAnimName);
         ShowFeedbackSprite(missSprite);
         PlaySound(badMissSound);
+        CameraImpact.Hit(HitResult.Miss);
     }
 
     public void RegisterMissedNote()
@@ -555,6 +558,7 @@ public class PlayerController : MonoBehaviour
         HideFeedbackSprite();
         if (feedbackText != null) feedbackText.text = "GAME OVER!";
         PlayAnimation("Player_Faint");
+        CameraImpact.GameOver();
         Debug.Log("GAME OVER! Score: " + score);
 
         for (int i = MiniLipid.Active.Count - 1; i >= 0; i--) Destroy(MiniLipid.Active[i].gameObject);
