@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sheatheDelay = 0.5f;
     [SerializeField] private float attackStopBeforeHitLine = 0.75f;
     [SerializeField] private float jumpAttackLeftOffset = 0.25f;
-    [SerializeField] private float jumpAttackBelowNote = 1.5f;
+    [SerializeField] private float jumpAttackBelowNote = 0.5f;
     [SerializeField] private float jumpAttackDuration = 0.35f;
 
     [Header("HP Balance")]
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
     private int holdTicksAwarded;
     private Vector3 homePosition;
     private bool isAwayFromHome;
-    private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4];
+    private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4]; // A/Left, S/Down, W/Up, D/Right
     private readonly Vector3[] arrowBaseScales = new Vector3[4];
     private readonly Color[] arrowBaseColors = new Color[4];
     private readonly float[] arrowFlashTimers = new float[4];
@@ -188,7 +188,8 @@ public class PlayerController : MonoBehaviour
         Transform hitline = GameObject.Find("Hitline")?.transform;
         if (hitline == null) return;
 
-        string[] names = { "Up2_1", "Left2_1", "Right2_0", "Down2_1" };
+        // Keep array order aligned with FlashDirectionArrow: A, S, W, D.
+        string[] names = { "Left2_1", "Down2_1", "Up2_1", "Right2_0" };
         for (int i = 0; i < names.Length; i++)
         {
             Transform arrow = hitline.Find(names[i]);
@@ -631,26 +632,33 @@ public class PlayerController : MonoBehaviour
 
     void PlayDirectionalAnimation(KeyCode pressedKey, float hitLineX, float noteY)
     {
+        // Current lanes top-to-bottom: A/W/S/D = jump, shoot, throw, kick-down.
         switch (pressedKey)
         {
-            case KeyCode.S:
-                StartDirectionalMove(new Vector3(hitLineX - attackStopBeforeHitLine, homePosition.y, homePosition.z));
-                PlayAnimation(kickDownAnimName);
-                break;
             case KeyCode.A:
-                PlayAnimation(shootingAnimName);
-                break;
-            case KeyCode.W:
-                StartDirectionalMove(new Vector3(hitLineX - attackStopBeforeHitLine - jumpAttackLeftOffset, noteY - jumpAttackBelowNote, homePosition.z));
+                StartDirectionalMove(new Vector3(
+                    hitLineX - attackStopBeforeHitLine - jumpAttackLeftOffset,
+                    noteY - jumpAttackBelowNote,
+                    homePosition.z));
                 PlayAnimation(jumpAttackAnimName);
                 Invoke(nameof(ReturnHome), jumpAttackDuration);
                 break;
-            default:
+            case KeyCode.W:
+                PlayAnimation(shootingAnimName);
+                break;
+            case KeyCode.S:
                 if (throwAnimNames != null && throwAnimNames.Length > 0)
                 {
                     PlayAnimation(throwAnimNames[throwStep % throwAnimNames.Length]);
                     throwStep++;
                 }
+                break;
+            default:
+                StartDirectionalMove(new Vector3(
+                    hitLineX - attackStopBeforeHitLine,
+                    homePosition.y,
+                    homePosition.z));
+                PlayAnimation(kickDownAnimName);
                 break;
         }
     }

@@ -24,6 +24,7 @@ public class ChartPlayer : MonoBehaviour
     [Header("Recording")]
     public bool recordMode = false;
     [SerializeField] private float recordSnapBeats = 0.5f;
+    [SerializeField, Min(0f)] private float recordHoldThresholdSeconds = 0.2f;
     [SerializeField] private bool clearChartBeforeRecording = true;
 
     [Header("Progress Bar")]
@@ -47,6 +48,9 @@ public class ChartPlayer : MonoBehaviour
     private bool finished = false;
     private bool musicStarted = false;
     private float lastPlayingTime;
+    private NoteKey? recordingKey;
+    private float recordingPressBeat;
+    private ChartNote recordingNote;
     private const float SongEndTolerance = 1f;
 
     bool Active => chart != null;
@@ -78,7 +82,7 @@ public class ChartPlayer : MonoBehaviour
         if (recordMode)
         {
             if (clearChartBeforeRecording) chart.notes.Clear();
-            Debug.Log("[ChartPlayer] Recording: press W/A/S/D with the music, stop Play to save");
+            Debug.Log("[ChartPlayer] Recording: tap W/A/S/D for taps; hold the key and release to record hold length. Stop Play to save.");
         }
     }
 
@@ -179,7 +183,7 @@ public class ChartPlayer : MonoBehaviour
         CheckSongEnded(false);
     }
 
-    // แต่ละปุ่มมีแถวของตัวเอง (W=บนสุด, A=แถวที่ 2, D=แถวที่ 3, S=ล่างสุด)
+    // แต่ละปุ่มใช้ตำแหน่งลูกศรทิศของตัวเอง; W/S ย้ายเลนได้จากตำแหน่งลูกศรในฉาก
     float RowYFor(NoteKey k)
     {
         switch (k)
@@ -242,6 +246,15 @@ public class ChartPlayer : MonoBehaviour
 
     void RecordInput()
     {
+        if (recordingKey.HasValue && WasKeyReleased(recordingKey.Value))
+        {
+            FinishRecordedHold(beat.songPositionInBeats);
+            recordingKey = null;
+            recordingNote = null;
+        }
+
+        if (recordingKey.HasValue) return;
+
         NoteKey? pressed = null;
         if (Input.GetKeyDown(KeyCode.W)) pressed = NoteKey.W;
         else if (Input.GetKeyDown(KeyCode.A)) pressed = NoteKey.A;
@@ -254,14 +267,45 @@ public class ChartPlayer : MonoBehaviour
         if (snapped < 0f) return;
 
         chart.notes.RemoveAll(x => Mathf.Approximately(x.beat, snapped));
-        chart.notes.Add(new ChartNote { beat = snapped, key = pressed.Value, row = ChartNote.DefaultRowFor(pressed.Value) });
-        Debug.Log($"[ChartPlayer] Recorded beat {snapped:0.##} {pressed.Value} ({chart.notes.Count} notes)");
+        recordingNote = new ChartNote { beat = snapped, key = pressed.Value, row = ChartNote.DefaultRowFor(pressed.Value) };
+        chart.notes.Add(recordingNote);
+        recordingKey = pressed.Value;
+        recordingPressBeat = beat.songPositionInBeats;
+        Debug.Log($"[ChartPlayer] Started beat {snapped:0.##} {pressed.Value}; release key to finish note");
+    }
+
+    bool WasKeyReleased(NoteKey key)
+    {
+        switch (key)
+        {
+            case NoteKey.W: return Input.GetKeyUp(KeyCode.W);
+            case NoteKey.A: return Input.GetKeyUp(KeyCode.A);
+            case NoteKey.S: return Input.GetKeyUp(KeyCode.S);
+            default: return Input.GetKeyUp(KeyCode.D);
+        }
+    }
+
+    void FinishRecordedHold(float songBeat)
+    {
+        if (recordingNote == null) return;
+
+        float snap = Mathf.Max(0.0625f, recordSnapBeats);
+        float pressedDurationBeats = Mathf.Max(0f, songBeat - recordingPressBeat);
+        float pressedDurationSeconds = pressedDurationBeats * chart.BeatDuration;
+        float snappedReleaseBeat = Mathf.Round(songBeat / snap) * snap;
+        float durationBeats = Mathf.Max(0f, snappedReleaseBeat - recordingNote.beat);
+        recordingNote.holdBeats = pressedDurationSeconds < recordHoldThresholdSeconds
+            ? 0f
+            : Mathf.Round(durationBeats / snap) * snap;
+        Debug.Log($"[ChartPlayer] Recorded {recordingNote.beat:0.##} {recordingNote.key} hold {recordingNote.holdBeats:0.##} beats ({chart.notes.Count} notes)");
     }
 
 #if UNITY_EDITOR
     void OnDisable()
     {
         if (!Active || !recordMode) return;
+        if (recordingKey.HasValue && beat != null)
+            FinishRecordedHold(beat.songPositionInBeats);
         chart.SortNotes();
         UnityEditor.EditorUtility.SetDirty(chart);
         UnityEditor.AssetDatabase.SaveAssets();
