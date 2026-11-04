@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,11 @@ public class MainMenu : MonoBehaviour
     [Header("Panels (assign these in the Inspector)")]
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject levelPanel;
+    [SerializeField] private GameObject mangaPanel;
+    [SerializeField] private Image mangaPageImage;
+    [SerializeField] private Sprite[] mangaPages;
+    [SerializeField] private Button mangaBackButton;
+    [SerializeField] private Button mangaNextButton;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private Image settingsBackdrop;
     [SerializeField] private SettingsMenuController settingsNavigation;
@@ -23,6 +29,7 @@ public class MainMenu : MonoBehaviour
     private static bool openLevelSelectOnStart;
     private Animator levelPanelAnimator;
     private readonly Button[] mainMenuOptions = new Button[3];
+    private int mangaPageIndex;
 
     private void Awake()
     {
@@ -53,6 +60,7 @@ public class MainMenu : MonoBehaviour
         }
 
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mangaPanel != null) mangaPanel.SetActive(false);
         if (levelPanel != null)
         {
             levelPanelAnimator = levelPanel.GetComponent<Animator>();
@@ -82,7 +90,107 @@ public class MainMenu : MonoBehaviour
         else ShowMainPanel();
     }
 
-    public void OnPlayClicked() => ShowLevelPanel();
+    public void OnPlayClicked()
+    {
+        if (mangaPanel == null || mangaPageImage == null || mangaPages == null || mangaPages.Length == 0)
+        {
+            Debug.LogWarning("MainMenu: assign Manga Panel, Manga Page Image, and Manga Pages in the Inspector.");
+            ShowLevelPanel();
+            return;
+        }
+
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mainPanel != null) mainPanel.SetActive(false);
+        if (levelPanel != null) levelPanel.SetActive(false);
+
+        mangaPageIndex = 0;
+        ShowMangaPage();
+        mangaPanel.SetActive(true);
+        ConfigureMangaButtonNavigation();
+        if (EventSystem.current != null) EventSystem.current.sendNavigationEvents = true;
+        StartCoroutine(FocusMangaButtonNextFrame(mangaNextButton != null ? mangaNextButton : mangaBackButton));
+    }
+
+    public void OnMangaNextClicked()
+    {
+        if (!HasMangaPages()) return;
+
+        if (mangaPageIndex < mangaPages.Length - 1)
+        {
+            mangaPageIndex++;
+            ShowMangaPage();
+        }
+        else
+        {
+            if (mangaPanel != null) mangaPanel.SetActive(false);
+            ShowLevelPanel();
+        }
+    }
+
+    public void OnMangaBackClicked()
+    {
+        if (!HasMangaPages()) return;
+
+        if (mangaPageIndex > 0)
+        {
+            mangaPageIndex--;
+            ShowMangaPage();
+        }
+        else
+        {
+            if (mangaPanel != null) mangaPanel.SetActive(false);
+            ShowMainPanel();
+        }
+    }
+
+    private bool HasMangaPages()
+    {
+        if (mangaPanel != null && mangaPageImage != null && mangaPages != null && mangaPages.Length > 0)
+            return true;
+
+        Debug.LogWarning("MainMenu: assign Manga Panel, Manga Page Image, and Manga Pages in the Inspector.");
+        return false;
+    }
+
+    private void ShowMangaPage()
+    {
+        mangaPageImage.sprite = mangaPages[mangaPageIndex];
+    }
+
+    private void ConfigureMangaButtonNavigation()
+    {
+        if (mangaBackButton == null || mangaNextButton == null) return;
+
+        Navigation backNavigation = mangaBackButton.navigation;
+        backNavigation.mode = Navigation.Mode.Explicit;
+        backNavigation.selectOnLeft = mangaNextButton;
+        backNavigation.selectOnRight = mangaNextButton;
+        backNavigation.selectOnUp = mangaNextButton;
+        backNavigation.selectOnDown = mangaNextButton;
+        mangaBackButton.navigation = backNavigation;
+
+        Navigation nextNavigation = mangaNextButton.navigation;
+        nextNavigation.mode = Navigation.Mode.Explicit;
+        nextNavigation.selectOnLeft = mangaBackButton;
+        nextNavigation.selectOnRight = mangaBackButton;
+        nextNavigation.selectOnUp = mangaBackButton;
+        nextNavigation.selectOnDown = mangaBackButton;
+        mangaNextButton.navigation = nextNavigation;
+    }
+
+    private static void FocusMangaButton(Button button)
+    {
+        if (EventSystem.current == null || button == null || !button.interactable) return;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(button.gameObject);
+    }
+
+    private IEnumerator FocusMangaButtonNextFrame(Button button)
+    {
+        yield return null;
+        if (mangaPanel != null && mangaPanel.activeInHierarchy)
+            FocusMangaButton(button);
+    }
 
     public void OnSettingsClicked()
     {
@@ -149,6 +257,7 @@ public class MainMenu : MonoBehaviour
     private void ShowMainPanel()
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mangaPanel != null) mangaPanel.SetActive(false);
         if (EventSystem.current != null) EventSystem.current.sendNavigationEvents = true;
         if (mainPanel != null) mainPanel.SetActive(true);
         if (levelPanel != null) levelPanel.SetActive(false);
@@ -189,6 +298,7 @@ public class MainMenu : MonoBehaviour
     private void ShowLevelPanel()
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mangaPanel != null) mangaPanel.SetActive(false);
         if (mainPanel != null) mainPanel.SetActive(false);
         if (levelPanel != null)
         {
