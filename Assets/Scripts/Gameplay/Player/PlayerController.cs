@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -126,8 +127,13 @@ public class PlayerController : MonoBehaviour
     private int activeWaves = 0;
     private int currentPerfectStreak = 0;
     private bool warnedMissingCombo = false;
-    private MiniLipid activeHold;
-    private int holdTicksAwarded;
+    private class ActiveHoldNote
+    {
+        public MiniLipid note;
+        public int ticksAwarded;
+    }
+
+    private readonly List<ActiveHoldNote> activeHolds = new List<ActiveHoldNote>();
     private Vector3 homePosition;
     private bool isAwayFromHome;
     private readonly SpriteRenderer[] directionArrows = new SpriteRenderer[4]; // A/Left, S/Down, W/Up, D/Right
@@ -372,94 +378,77 @@ public class PlayerController : MonoBehaviour
 
     void TryHit(KeyCode pressedKey)
     {
-        nextAllowedPressTime = Time.time + cooldownTime;
-
-        MiniLipid target = MiniLipid.FindNextToHit();
+        MiniLipid target = MiniLipid.FindNextForKey(pressedKey);
         if (target == null) return;
 
-        if (pressedKey == target.assignedKey)
+        nextAllowedPressTime = Time.time + cooldownTime;
+
+        if (target.IsHold)
         {
-            if (target.IsHold)
+            if (target.TryStartHold())
             {
-                if (target.TryStartHold())
-                {
-                    HitResult headResult = target.EvaluateAccuracy();
-                    OnNoteHit(headResult, false, pressedKey, target.hitLineX, target.transform.position.y);
-                    activeHold = target;
-                    holdTicksAwarded = 0;
-                    UpdateScoreUI();
-                }
-                else if (target.IsOutsideTimingWindow)
-                {
-                    OnNoteMissed();
-                    target.ConsumeMini(HitResult.Miss);
-                    UpdateScoreUI();
-                }
-                return;
+                HitResult headResult = target.EvaluateAccuracy();
+                OnNoteHit(headResult, false, pressedKey, target.hitLineX, target.transform.position.y);
+                activeHolds.Add(new ActiveHoldNote { note = target });
+                UpdateScoreUI();
             }
-
-            HitResult result = target.EvaluateAccuracy();
-            OnNoteHit(result, target.IsLastInRow(), pressedKey, target.hitLineX, target.transform.position.y);
-            target.ConsumeMini(result);
-        }
-        else
-        {
-            OnNoteMissed();
-            target.ConsumeMini(HitResult.Miss);
+            return;
         }
 
+        HitResult result = target.EvaluateAccuracy();
+        OnNoteHit(result, target.IsLastInRow(), pressedKey, target.hitLineX, target.transform.position.y);
+        target.ConsumeMini(result);
         UpdateScoreUI();
     }
 
     void UpdateHoldNote()
     {
-        if (activeHold == null) return;
-        if (!activeHold.gameObject.activeInHierarchy)
+        for (int i = activeHolds.Count - 1; i >= 0; i--)
         {
-            activeHold = null;
-            return;
-        }
+            ActiveHoldNote hold = activeHolds[i];
+            MiniLipid note = hold.note;
 
-        float endOffset = activeHold.HoldEndOffsetSeconds;
-        int holdTicksNow = activeHold.HoldTickCount;
-        if (holdTicksNow > holdTicksAwarded)
-        {
-            score += (holdTicksNow - holdTicksAwarded) * HoldTickScore;
-            holdTicksAwarded = holdTicksNow;
-            UpdateScoreUI();
-        }
+            if (note == null || !note.gameObject.activeInHierarchy)
+            {
+                activeHolds.RemoveAt(i);
+                continue;
+            }
 
-        if (activeHold.HoldKeyReleasedThisFrame)
-        {
-            if (Mathf.Abs(endOffset) <= activeHold.HoldReleaseWindow)
-                CompleteHoldNote();
-            else
-                MissActiveHold();
-            return;
-        }
+            int holdTicksNow = note.HoldTickCount;
+            if (holdTicksNow > hold.ticksAwarded)
+            {
+                score += (holdTicksNow - hold.ticksAwarded) * HoldTickScore;
+                hold.ticksAwarded = holdTicksNow;
+                UpdateScoreUI();
+            }
 
-        if (endOffset > activeHold.HoldReleaseWindow || !activeHold.IsHoldButtonStillDown)
-        {
-            MissActiveHold();
-            return;
+            if (note.HoldKeyReleasedThisFrame)
+            {
+                if (Mathf.Abs(note.HoldEndOffsetSeconds) <= note.HoldReleaseWindow)
+                    CompleteHoldNote(hold);
+                else
+                    MissActiveHold(hold);
+                continue;
+            }
+
+            if (note.HoldEndOffsetSeconds > note.HoldReleaseWindow || !note.IsHoldButtonStillDown)
+                MissActiveHold(hold);
         }
     }
 
-    void CompleteHoldNote()
+    void CompleteHoldNote(ActiveHoldNote hold)
     {
-        MiniLipid completed = activeHold;
-        activeHold = null;
+        activeHolds.Remove(hold);
         score += HoldTailBonus;
-        completed.ConsumeMini(HitResult.Perfect);
+        hold.note.ConsumeMini(HitResult.Perfect);
         UpdateScoreUI();
     }
 
-    void MissActiveHold()
+    void MissActiveHold(ActiveHoldNote hold)
     {
-        MiniLipid missed = activeHold;
-        activeHold = null;
+        activeHolds.Remove(hold);
         OnNoteMissed();
-        missed.ConsumeMini(HitResult.Miss);
+        hold.note.ConsumeMini(HitResult.Miss);
         UpdateScoreUI();
     }
 

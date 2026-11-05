@@ -36,7 +36,7 @@ MonoBehaviour:
   - beat: 9.5
     key: 0
     row: 0
-    holdBeats: 0
+    holdBeats: 1
   - beat: 10
     key: 2
     row: 2
@@ -120,7 +120,7 @@ MonoBehaviour:
   - beat: 25
     key: 0
     row: 0
-    holdBeats: 0
+    holdBeats: 2
   - beat: 25.5
     key: 3
     row: 1
@@ -332,7 +332,7 @@ MonoBehaviour:
   - beat: 61.5
     key: 1
     row: 1
-    holdBeats: 0
+    holdBeats: 1.5
   - beat: 62
     key: 3
     row: 1

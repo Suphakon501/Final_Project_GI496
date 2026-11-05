@@ -14,9 +14,10 @@ public class ProgressTracker : MonoBehaviour
     [SerializeField] private bool smoothMovement = true;
 
     [Header("Bar Layout")]
-    [SerializeField] private float startInset = 30f;
-    [SerializeField] private float endInset = 30f;
+    [SerializeField] private float startInset = 110f;
+    [SerializeField] private float endInset = 65f;
     [SerializeField] private float lineYOffset = 0f;
+    [SerializeField] private bool showCheckpoints = false;
 
     [Header("Checkpoint (MarkProgress)")]
     [SerializeField] private Sprite checkpointSprite;
@@ -151,7 +152,7 @@ public class ProgressTracker : MonoBehaviour
         float right = r.xMax - endInset;
         float y = r.center.y + lineYOffset;
 
-        int needed = Mathf.Max(0, segmentCount - 1);
+        int needed = showCheckpoints ? Mathf.Max(0, segmentCount - 1) : 0;
         while (checkpoints.Count < needed) checkpoints.Add(CreateImage(CheckpointName));
         for (int i = 0; i < checkpoints.Count; i++)
         {

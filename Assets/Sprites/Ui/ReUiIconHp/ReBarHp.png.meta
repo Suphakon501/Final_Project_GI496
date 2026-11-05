@@ -1,0 +1,2171 @@
+fileFormatVersion: 2
+guid: 32fb88d152872424c93250a12cf6caef
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8662415993884095038
+    second: ReBarHp_0
+  - first:
+      213: 4075123578099347099
+    second: ReBarHp_1
+  - first:
+      213: -4463121739740378731
+    second: ReBarHp_2
+  - first:
+      213: -7868642710666701679
+    second: ReBarHp_3
+  - first:
+      213: 4890254951849587061
+    second: ReBarHp_4
+  - first:
+      213: -5857595891831590819
+    second: ReBarHp_5
+  - first:
+      213: -5413786455593423719
+    second: ReBarHp_6
+  - first:
+      213: 3508918052164176884
+    second: ReBarHp_7
+  - first:
+      213: -6347271145847949559
+    second: ReBarHp_8
+  - first:
+      213: 7779851698419381787
+    second: ReBarHp_9
+  - first:
+      213: 6080110853672420063
+    second: ReBarHp_10
+  - first:
+      213: 6526843001117941208
+    second: ReBarHp_11
+  - first:
+      213: -6432090976304243385
+    second: ReBarHp_12
+  - first:
+      213: -7001579051972383002
+    second: ReBarHp_13
+  - first:
+      213: 7843235133145196807
+    second: ReBarHp_14
+  - first:
+      213: -4530062819249269556
+    second: ReBarHp_15
+  - first:
+      213: -1084218642121653343
+    second: ReBarHp_16
+  - first:
+      213: -2337032033316500068
+    second: ReBarHp_17
+  - first:
+      213: 3140512681061040755
+    second: ReBarHp_18
+  - first:
+      213: -7195554368771764592
+    second: ReBarHp_19
+  - first:
+      213: -4998217759691788123
+    second: ReBarHp_20
+  - first:
+      213: -6174330969610286577
+    second: ReBarHp_21
+  - first:
+      213: -5858198764472427148
+    second: ReBarHp_22
+  - first:
+      213: -5872428054456394377
+    second: ReBarHp_23
+  - first:
+      213: -6101892667408430173
+    second: ReBarHp_24
+  - first:
+      213: -5137842279613436228
+    second: ReBarHp_25
+  - first:
+      213: 6176868137395926491
+    second: ReBarHp_26
+  - first:
+      213: -3088389519202026922
+    second: ReBarHp_27
+  - first:
+      213: -5256604005213109032
+    second: ReBarHp_28
+  - first:
+      213: 6067887314856661550
+    second: ReBarHp_29
+  - first:
+      213: -560255045213479741
+    second: ReBarHp_30
+  - first:
+      213: 3208736502284855566
+    second: ReBarHp_31
+  - first:
+      213: -6912332056406964344
+    second: ReBarHp_32
+  - first:
+      213: 4024594426440721212
+    second: ReBarHp_33
+  - first:
+      213: 1710928296331764736
+    second: ReBarHp_34
+  - first:
+      213: 8373073330441557621
+    second: ReBarHp_35
+  - first:
+      213: 1551586090930444711
+    second: ReBarHp_36
+  - first:
+      213: 4353741094003660886
+    second: ReBarHp_37
+  - first:
+      213: 9085688667812030105
+    second: ReBarHp_38
+  - first:
+      213: -5353137948496159887
+    second: ReBarHp_39
+  - first:
+      213: 4989602417527786491
+    second: ReBarHp_40
+  - first:
+      213: 6715281088645939903
+    second: ReBarHp_41
+  - first:
+      213: -413985037007171585
+    second: ReBarHp_42
+  - first:
+      213: 864224478846725923
+    second: ReBarHp_43
+  - first:
+      213: 6741138454084345458
+    second: ReBarHp_44
+  - first:
+      213: 7394052002026397716
+    second: ReBarHp_45
+  - first:
+      213: 3589152592246371162
+    second: ReBarHp_46
+  - first:
+      213: 4850636126983260906
+    second: ReBarHp_47
+  - first:
+      213: -7803510000144090632
+    second: ReBarHp_48
+  - first:
+      213: 8434751135971220882
+    second: ReBarHp_49
+  - first:
+      213: -460467447977178431
+    second: ReBarHp_50
+  - first:
+      213: -5025385991700510972
+    second: ReBarHp_51
+  - first:
+      213: -3503059392741199970
+    second: ReBarHp_52
+  - first:
+      213: -8757703972837639206
+    second: ReBarHp_53
+  - first:
+      213: -7335995470120256612
+    second: ReBarHp_54
+  - first:
+      213: 7831133289428656027
+    second: ReBarHp_55
+  - first:
+      213: -6719224111681479688
+    second: ReBarHp_56
+  - first:
+      213: -8011445456469545007
+    second: ReBarHp_57
+  - first:
+      213: 4840756208408644065
+    second: ReBarHp_58
+  - first:
+      213: 5121374237125757380
+    second: ReBarHp_59
+  - first:
+      213: -4135099088829962218
+    second: ReBarHp_60
+  - first:
+      213: -2308211623399320402
+    second: ReBarHp_61
+  - first:
+      213: -1023972069698150960
+    second: ReBarHp_62
+  - first:
+      213: 5579120295443691593
+    second: ReBarHp_63
+  - first:
+      213: -1071354309006440571
+    second: ReBarHp_64
+  - first:
+      213: 8746263485148197826
+    second: ReBarHp_65
+  - first:
+      213: 6971068124029139405
+    second: ReBarHp_66
+  - first:
+      213: 7250278122026168740
+    second: ReBarHp_67
+  - first:
+      213: 7412504318439613993
+    second: ReBarHp_68
+  - first:
+      213: 4206269549662485210
+    second: ReBarHp_69
+  - first:
+      213: 580840518152194449
+    second: ReBarHp_70
+  - first:
+      213: -5948614996408343016
+    second: ReBarHp_71
+  - first:
+      213: 1199549950447120684
+    second: ReBarHp_72
+  - first:
+      213: -8437009738414267242
+    second: ReBarHp_73
+  - first:
+      213: 1237491911351900521
+    second: ReBarHp_74
+  - first:
+      213: -546022342323526159
+    second: ReBarHp_75
+  - first:
+      213: -4832352218237142694
+    second: ReBarHp_76
+  - first:
+      213: -616624659726584497
+    second: ReBarHp_77
+  - first:
+      213: -6482235539479291097
+    second: ReBarHp_78
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ReBarHp_0
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 1717
+        width: 4524
+        height: 867
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cd40eb8c8ae8c780800000000000000
+      internalID: -8662415993884095038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_1
+      rect:
+        serializedVersion: 2
+        x: 2245
+        y: 2582
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9e2e68ad4fbd8830800000000000000
+      internalID: 4075123578099347099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_2
+      rect:
+        serializedVersion: 2
+        x: 2251
+        y: 2581
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5998371ac6ecf02c0800000000000000
+      internalID: -4463121739740378731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_3
+      rect:
+        serializedVersion: 2
+        x: 2063
+        y: 2563
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1949e3ef427fcc290800000000000000
+      internalID: -7868642710666701679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_4
+      rect:
+        serializedVersion: 2
+        x: 2083
+        y: 2568
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 571f61218fcadd340800000000000000
+      internalID: 4890254951849587061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_5
+      rect:
+        serializedVersion: 2
+        x: 2229
+        y: 2548
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d50379d3293a5bea0800000000000000
+      internalID: -5857595891831590819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_6
+      rect:
+        serializedVersion: 2
+        x: 2291
+        y: 2554
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99c6880f6ed5ed4b0800000000000000
+      internalID: -5413786455593423719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_7
+      rect:
+        serializedVersion: 2
+        x: 2162
+        y: 2541
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fb833d906e22b030800000000000000
+      internalID: 3508918052164176884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_8
+      rect:
+        serializedVersion: 2
+        x: 2179
+        y: 2539
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90775aaa586f9e7a0800000000000000
+      internalID: -6347271145847949559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_9
+      rect:
+        serializedVersion: 2
+        x: 2214
+        y: 2539
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b16b18976e597fb60800000000000000
+      internalID: 7779851698419381787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_10
+      rect:
+        serializedVersion: 2
+        x: 2239
+        y: 2532
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd2442c8b94e06450800000000000000
+      internalID: 6080110853672420063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_11
+      rect:
+        serializedVersion: 2
+        x: 2254
+        y: 2535
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dd116af021049a50800000000000000
+      internalID: 6526843001117941208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_12
+      rect:
+        serializedVersion: 2
+        x: 2274
+        y: 2540
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74dd362f55f9cb6a0800000000000000
+      internalID: -6432090976304243385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_13
+      rect:
+        serializedVersion: 2
+        x: 2306
+        y: 2533
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6eeae5cb2f465de90800000000000000
+      internalID: -7001579051972383002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_14
+      rect:
+        serializedVersion: 2
+        x: 2320
+        y: 2534
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 709abf06cc4c8dc60800000000000000
+      internalID: 7843235133145196807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_15
+      rect:
+        serializedVersion: 2
+        x: 2029
+        y: 2527
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc451700edbf121c0800000000000000
+      internalID: -4530062819249269556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_16
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 2532
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a38b71b3e414f0f0800000000000000
+      internalID: -1084218642121653343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_17
+      rect:
+        serializedVersion: 2
+        x: 2185
+        y: 2530
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9d06717fb1319fd0800000000000000
+      internalID: -2337032033316500068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_18
+      rect:
+        serializedVersion: 2
+        x: 2210
+        y: 2527
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 372c04fe4a7559b20800000000000000
+      internalID: 3140512681061040755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_19
+      rect:
+        serializedVersion: 2
+        x: 2266
+        y: 2528
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09e495fdc61442c90800000000000000
+      internalID: -7195554368771764592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_20
+      rect:
+        serializedVersion: 2
+        x: 2273
+        y: 2527
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a0b583ed63c2aab0800000000000000
+      internalID: -4998217759691788123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_21
+      rect:
+        serializedVersion: 2
+        x: 1950
+        y: 2517
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0a8fa632be505aa0800000000000000
+      internalID: -6174330969610286577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_22
+      rect:
+        serializedVersion: 2
+        x: 2034
+        y: 2520
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47d1df3034f73bea0800000000000000
+      internalID: -5858198764472427148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_23
+      rect:
+        serializedVersion: 2
+        x: 2066
+        y: 2519
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77d96154cc1f08ea0800000000000000
+      internalID: -5872428054456394377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_24
+      rect:
+        serializedVersion: 2
+        x: 2139
+        y: 2525
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab4f8db2f8b15ba0800000000000000
+      internalID: -6101892667408430173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_25
+      rect:
+        serializedVersion: 2
+        x: 2144
+        y: 2519
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbe68ab0ba7b2b8b0800000000000000
+      internalID: -5137842279613436228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_26
+      rect:
+        serializedVersion: 2
+        x: 2152
+        y: 2505
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd5b9e138d4a8b550800000000000000
+      internalID: 6176868137395926491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_27
+      rect:
+        serializedVersion: 2
+        x: 2178
+        y: 2519
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65a7ce36816d325d0800000000000000
+      internalID: -3088389519202026922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_28
+      rect:
+        serializedVersion: 2
+        x: 2191
+        y: 2524
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d48068028acc07b0800000000000000
+      internalID: -5256604005213109032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_29
+      rect:
+        serializedVersion: 2
+        x: 2203
+        y: 2521
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2251232d57753450800000000000000
+      internalID: 6067887314856661550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_30
+      rect:
+        serializedVersion: 2
+        x: 2250
+        y: 2521
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cc1e6631039938f0800000000000000
+      internalID: -560255045213479741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_31
+      rect:
+        serializedVersion: 2
+        x: 2260
+        y: 2518
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e09a48429d8b78c20800000000000000
+      internalID: 3208736502284855566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_32
+      rect:
+        serializedVersion: 2
+        x: 2283
+        y: 2518
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88741582e967210a0800000000000000
+      internalID: -6912332056406964344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_33
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 2513
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c332401ce4b3ad730800000000000000
+      internalID: 4024594426440721212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_34
+      rect:
+        serializedVersion: 2
+        x: 2013
+        y: 2513
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 004e40b78307eb710800000000000000
+      internalID: 1710928296331764736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_35
+      rect:
+        serializedVersion: 2
+        x: 2018
+        y: 2506
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5761443e4d1233470800000000000000
+      internalID: 8373073330441557621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_36
+      rect:
+        serializedVersion: 2
+        x: 2047
+        y: 2512
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a9985c3457588510800000000000000
+      internalID: 1551586090930444711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_37
+      rect:
+        serializedVersion: 2
+        x: 2077
+        y: 2514
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 658db1835789b6c30800000000000000
+      internalID: 4353741094003660886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_38
+      rect:
+        serializedVersion: 2
+        x: 2091
+        y: 2517
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9966ab094b9d61e70800000000000000
+      internalID: 9085688667812030105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_39
+      rect:
+        serializedVersion: 2
+        x: 2108
+        y: 2511
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17b1932e565d5b5b0800000000000000
+      internalID: -5353137948496159887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_40
+      rect:
+        serializedVersion: 2
+        x: 2230
+        y: 2507
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfb8c2376f0ae3540800000000000000
+      internalID: 4989602417527786491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_41
+      rect:
+        serializedVersion: 2
+        x: 2255
+        y: 2506
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb2c3af2298713d50800000000000000
+      internalID: 6715281088645939903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_42
+      rect:
+        serializedVersion: 2
+        x: 2309
+        y: 2511
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fff4cde5dca314af0800000000000000
+      internalID: -413985037007171585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_43
+      rect:
+        serializedVersion: 2
+        x: 2326
+        y: 2516
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32f2bdba5975efb00800000000000000
+      internalID: 864224478846725923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_44
+      rect:
+        serializedVersion: 2
+        x: 1970
+        y: 2501
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27e5c6935b55d8d50800000000000000
+      internalID: 6741138454084345458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_45
+      rect:
+        serializedVersion: 2
+        x: 1999
+        y: 2506
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 410ac87de13fc9660800000000000000
+      internalID: 7394052002026397716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_46
+      rect:
+        serializedVersion: 2
+        x: 2013
+        y: 2505
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a537489344b3fc130800000000000000
+      internalID: 3589152592246371162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_47
+      rect:
+        serializedVersion: 2
+        x: 2038
+        y: 2502
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aea83839bdbe05340800000000000000
+      internalID: 4850636126983260906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_48
+      rect:
+        serializedVersion: 2
+        x: 2106
+        y: 2504
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f9f338effc54b390800000000000000
+      internalID: -7803510000144090632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_49
+      rect:
+        serializedVersion: 2
+        x: 2131
+        y: 2509
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29d136c08714e0570800000000000000
+      internalID: 8434751135971220882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_50
+      rect:
+        serializedVersion: 2
+        x: 2150
+        y: 2502
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ca80b4bb471c99f0800000000000000
+      internalID: -460467447977178431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_51
+      rect:
+        serializedVersion: 2
+        x: 2218
+        y: 2508
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4078771f01e324ab0800000000000000
+      internalID: -5025385991700510972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_52
+      rect:
+        serializedVersion: 2
+        x: 2244
+        y: 2506
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9fa094da02a26fc0800000000000000
+      internalID: -3503059392741199970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_53
+      rect:
+        serializedVersion: 2
+        x: 2265
+        y: 2504
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adb3cf213a2667680800000000000000
+      internalID: -8757703972837639206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_54
+      rect:
+        serializedVersion: 2
+        x: 2321
+        y: 2507
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9b7b99dcfe413a90800000000000000
+      internalID: -7335995470120256612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_55
+      rect:
+        serializedVersion: 2
+        x: 2335
+        y: 2509
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9f91215c36cdac60800000000000000
+      internalID: 7831133289428656027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_56
+      rect:
+        serializedVersion: 2
+        x: 2363
+        y: 2499
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fb5cf8354580c2a0800000000000000
+      internalID: -6719224111681479688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_57
+      rect:
+        serializedVersion: 2
+        x: 1926
+        y: 2496
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1df27b5cdc0a1d090800000000000000
+      internalID: -8011445456469545007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_58
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 2489
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e9c676cf12dd2340800000000000000
+      internalID: 4840756208408644065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_59
+      rect:
+        serializedVersion: 2
+        x: 1980
+        y: 2496
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c9c7b50cb6c21740800000000000000
+      internalID: 5121374237125757380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_60
+      rect:
+        serializedVersion: 2
+        x: 1998
+        y: 2497
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 618af33994d2d96c0800000000000000
+      internalID: -4135099088829962218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_61
+      rect:
+        serializedVersion: 2
+        x: 2018
+        y: 2499
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea41bd802c597ffd0800000000000000
+      internalID: -2308211623399320402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_62
+      rect:
+        serializedVersion: 2
+        x: 2125
+        y: 2492
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dd58bde3de1ac1f0800000000000000
+      internalID: -1023972069698150960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_63
+      rect:
+        serializedVersion: 2
+        x: 2136
+        y: 2495
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 948f71969540d6d40800000000000000
+      internalID: 5579120295443691593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_64
+      rect:
+        serializedVersion: 2
+        x: 2145
+        y: 2494
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5874617aee8c121f0800000000000000
+      internalID: -1071354309006440571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_65
+      rect:
+        serializedVersion: 2
+        x: 2147
+        y: 2498
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c37a30dc48f06970800000000000000
+      internalID: 8746263485148197826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_66
+      rect:
+        serializedVersion: 2
+        x: 2158
+        y: 2494
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc93ec546853eb060800000000000000
+      internalID: 6971068124029139405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_67
+      rect:
+        serializedVersion: 2
+        x: 2238
+        y: 2500
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a1f722d9892e9460800000000000000
+      internalID: 7250278122026168740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_68
+      rect:
+        serializedVersion: 2
+        x: 2264
+        y: 2499
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92664ac87618ed660800000000000000
+      internalID: 7412504318439613993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_69
+      rect:
+        serializedVersion: 2
+        x: 2281
+        y: 2499
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adabc21aedbaf5a30800000000000000
+      internalID: 4206269549662485210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_70
+      rect:
+        serializedVersion: 2
+        x: 2298
+        y: 2494
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1998d93bf5f8f0800800000000000000
+      internalID: 580840518152194449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_71
+      rect:
+        serializedVersion: 2
+        x: 2308
+        y: 2498
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 816e4898d26427da0800000000000000
+      internalID: -5948614996408343016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_72
+      rect:
+        serializedVersion: 2
+        x: 2340
+        y: 2497
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c21fcbe0358a5a010800000000000000
+      internalID: 1199549950447120684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_73
+      rect:
+        serializedVersion: 2
+        x: 2348
+        y: 2496
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6946e471858b9ea80800000000000000
+      internalID: -8437009738414267242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_74
+      rect:
+        serializedVersion: 2
+        x: 2110
+        y: 2491
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9699c8c36547c2110800000000000000
+      internalID: 1237491911351900521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_75
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 2489
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f5216692932c68f0800000000000000
+      internalID: -546022342323526159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_76
+      rect:
+        serializedVersion: 2
+        x: 2180
+        y: 2490
+        width: 22
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a59776aa24900fcb0800000000000000
+      internalID: -4832352218237142694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_77
+      rect:
+        serializedVersion: 2
+        x: 2237
+        y: 2491
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f453045932f4177f0800000000000000
+      internalID: -616624659726584497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReBarHp_78
+      rect:
+        serializedVersion: 2
+        x: 2269
+        y: 2490
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72b9ce60f197a06a0800000000000000
+      internalID: -6482235539479291097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ReBarHp_0: -8662415993884095038
+      ReBarHp_1: 4075123578099347099
+      ReBarHp_10: 6080110853672420063
+      ReBarHp_11: 6526843001117941208
+      ReBarHp_12: -6432090976304243385
+      ReBarHp_13: -7001579051972383002
+      ReBarHp_14: 7843235133145196807
+      ReBarHp_15: -4530062819249269556
+      ReBarHp_16: -1084218642121653343
+      ReBarHp_17: -2337032033316500068
+      ReBarHp_18: 3140512681061040755
+      ReBarHp_19: -7195554368771764592
+      ReBarHp_2: -4463121739740378731
+      ReBarHp_20: -4998217759691788123
+      ReBarHp_21: -6174330969610286577
+      ReBarHp_22: -5858198764472427148
+      ReBarHp_23: -5872428054456394377
+      ReBarHp_24: -6101892667408430173
+      ReBarHp_25: -5137842279613436228
+      ReBarHp_26: 6176868137395926491
+      ReBarHp_27: -3088389519202026922
+      ReBarHp_28: -5256604005213109032
+      ReBarHp_29: 6067887314856661550
+      ReBarHp_3: -7868642710666701679
+      ReBarHp_30: -560255045213479741
+      ReBarHp_31: 3208736502284855566
+      ReBarHp_32: -6912332056406964344
+      ReBarHp_33: 4024594426440721212
+      ReBarHp_34: 1710928296331764736
+      ReBarHp_35: 8373073330441557621
+      ReBarHp_36: 1551586090930444711
+      ReBarHp_37: 4353741094003660886
+      ReBarHp_38: 9085688667812030105
+      ReBarHp_39: -5353137948496159887
+      ReBarHp_4: 4890254951849587061
+      ReBarHp_40: 4989602417527786491
+      ReBarHp_41: 6715281088645939903
+      ReBarHp_42: -413985037007171585
+      ReBarHp_43: 864224478846725923
+      ReBarHp_44: 6741138454084345458
+      ReBarHp_45: 7394052002026397716
+      ReBarHp_46: 3589152592246371162
+      ReBarHp_47: 4850636126983260906
+      ReBarHp_48: -7803510000144090632
+      ReBarHp_49: 8434751135971220882
+      ReBarHp_5: -5857595891831590819
+      ReBarHp_50: -460467447977178431
+      ReBarHp_51: -5025385991700510972
+      ReBarHp_52: -3503059392741199970
+      ReBarHp_53: -8757703972837639206
+      ReBarHp_54: -7335995470120256612
+      ReBarHp_55: 7831133289428656027
+      ReBarHp_56: -6719224111681479688
+      ReBarHp_57: -8011445456469545007
+      ReBarHp_58: 4840756208408644065
+      ReBarHp_59: 5121374237125757380
+      ReBarHp_6: -5413786455593423719
+      ReBarHp_60: -4135099088829962218
+      ReBarHp_61: -2308211623399320402
+      ReBarHp_62: -1023972069698150960
+      ReBarHp_63: 5579120295443691593
+      ReBarHp_64: -1071354309006440571
+      ReBarHp_65: 8746263485148197826
+      ReBarHp_66: 6971068124029139405
+      ReBarHp_67: 7250278122026168740
+      ReBarHp_68: 7412504318439613993
+      ReBarHp_69: 4206269549662485210
+      ReBarHp_7: 3508918052164176884
+      ReBarHp_70: 580840518152194449
+      ReBarHp_71: -5948614996408343016
+      ReBarHp_72: 1199549950447120684
+      ReBarHp_73: -8437009738414267242
+      ReBarHp_74: 1237491911351900521
+      ReBarHp_75: -546022342323526159
+      ReBarHp_76: -4832352218237142694
+      ReBarHp_77: -616624659726584497
+      ReBarHp_78: -6482235539479291097
+      ReBarHp_8: -6347271145847949559
+      ReBarHp_9: 7779851698419381787
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

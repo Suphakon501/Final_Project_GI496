@@ -8,6 +8,7 @@ public class MiniLipid : MonoBehaviour
 {
     private static readonly List<MiniLipid> active = new List<MiniLipid>();
     public static IReadOnlyList<MiniLipid> Active => active;
+    private static Transform cachedHitline;
 
     [Header("Settings")]
     public KeyCode assignedKey;
@@ -59,6 +60,11 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private float flySpinSpeed = 260f;
     [SerializeField, Range(0.05f, 1f)] private float flyEndScale = 0.3f;
 
+    [Header("Long Note Visuals (LDL)")]
+    [SerializeField] private Sprite holdHeadSprite;
+    [SerializeField] private Sprite holdBodySprite;
+    [SerializeField] private Sprite holdTailSprite;
+
     private LipidMovement parentLipid;
     private bool isFinished = false;
     private bool hasTargetTime = false;
@@ -67,6 +73,10 @@ public class MiniLipid : MonoBehaviour
     private bool holdStarted;
     private LineRenderer holdTrail;
     private SpriteRenderer noteRenderer;
+    private SpriteRenderer holdHeadRenderer;
+    private SpriteRenderer holdBodyRenderer;
+    private SpriteRenderer holdTailRenderer;
+    private Bounds holdMainBounds;
 
     public bool IsHold => holdDuration > 0f;
     public bool HoldStarted => holdStarted;
@@ -93,11 +103,13 @@ public class MiniLipid : MonoBehaviour
     {
         if (PauseMenu.IsPaused || PlayerController.isGameOver || isFinished) return;
 
-        if (UsingSongClock) FollowSongTime();
-        else if (!holdStarted)
+        if (!holdStarted)
         {
-            transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
+            if (UsingSongClock) FollowSongTime();
+            else transform.position += Vector3.left * MoveSpeed * Time.deltaTime;
         }
+
+        if (holdDuration > 0f) UpdateHoldVisual();
 
         if (!holdStarted && SecondsUntilLine() < -missAfter)
         {
@@ -111,13 +123,52 @@ public class MiniLipid : MonoBehaviour
         assignedKey = key;
         parentLipid = owner;
 
-        // จัดตำแหน่ง Y ตามเลนใหม่ (ซ้าย -> ล่าง -> ขึ้น -> ขวา)
+        // ใช้ตำแหน่งลูกศรจริงในซีนเป็นจุดตัดสิน: โน้ตวิ่งมาหยุดที่ลูกศรของปุ่มนั้น
+        if (TryGetLaneAnchor(assignedKey, out Vector3 anchor))
+        {
+            hitLineX = anchor.x;
+
+            Vector3 anchored = transform.position;
+            anchored.y = anchor.y;
+            transform.position = anchored;
+            return;
+        }
+
+        // Fallback: ตำแหน่ง Y จากพรีแฟ็บ (ซีนที่ไม่มี Hitline/ลูกศร)
         Vector3 pos = transform.position;
-        if (assignedKey == KeyCode.A) pos.y = yPosTop;       // บนสุด (ซ้าย) -> 3.0
-        else if (assignedKey == KeyCode.W) pos.y = yPosMid1;  // ถัดลงมา (ขึ้น) -> 1.0
-        else if (assignedKey == KeyCode.S) pos.y = yPosMid2;  // ถัดลงมา (ล่าง) -> -1.0
-        else if (assignedKey == KeyCode.D) pos.y = yPosBottom;// ล่างสุด (ขวา) -> -3.0
+        if (assignedKey == KeyCode.A) pos.y = yPosTop;
+        else if (assignedKey == KeyCode.W) pos.y = yPosMid1;
+        else if (assignedKey == KeyCode.S) pos.y = yPosMid2;
+        else if (assignedKey == KeyCode.D) pos.y = yPosBottom;
         transform.position = pos;
+    }
+
+    static bool TryGetLaneAnchor(KeyCode key, out Vector3 anchor)
+    {
+        anchor = Vector3.zero;
+
+        if (cachedHitline == null)
+        {
+            GameObject hitline = GameObject.Find("Hitline");
+            if (hitline != null) cachedHitline = hitline.transform;
+        }
+        if (cachedHitline == null) return false;
+
+        string arrowName;
+        switch (key)
+        {
+            case KeyCode.A: arrowName = "Left2_1"; break;
+            case KeyCode.W: arrowName = "Up2_1"; break;
+            case KeyCode.S: arrowName = "Down2_1"; break;
+            case KeyCode.D: arrowName = "Right2_0"; break;
+            default: return false;
+        }
+
+        Transform arrow = cachedHitline.Find(arrowName);
+        if (arrow == null) return false;
+
+        anchor = arrow.position;
+        return true;
     }
 
     public void SetTargetSongTime(float songTime)
@@ -131,6 +182,12 @@ public class MiniLipid : MonoBehaviour
     {
         holdDuration = Mathf.Max(0f, seconds);
         if (holdDuration <= 0f) return;
+
+        if (holdHeadSprite != null && holdBodySprite != null && holdTailSprite != null)
+        {
+            BuildHoldVisual();
+            return;
+        }
 
         var trailObject = new GameObject("HoldTrail");
         trailObject.transform.SetParent(transform, false);
@@ -149,13 +206,102 @@ public class MiniLipid : MonoBehaviour
         if (shader != null) holdTrail.material = new Material(shader);
     }
 
+    void BuildHoldVisual()
+    {
+        if (holdHeadRenderer != null)
+        {
+            UpdateHoldVisual();
+            return;
+        }
+
+        noteRenderer = GetComponent<SpriteRenderer>();
+        if (noteRenderer == null) return;
+
+        holdMainBounds = noteRenderer.sprite != null
+            ? noteRenderer.sprite.bounds
+            : new Bounds(Vector3.zero, Vector3.one);
+
+        holdHeadRenderer = CreateHoldPart("HoldHead", holdHeadSprite);
+        holdBodyRenderer = CreateHoldPart("HoldBody", holdBodySprite);
+        holdTailRenderer = CreateHoldPart("HoldTail", holdTailSprite);
+
+        noteRenderer.enabled = false;
+        UpdateHoldVisual();
+    }
+
+    SpriteRenderer CreateHoldPart(string partName, Sprite sprite)
+    {
+        var partObject = new GameObject(partName);
+        partObject.transform.SetParent(transform, false);
+
+        var partRenderer = partObject.AddComponent<SpriteRenderer>();
+        partRenderer.sprite = sprite;
+        partRenderer.color = noteRenderer != null ? noteRenderer.color : Color.white;
+        partRenderer.sortingOrder = noteRenderer != null ? noteRenderer.sortingOrder : 5;
+        return partRenderer;
+    }
+
+    void UpdateHoldVisual()
+    {
+        if (holdHeadRenderer == null || holdBodyRenderer == null || holdTailRenderer == null) return;
+
+        float visualDuration = holdDuration;
+        if (holdStarted && UsingSongClock)
+            visualDuration = Mathf.Clamp(
+                targetSongTime + holdDuration - BeatManager.instance.songPositionInSeconds,
+                0f, holdDuration);
+
+        float noteScale = Mathf.Max(0.0001f, Mathf.Abs(transform.lossyScale.x));
+        float localLength = (visualDuration * MoveSpeed) / noteScale;
+
+        Bounds head = holdHeadRenderer.sprite.bounds;
+        Bounds body = holdBodyRenderer.sprite.bounds;
+        Bounds tail = holdTailRenderer.sprite.bounds;
+
+        float left = holdMainBounds.min.x;
+        float centerY = holdMainBounds.center.y;
+
+        holdHeadRenderer.transform.localPosition = new Vector3(
+            left - head.min.x,
+            centerY - head.center.y,
+            0f);
+
+        float headRight = left + head.size.x;
+        float tailRight = left + localLength;
+        float tailLeft = tailRight - tail.size.x;
+        bool showBody = tailLeft > headRight;
+        holdBodyRenderer.enabled = showBody;
+        holdTailRenderer.enabled = showBody;
+
+        float bodyWidth = Mathf.Max(0.001f, tailLeft - headRight);
+        float bodyScaleX = bodyWidth / Mathf.Max(0.001f, body.size.x);
+
+        holdBodyRenderer.transform.localScale = new Vector3(bodyScaleX, 1f, 1f);
+        holdBodyRenderer.transform.localPosition = new Vector3(
+            headRight - bodyScaleX * body.min.x,
+            centerY - body.center.y,
+            0f);
+
+        holdTailRenderer.transform.localPosition = new Vector3(
+            tailRight - tail.max.x,
+            centerY - tail.center.y,
+            0f);
+    }
+
+    void SetHoldColor(Color color)
+    {
+        if (noteRenderer != null) noteRenderer.color = color;
+        if (holdHeadRenderer != null) holdHeadRenderer.color = color;
+        if (holdBodyRenderer != null) holdBodyRenderer.color = color;
+        if (holdTailRenderer != null) holdTailRenderer.color = color;
+    }
+
     public bool TryStartHold()
     {
         if (!IsHold || holdStarted || Mathf.Abs(SecondsUntilLine()) > missAfter) return false;
         holdStarted = true;
-        noteRenderer = GetComponent<SpriteRenderer>();
-        if (noteRenderer != null)
-            noteRenderer.color = new Color(0.45f, 1f, 0.45f, noteRenderer.color.a);
+        if (noteRenderer == null) noteRenderer = GetComponent<SpriteRenderer>();
+        SetHoldColor(new Color(0.45f, 1f, 0.45f, noteRenderer != null ? noteRenderer.color.a : 1f));
         if (holdTrail != null)
         {
             holdTrail.startColor = Color.green;
@@ -225,17 +371,21 @@ public class MiniLipid : MonoBehaviour
         return HitResult.Bad;
     }
 
-    public static MiniLipid FindNextToHit()
+    // เลือกโน้ตของ "เลน/ปุ่ม" ที่กดเท่านั้น (ไม่สนโน้ตเลนอื่น) แล้วเอาตัวที่ถึงคิวก่อน
+    public static MiniLipid FindNextForKey(KeyCode key)
     {
         MiniLipid next = null;
-        float lowestX = float.MaxValue;
+        float earliest = float.MaxValue;
         foreach (var mini in active)
         {
-            if (mini.isFinished) continue;
-            float x = mini.transform.position.x;
-            if (x < lowestX)
+            if (mini.isFinished || mini.HoldStarted || mini.assignedKey != key) continue;
+
+            float untilLine = mini.SecondsUntilLine();
+            if (Mathf.Abs(untilLine) > mini.missAfter) continue;
+
+            if (untilLine < earliest)
             {
-                lowestX = x;
+                earliest = untilLine;
                 next = mini;
             }
         }
