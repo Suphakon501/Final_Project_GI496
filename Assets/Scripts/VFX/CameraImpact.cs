@@ -37,15 +37,19 @@ public class CameraImpact : MonoBehaviour
     [Header("Roll (เอียงกล้อง)")]
     [SerializeField] private float maxRoll = 1.6f;
 
+    [Header("Impact (กระแทกกล้อง)")]
+    [Tooltip("เปิด/ปิดการกระแทกกล้องตอนกดโดน/พลาด/ตาย (ปิด = หน้าจอนิ่ง)")]
+    [SerializeField] private bool enableImpact = false;
+
     [Header("Beat Pulse (เต้นตาม BPM)")]
     [Tooltip("เปิดให้กล้องซูมวูบตามจังหวะเพลง")]
-    [SerializeField] private bool beatPulse = true;
+    [SerializeField] private bool beatPulse = false;
     [SerializeField, Min(0f)] private float beatZoom = 0.06f;
     [SerializeField, Min(0.05f)] private float beatPulseDuration = 0.22f;
     [Tooltip("ทุกกี่บีตถึงจะแรงเป็นพิเศษ (1 = ทุกบีตเท่ากันหมด)")]
     [SerializeField, Min(1)] private int strongBeatEvery = 4;
     [SerializeField, Min(1f)] private float strongBeatMultiplier = 1.9f;
-    [SerializeField, Min(0f)] private float strongBeatShake = 0.06f;
+    [SerializeField, Min(0f)] private float strongBeatShake = 0f;
 
     private Camera cam;
     private LowHealthCameraShake lowHealth;
@@ -117,6 +121,8 @@ public class CameraImpact : MonoBehaviour
 
     void AddImpact(float shakeAmount, float zoomAmount)
     {
+        if (!enableImpact) return;
+
         trauma = Mathf.Clamp01(trauma + shakeAmount);
         zoomPunch = Mathf.Max(zoomPunch, zoomAmount);
     }

@@ -694,6 +694,8 @@ GameObject:
   - component: {fileID: 197997222}
   - component: {fileID: 197997223}
   - component: {fileID: 197997224}
+  - component: {fileID: 197997225}
+  - component: {fileID: 197997226}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1732,7 +1734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb0a66929b0ef904f95fdcb5c9e5017c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseSpeed: 2
+  baseSpeed: 0
   layers:
   - name: BackGround
     sprite: {fileID: 7352022918230586180, guid: f283442106527074e93f72897e19ad50, type: 3}
@@ -1778,6 +1780,7 @@ MonoBehaviour:
     speedMultiplier: 0.72
     positionOffset: {x: 0, y: 0}
     overlap: 0.2
+    pulseOnBeat: 1
     tiles: []
     template: {fileID: 0}
     parent: {fileID: 0}
@@ -1791,6 +1794,7 @@ MonoBehaviour:
     speedMultiplier: 0.72
     positionOffset: {x: 0, y: 0}
     overlap: 0.2
+    pulseOnBeat: 1
     tiles: []
     template: {fileID: 0}
     parent: {fileID: 0}
@@ -3442,7 +3446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lowHealthThreshold: 0.55
-  shakeAmplitude: 0.06
+  shakeAmplitude: 0
   shakeFrequency: 16
   intensityChangeSpeed: 4
   shakeHorizontally: 1
@@ -6867,3 +6871,34 @@ SceneRoots:
   - {fileID: 1142325751}
   - {fileID: 1716451134}
   - {fileID: 122610052}
+--- !u!114 &197997225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197997219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5f8a1c7b9e4f2d8c6a0b3e5f7d1c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlit: 1
+  tint: {r: 1, g: 1, b: 1, a: 1}
+
+--- !u!114 &197997226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197997219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8e2c4a91d3477f8a6c0d3e2f9b7148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squashAmount: 0.09
+  horizontalAmount: 0.35
+  bopDuration: 0.22
+  useSongBeat: 1

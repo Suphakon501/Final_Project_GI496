@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2179881340075721702}
   - component: {fileID: 2238457391898539209}
   - component: {fileID: 1675631268107329832}
+  - component: {fileID: 7745123456789012345}
+  - component: {fileID: 7745123456789012346}
   m_Layer: 0
   m_Name: VisualHolder
   m_TagString: Untagged
@@ -27,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 441890903775548890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalPosition: {x: 0, y: -1.49, z: 0}
+  m_LocalScale: {x: 0.377, y: 0.377, z: 0.377}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8060387366849939817}
@@ -77,12 +79,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 9180251791023625898, guid: 7bcf59af62094ef489874dd1341d9a8b, type: 3}
+  m_Sprite: {fileID: -1886905056965375609, guid: 664e6b2e0a4c281468a531ff14b03bdc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 31.921875, y: 40.25}
+  m_Size: {x: 35.87, y: 59.739998}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,7 +100,7 @@ Animator:
   m_GameObject: {fileID: 441890903775548890}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4943cb917163ce4418fec002265440a7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3ed82b615b586344d9b4341efeeab674, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -196,7 +198,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1011320745806124597
@@ -211,14 +213,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624d905c3610af64c8c31e21393b7d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  moveSpeed: 3
   spawnPosX: 10
   stopPosX: 6
   stopPosY: 0
-  miniLipidPrefab: {fileID: 8207271258691897193, guid: 418152cc8345bab46aaa5d6688c2e2f3, type: 3}
+  miniLipidPrefab: {fileID: 36039903227548168, guid: 966e65db13e36fb48bdcad6fe861ad55, type: 3}
   spawnInterval: 0.3
   syncToBeat: 1
   beatsBetweenNotes: 1
   waveStartsOnBeatMultiple: 1
   baseSequenceLength: 2
   maxSequenceLength: 6
+--- !u!114 &7745123456789012345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441890903775548890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5f8a1c7b9e4f2d8c6a0b3e5f7d1c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlit: 1
+  tint: {r: 1, g: 1, b: 1, a: 1}
+
+--- !u!114 &7745123456789012346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441890903775548890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8e2c4a91d3477f8a6c0d3e2f9b7148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squashAmount: 0.1
+  horizontalAmount: 0.35
+  bopDuration: 0.2
+  useSongBeat: 1
