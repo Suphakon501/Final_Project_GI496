@@ -1,5 +1,7 @@
 ﻿using TMPro;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -37,9 +39,9 @@ public class ResultScreen : MonoBehaviour
     [SerializeField] private string menuScene = "Menu";
     [SerializeField] private string fallbackLevelScene = "Level1";
 
-    [Header("Shortcuts")]
-    [SerializeField] private KeyCode restartKey = KeyCode.R;
-    [SerializeField] private KeyCode menuKey = KeyCode.Escape;
+    [Header("Keyboard Navigation")]
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button menuButton;
 
     void Start()
     {
@@ -68,6 +70,49 @@ public class ResultScreen : MonoBehaviour
         }
 
         if (newBestObject != null) newBestObject.SetActive(r.newBest);
+
+        FindResultButtons();
+        ConfigureButtonNavigation();
+        if (EventSystem.current != null) EventSystem.current.sendNavigationEvents = true;
+        StartCoroutine(FocusRestartButtonNextFrame());
+    }
+
+    void FindResultButtons()
+    {
+        foreach (Button button in FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (button.gameObject.name == "Restart") restartButton = button;
+            else if (button.gameObject.name == "BackToMenu") menuButton = button;
+        }
+    }
+
+    void ConfigureButtonNavigation()
+    {
+        if (restartButton == null || menuButton == null) return;
+
+        Navigation restartNavigation = restartButton.navigation;
+        restartNavigation.mode = Navigation.Mode.Explicit;
+        restartNavigation.selectOnUp = menuButton;
+        restartNavigation.selectOnDown = menuButton;
+        restartNavigation.selectOnLeft = menuButton;
+        restartNavigation.selectOnRight = menuButton;
+        restartButton.navigation = restartNavigation;
+
+        Navigation menuNavigation = menuButton.navigation;
+        menuNavigation.mode = Navigation.Mode.Explicit;
+        menuNavigation.selectOnUp = restartButton;
+        menuNavigation.selectOnDown = restartButton;
+        menuNavigation.selectOnLeft = restartButton;
+        menuNavigation.selectOnRight = restartButton;
+        menuButton.navigation = menuNavigation;
+    }
+
+    IEnumerator FocusRestartButtonNextFrame()
+    {
+        yield return null;
+        if (EventSystem.current == null || restartButton == null || !restartButton.interactable) yield break;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(restartButton.gameObject);
     }
 
     void ApplySongInfo(LevelManager.Result result)
@@ -137,12 +182,6 @@ public class ResultScreen : MonoBehaviour
     {
         if (string.IsNullOrEmpty(sceneName)) return null;
         return sceneName.Contains("1.1") || sceneName.ToUpperInvariant().Contains("LEVEL2") ? "EASY" : "NORMAL";
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(restartKey)) Restart();
-        else if (Input.GetKeyDown(menuKey)) BackToMenu();
     }
 
     public void Restart()
