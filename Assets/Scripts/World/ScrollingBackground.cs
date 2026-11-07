@@ -12,8 +12,18 @@ public class ScrollingBackground : MonoBehaviour
         [Range(0f, 3f)] public float speedMultiplier = 1f;
         public Vector2 positionOffset = Vector2.zero;
         [Range(0f, 0.2f)] public float overlap = 0.02f;
-        [Tooltip("ให้เลเยอร์นี้เด้งตามบีตหรือไม่ (เปิดเฉพาะเลเยอร์ตึก/เมือง)")]
+        [Tooltip("ให้เลเยอร์นี้เด้งตามบีตหรือไม่ (เปิดเฉพาะเลเยอร์ตึก/เมือง/ฝูงคน)")]
         public bool pulseOnBeat = false;
+        [Tooltip("แรงเด้งของเลเยอร์นี้เทียบกับค่าหลัก (0.5 = ครึ่งเดียว = นุ่มกว่า)")]
+        [Range(0f, 2f)] public float pulseAmount = 1f;
+        [Tooltip("การยืด/หดตัวของเลเยอร์นี้ (0 = ไม่เปลี่ยนขนาดเลย — เหมาะกับภาพยาวที่มีรอยต่อ tile)")]
+        [Range(0f, 2f)] public float pulseScale = 1f;
+        [Tooltip("ความหน่วงก่อนเริ่มเด้ง (วินาที) — ใส่ค่าต่างกันให้แต่ละชั้นไม่ขยับพร้อมกัน")]
+        [Min(0f)] public float pulseDelay = 0f;
+        [Tooltip("ความนุ่ม: 0 = กระตุกแบบสปริงเดิม, 1 = ยกขึ้นแล้วผ่อนลงเรียบ ไม่สะบัดกลับ")]
+        [Range(0f, 1f)] public float pulseSoftness = 0f;
+        [Tooltip("ความยาวการเด้งหนึ่งครั้งของชั้นนี้ (0 = ใช้ค่าหลัก)")]
+        [Min(0f)] public float pulseDuration = 0f;
 
         [HideInInspector] public List<Transform> tiles = new List<Transform>();
         [HideInInspector] public SpriteRenderer template; // ตัว clone ในซีนที่ซ่อนไว้ ใช้สร้าง tile
@@ -25,6 +35,8 @@ public class ScrollingBackground : MonoBehaviour
         [HideInInspector] public int spawnCount;
         [HideInInspector] public Vector3 baseScale = Vector3.one;
         [HideInInspector] public float beatJitter = 1f;
+        [System.NonSerialized] public float pulseElapsed;  // เวลาที่ผ่านไปของการเด้งรอบล่าสุด (ติดลบ = ยังอยู่ในช่วงหน่วง)
+        [System.NonSerialized] public float pulseStrength; // แรงของบีตที่สั่งให้ชั้นนี้เด้งรอบล่าสุด
         [HideInInspector] public Color baseColor = Color.white;
         [HideInInspector] public List<SpriteRenderer> renderers = new List<SpriteRenderer>();
     }
@@ -34,6 +46,12 @@ public class ScrollingBackground : MonoBehaviour
 
     [Header("Beat Pulse (เด้งตาม BPM)")]
     [SerializeField] private bool beatPulse = true;
+    [Tooltip("พิมพ์สรุปการตั้งค่า pulse ลง Console ครั้งเดียวตอนเริ่ม (ใช้ตรวจว่าฝูงคนถูกนับเป็นเลเยอร์เด้งจริงหรือไม่)")]
+    [SerializeField] private bool logPulseDiagnostics = true;
+    [Tooltip("ถ้าพบ SpriteRenderer ชื่อขึ้นต้นด้วย Crowd ที่ยังไม่อยู่ใน layers ให้ลงทะเบียนเป็นเลเยอร์เด้งให้อัตโนมัติ (กันลิสต์หลุด)")]
+    [SerializeField] private bool autoRegisterCrowdLayers = true;
+    [Tooltip("BPM ที่ใช้เด้งแทน เมื่อไม่พบ BeatManager ในฉาก")]
+    [SerializeField, Min(1f)] private float fallbackBpm = 120f;
     [Tooltip("ขนาดการเด้ง (0.03 = 3%)")]
     [SerializeField, Min(0f)] private float beatScaleAmount = 0.035f;
     [Tooltip("ระยะที่พื้นหลังกระตุกขึ้น (หน่วย)")]
@@ -42,8 +60,6 @@ public class ScrollingBackground : MonoBehaviour
     [SerializeField, Min(0.05f)] private float beatPulseDuration = 0.34f;
     [Tooltip("เวลาที่ใช้พุ่งขึ้นถึงจุดสูงสุด (สั้น = กระตุกแรง)")]
     [SerializeField, Min(0.01f)] private float beatAttackTime = 0.05f;
-    [Tooltip("ความหน่วงต่อชั้น ให้เลเยอร์หลังตามหลังเลเยอร์หน้าเล็กน้อย")]
-    [SerializeField, Min(0f)] private float beatLayerStagger = 0.04f;
     [Tooltip("สุ่มแรงเด้งแต่ละบีตให้ต่างกัน (± สัดส่วน) กันดูซ้ำเดิม")]
     [SerializeField, Range(0f, 0.4f)] private float beatRandomVariance = 0.12f;
     [Tooltip("ทุกกี่บีตถึงจะแรงเป็นพิเศษ (1 = ทุกบีตเท่ากัน)")]
@@ -103,6 +119,7 @@ public class ScrollingBackground : MonoBehaviour
 
     Camera cam;
     private int lastBeatIndex = int.MinValue;
+    private bool warnedNoBeatManager;
     private float beatTimer;
     private float beatStrength = 1f;
     private SpriteRenderer nightVeil;
@@ -120,8 +137,12 @@ public class ScrollingBackground : MonoBehaviour
         // เลเยอร์แรก (หลังสุด) คือฟ้องฟ้า — ต้องอยู่หลังแผ่นแสงเรือง
         if (layers != null && layers.Length > 0) skyLayer = layers[0];
 
+        layers = AutoAppendCrowdLayers(layers);
+
         foreach (var layer in layers)
             BuildLayer(layer);
+
+        LogPulseSetup();
 
         BuildBacklight();
         BuildNightVeil();
@@ -168,20 +189,19 @@ public class ScrollingBackground : MonoBehaviour
         UpdateBacklight();
         UpdateNightVeil();
 
-        int pulseIndex = 0;
         foreach (var layer in layers)
         {
             float curve = 0f;
             if (layer.pulseOnBeat)
             {
-                curve = LayerBeatCurve(pulseIndex, layer);
-                pulseIndex++;
+                layer.pulseElapsed += Time.deltaTime;
+                curve = LayerBeatCurve(layer);
             }
 
             if (layer.template == null) continue;
 
             float bob = beatBounceHeight * curve;
-            float scaleMul = 1f + beatScaleAmount * curve;
+            float scaleMul = 1f + beatScaleAmount * curve * layer.pulseScale;
             float move = baseSpeed * layer.speedMultiplier * Time.deltaTime;
 
             for (int i = 0; i < layer.tiles.Count; i++)
@@ -207,23 +227,31 @@ public class ScrollingBackground : MonoBehaviour
         }
     }
 
-    /// <summary>เส้นโค้งการเด้งของแต่ละชั้น: กระตุกขึ้นเร็ว แล้วค้างตัวลงนุ่ม ๆ แบบสปริง</summary>
-    float LayerBeatCurve(int index, Layer layer)
+    /// <summary>
+    /// เส้นโค้งการเด้งของเลเยอร์: ผสมระหว่างสปริงกระตุก (ตึก) กับโค้งนุ่มขึ้น-ลงเรียบ (ฝูงคน)
+    /// แต่ละชั้นมีเวลาเด้งของตัวเอง จึงหน่วง/นุ่มได้ไม่เท่ากัน
+    /// </summary>
+    float LayerBeatCurve(Layer layer)
     {
-        if (!layer.pulseOnBeat || beatTimer <= 0f) return 0f;
+        if (!layer.pulseOnBeat) return 0f;
 
-        float elapsed = (Mathf.Max(0.05f, beatPulseDuration) - beatTimer) - index * beatLayerStagger;
-        if (elapsed <= 0f) return 0f;
+        float duration = layer.pulseDuration > 0.001f ? layer.pulseDuration : Mathf.Max(0.05f, beatPulseDuration);
+        float elapsed = layer.pulseElapsed;
+        if (elapsed <= 0f || elapsed >= duration) return 0f;
 
-        // ช่วงพุ่งขึ้น: smoothstep สั้น ๆ ขึ้นเร็วแต่ไม่กระชาก
+        // โค้งกระตุกแบบเดิม: smoothstep สั้น ๆ ขึ้นเร็ว แล้วสปริงหน่วง (เด้งกลับต่ำกว่าเดิมนิดหน่อย)
         float attackT = Mathf.Clamp01(elapsed / Mathf.Max(0.01f, beatAttackTime));
         float attack = attackT * attackT * (3f - 2f * attackT);
-
-        // ช่วงค้างตัว: สปริงหน่วง มีเด้งกลับลงต่ำกว่าเดิมนิดหน่อยแล้วนิ่ง
         float decayT = Mathf.Max(0f, elapsed - beatAttackTime);
         float settle = Mathf.Exp(-8.5f * decayT) * Mathf.Cos(decayT * 15f);
+        float snap = attack * settle;
 
-        return attack * settle * beatStrength * layer.beatJitter;
+        // โค้งนุ่ม: ยกขึ้นเร็ว (peak ราว 40% ของช่วง) แล้วผ่อนลงจบที่เส้นเดิมพอดี ไม่สะบัดกลับ
+        float u = Mathf.Clamp01(elapsed / duration);
+        float soft = Mathf.Sin(Mathf.PI * Mathf.Pow(u, 0.8f));
+
+        float curve = Mathf.Lerp(snap, soft, Mathf.Clamp01(layer.pulseSoftness));
+        return curve * layer.pulseStrength * Mathf.Max(0f, layer.pulseAmount);
     }
 
     /// <summary>คำนวณการเด้งของพื้นหลังตามbeatเพลง (อ่านจาก BeatManager)</summary>
@@ -231,10 +259,18 @@ public class ScrollingBackground : MonoBehaviour
     {
         if (beatTimer > 0f) beatTimer = Mathf.Max(0f, beatTimer - deltaTime);
 
-        BeatManager beat = BeatManager.instance;
-        if (!beatPulse || beat == null) return;
+        if (!beatPulse) return;
 
-        int beatIndex = Mathf.FloorToInt(beat.songPositionInBeats);
+        BeatManager beat = BeatManager.instance;
+        if (beat == null && !warnedNoBeatManager)
+        {
+            warnedNoBeatManager = true;
+            Debug.LogWarning($"[ScrollingBackground] ไม่พบ BeatManager — ใช้ BPM สำรอง {fallbackBpm} ในการเด้ง");
+        }
+
+        // ถ้าไม่มี BeatManager ให้เดินนาฬิกาเองด้วย BPM สำรอง (BG จะได้ไม่่นิ่ง)
+        float beats = beat != null ? beat.songPositionInBeats : Time.time / (60f / Mathf.Max(1f, fallbackBpm));
+        int beatIndex = Mathf.FloorToInt(beats);
         if (beatIndex == lastBeatIndex) return;
         lastBeatIndex = beatIndex;
         if (beatIndex < 0) return;
@@ -244,11 +280,83 @@ public class ScrollingBackground : MonoBehaviour
         beatTimer = Mathf.Max(0.05f, beatPulseDuration);
 
         // สุ่มแรงของแต่ละบีต/แต่ละชั้นให้ไม่ซ้ำเดิม ดูเป็นธรรมชาติ
+        // แต่ละชั้นเริ่มเด้งไม่พร้อมกันด้วย pulseDelay ของตัวเอง (ชั้นไกลตามหลังชั้นหน้าเล็กน้อย)
         foreach (var layer in layers)
         {
             if (!layer.pulseOnBeat) continue;
+
             layer.beatJitter = 1f + Random.Range(-beatRandomVariance, beatRandomVariance);
+            layer.pulseStrength = beatStrength * layer.beatJitter;
+            layer.pulseElapsed = -Mathf.Max(0f, layer.pulseDelay);
         }
+    }
+
+    /// <summary>
+    /// ถ้าในซีนมี SpriteRenderer ชื่อขึ้นต้นด้วย "Crowd" ที่ยังไม่ถูกใช้เป็นเลเยอร์ ให้ลงทะเบียนเป็นเลเยอร์ BG อัตโนมัติ
+    /// ตำแหน่ง/สเกลใช้ค่าของ transform เดิมทุกอย่าง (ไม่แก้) — กันกรณีลิสต์ layers ในซีนหลุด/ยังไม่โหลดใหม่
+    /// </summary>
+    Layer[] AutoAppendCrowdLayers(Layer[] src)
+    {
+        if (!autoRegisterCrowdLayers || cam == null) return src;
+
+        List<Layer> list = new List<Layer>();
+        HashSet<SpriteRenderer> used = new HashSet<SpriteRenderer>();
+
+        if (src != null)
+        {
+            foreach (var l in src)
+            {
+                if (l == null) continue;
+                list.Add(l);
+                if (l.sprite != null) used.Add(l.sprite);
+            }
+        }
+
+        foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            if (sr == null || sr.sprite == null || used.Contains(sr)) continue;
+            if (!sr.name.StartsWith("Crowd", System.StringComparison.OrdinalIgnoreCase)) continue;
+
+            bool front = sr.name.IndexOf("Front", System.StringComparison.OrdinalIgnoreCase) >= 0;
+            Layer layer = new Layer
+            {
+                name = sr.name,
+                sprite = sr,
+                speedMultiplier = 0.72f,
+                overlap = front ? 1.5f : 0.6f,
+                pulseOnBeat = true,
+                pulseAmount = front ? 2.6f : 2f,
+                pulseScale = 0f,
+                pulseDelay = front ? 0f : 0.04f,
+                pulseSoftness = front ? 0.7f : 0.55f,
+                pulseDuration = front ? 0.22f : 0.16f
+            };
+
+            list.Add(layer);
+            used.Add(sr);
+            Debug.Log($"[ScrollingBackground] auto-register '{sr.name}' (y {sr.transform.position.y:0.##}, scale {sr.transform.lossyScale.x:0.###})");
+        }
+
+        return list.ToArray();
+    }
+
+    /// <summary>สรุปการตั้งค่า pulse ลง Console ครั้งเดียว — ช่วยรู้ทันทีว่าฝูงคนถูกนับเป็นเลเยอร์เด้งหรือไม่</summary>
+    void LogPulseSetup()
+    {
+        if (!logPulseDiagnostics) return;
+
+        var sb = new System.Text.StringBuilder("[ScrollingBackground] ");
+        sb.Append(BeatManager.instance == null ? "BeatManager = NOT FOUND (BG จะไม่เด้งเลย)" : "BeatManager = ok");
+        if (layers != null)
+        {
+            foreach (var l in layers)
+            {
+                if (l == null || !l.pulseOnBeat) continue;
+                float dur = l.pulseDuration > 0.001f ? l.pulseDuration : beatPulseDuration;
+                sb.Append($" | {l.name}: tiles={l.tiles.Count} amount={l.pulseAmount:0.##} dur={dur:0.##}s");
+            }
+        }
+        Debug.Log(sb.ToString());
     }
 
     // ทำลาย tile ที่ขอบขวาพ้นขอบซ้ายของกล้องไปแล้ว (ทุกตัวเป็น clone ในซีน จึง Destroy ได้)
