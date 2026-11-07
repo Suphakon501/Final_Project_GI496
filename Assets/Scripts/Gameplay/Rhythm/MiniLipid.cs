@@ -113,7 +113,7 @@ public class MiniLipid : MonoBehaviour
 
         if (!holdStarted && SecondsUntilLine() < -missAfter)
         {
-            if (PlayerController.instance != null) PlayerController.instance.RegisterMissedNote();
+            if (PlayerController.instance != null) PlayerController.instance.RegisterMissedNote(assignedKey);
             ConsumeMini(HitResult.Miss);
         }
     }

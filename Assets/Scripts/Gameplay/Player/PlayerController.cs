@@ -86,6 +86,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float feedbackShrinkSpeed = 15f;
     [SerializeField] private float feedbackMaxTilt = 6f;
 
+    [Header("Judgement Popup (โผล่ที่ปุ่มกดแต่ละปุ่ม)")]
+    [Tooltip("ระยะลอยเหนือปุ่มกด (พิกเซลจอ)")]
+    [SerializeField] private Vector2 gradePopupOffset = new Vector2(0f, 34f);
+    [Tooltip("ความกว้างข้อความเกรด เท่าของความกว้างปุ่ม (2 = กว้างเป็น 2 เท่าของปุ่ม)")]
+    [SerializeField, Min(0.5f)] private float gradePopupWidth = 2.2f;
+    [SerializeField, Min(0.01f)] private float gradePopupPop = 0.12f;
+    [SerializeField, Min(0f)] private float gradePopupHold = 0.1f;
+    [SerializeField, Min(0.01f)] private float gradePopupFade = 0.24f;
+    [SerializeField] private float gradePopupRise = 26f;
+    [SerializeField, Min(1f)] private float gradePopupStartScale = 1.45f;
+    [SerializeField] private float gradePopupTilt = 5f;
+
     [Header("Audio System (Sound Effects)")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip goodSound;
@@ -151,6 +163,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 scorePopBaseScale = Vector3.one;
     private Coroutine scorePopRoutine;
 
+    private Canvas gradeCanvas;
+    private readonly Image[] gradeLaneImages = new Image[4];
+    private readonly RectTransform[] gradeLaneRects = new RectTransform[4];
+    private readonly Vector3[] gradeLaneAnchors = new Vector3[4];
+    private readonly float[] gradeLaneAges = new float[4];
+
     void Awake()
     {
         instance = this;
@@ -158,6 +176,7 @@ public class PlayerController : MonoBehaviour
         if (jumpVfxPrefab == null) jumpVfxPrefab = Resources.Load<GameObject>("Vfx/JumpWind");
         CacheDirectionArrows();
         CreateComboTintOverlay();
+        CreateGradeOverlay();
     }
 
     void Start()
@@ -189,7 +208,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        ShrinkFeedbackSprite();
+        UpdateGradeOverlay();
         UpdateDirectionArrowFeedback();
         UpdateComboScreenTint();
 
@@ -447,7 +466,7 @@ public class PlayerController : MonoBehaviour
     void MissActiveHold(ActiveHoldNote hold)
     {
         activeHolds.Remove(hold);
-        OnNoteMissed();
+        OnNoteMissed(hold.note.assignedKey);
         hold.note.ConsumeMini(HitResult.Miss);
         UpdateScoreUI();
     }
@@ -466,7 +485,7 @@ public class PlayerController : MonoBehaviour
                 score += PerfectScore;
                 ChangeHealth(hpPerfect);
                 currentPerfectStreak++;
-                ShowFeedbackSprite(perfectSprite);
+                ShowGrade(perfectSprite, pressedKey);
                 PlayPerfectSound(isLastOfWave);
                 break;
 
@@ -475,7 +494,7 @@ public class PlayerController : MonoBehaviour
                 score += GoodScore;
                 ChangeHealth(hpGood);
                 currentPerfectStreak = 0;
-                ShowFeedbackSprite(goodSprite);
+                ShowGrade(goodSprite, pressedKey);
                 PlaySound(goodSound);
                 break;
 
@@ -485,7 +504,7 @@ public class PlayerController : MonoBehaviour
                 ChangeHealth(-badDamage);
                 PlayAnimation(hitAnimName);
                 currentPerfectStreak = 0;
-                ShowFeedbackSprite(badSprite);
+                ShowGrade(badSprite, pressedKey);
                 PlaySound(badMissSound);
                 break;
         }
@@ -493,7 +512,7 @@ public class PlayerController : MonoBehaviour
         CameraImpact.Hit(result, combo);
     }
 
-    void OnNoteMissed()
+    void OnNoteMissed(KeyCode missedKey = KeyCode.None)
     {
         missCount++;
         CancelDirectionalMove();
@@ -501,14 +520,16 @@ public class PlayerController : MonoBehaviour
         BreakCombo();
         ApplyMissDamage();
         PlayAnimation(hitAnimName);
-        ShowFeedbackSprite(missSprite);
+        ShowGrade(missSprite, missedKey);
         PlaySound(badMissSound);
         CameraImpact.Hit(HitResult.Miss);
     }
 
-    public void RegisterMissedNote()
+    public void RegisterMissedNote() => RegisterMissedNote(KeyCode.None);
+
+    public void RegisterMissedNote(KeyCode missedKey)
     {
-        if (!isGameOver) OnNoteMissed();
+        if (!isGameOver) OnNoteMissed(missedKey);
     }
 
     public void OnWaveStart()
@@ -719,6 +740,152 @@ public class PlayerController : MonoBehaviour
         if (feedbackImage == null || !feedbackImage.enabled) return;
         feedbackImage.transform.localScale = Vector3.Lerp(
             feedbackImage.transform.localScale, Vector3.one, feedbackShrinkSpeed * Time.deltaTime);
+    }
+
+    // เกรดโผล่ที่ปุ่มกดของเลนนั้น (Perfect / Good / Bad / Miss) แล้วลอยขึ้น + จางหาย
+    void CreateGradeOverlay()
+    {
+        if (gradeCanvas != null) return;
+
+        var canvasObject = new GameObject("GradeOverlay", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
+        int uiLayer = LayerMask.NameToLayer("UI");
+        canvasObject.layer = uiLayer >= 0 ? uiLayer : comboTintCanvas != null ? comboTintCanvas.gameObject.layer : 5;
+
+        gradeCanvas = canvasObject.GetComponent<Canvas>();
+        gradeCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        gradeCanvas.sortingOrder = 500; // อยู่บนสุด กัน UI อื่นบัง
+
+        CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.matchWidthOrHeight = 0.5f;
+    }
+
+    Image GradeLaneImage(int index)
+    {
+        if (gradeLaneImages[index] != null) return gradeLaneImages[index];
+
+        if (gradeCanvas == null) CreateGradeOverlay();
+        if (gradeCanvas == null) return null;
+
+        var popupObject = new GameObject("Grade_" + index, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        popupObject.layer = gradeCanvas.gameObject.layer;
+
+        RectTransform rect = (RectTransform)popupObject.transform;
+        rect.SetParent(gradeCanvas.transform, false);
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+
+        Image image = popupObject.GetComponent<Image>();
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+        image.enabled = false;
+
+        gradeLaneRects[index] = rect;
+        gradeLaneImages[index] = image;
+        return image;
+    }
+
+    void ShowGrade(Sprite sprite, KeyCode key)
+    {
+        int index = KeyGradeIndex(key);
+        if (sprite == null || index < 0) return;
+
+        Image image = GradeLaneImage(index);
+        if (image == null) return;
+
+        gradeLaneAges[index] = 0f;
+        gradeLaneAnchors[index] = GradeAnchor(index);
+
+        image.sprite = sprite;
+        image.color = Color.white;
+        image.enabled = true;
+
+        RectTransform rect = gradeLaneRects[index];
+        rect.localScale = Vector3.one * gradePopupStartScale;
+        rect.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-gradePopupTilt, gradePopupTilt));
+        rect.SetAsLastSibling();
+
+        // ขนาดอิงจากขนาดปุ่มบนจอ แต่คุมไม่ให้ใหญ่เกิน
+        Camera cam = Camera.main;
+        float screenWidth = Screen.height * 0.07f;
+        SpriteRenderer arrow = directionArrows[index];
+        if (cam != null && arrow != null)
+        {
+            Vector3 min = cam.WorldToScreenPoint(arrow.bounds.min);
+            Vector3 max = cam.WorldToScreenPoint(arrow.bounds.max);
+            float width = Mathf.Abs(max.x - min.x);
+            if (width > 1f) screenWidth = width;
+        }
+
+        float scaleFactor = gradeCanvas.scaleFactor > 0f ? gradeCanvas.scaleFactor : 1f;
+        float boxWidth = Mathf.Clamp(screenWidth * gradePopupWidth / scaleFactor, 100f, 420f);
+        rect.sizeDelta = new Vector2(boxWidth, boxWidth * 0.55f);
+    }
+
+    Vector3 GradeAnchor(int index)
+    {
+        SpriteRenderer arrow = directionArrows[index];
+        if (arrow != null) return arrow.transform.position;
+
+        // ไม่เจอปุ่ม: อิงตำแหน่งผู้เล่น + เลน (index เรียง A, S, W, D)
+        float[] laneY = { 3f, -1f, 1f, -3f };
+        return transform.position + new Vector3(-3.2f, laneY[Mathf.Clamp(index, 0, 3)], 0f);
+    }
+
+    void UpdateGradeOverlay()
+    {
+        if (gradeCanvas == null) return;
+
+        Camera cam = Camera.main;
+        float total = gradePopupPop + gradePopupHold + gradePopupFade;
+
+        for (int i = 0; i < gradeLaneImages.Length; i++)
+        {
+            Image image = gradeLaneImages[i];
+            if (image == null || !image.enabled) continue;
+
+            gradeLaneAges[i] += Time.unscaledDeltaTime;
+            float age = gradeLaneAges[i];
+
+            float popT = Mathf.Clamp01(age / gradePopupPop);
+            float fadeT = Mathf.Clamp01((age - gradePopupPop - gradePopupHold) / gradePopupFade);
+
+            RectTransform rect = gradeLaneRects[i];
+            float scale = Mathf.Lerp(gradePopupStartScale, 1f, 1f - Mathf.Pow(1f - popT, 3f)) * (1f + 0.05f * fadeT);
+            rect.localScale = Vector3.one * scale;
+
+            Color color = image.color;
+            color.a = 1f - fadeT * fadeT;
+            image.color = color;
+
+            if (age >= total || cam == null)
+            {
+                image.enabled = false;
+                image.sprite = null;
+                continue;
+            }
+
+            // ตำแหน่งปุ่มบนจอ (ขยับตามกล้อง/ซูม)
+            Vector3 screenPoint = cam.WorldToScreenPoint(gradeLaneAnchors[i]);
+            if (screenPoint.z <= 0f) continue;
+
+            Vector2 point = (Vector2)screenPoint + gradePopupOffset;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    (RectTransform)gradeCanvas.transform, point, null, out Vector2 local)) continue;
+
+            rect.anchoredPosition = local + new Vector2(0f, gradePopupRise * Mathf.Clamp01(age / total));
+        }
+    }
+
+    static int KeyGradeIndex(KeyCode key)
+    {
+        if (key == KeyCode.A || key == KeyCode.LeftArrow) return 0;
+        if (key == KeyCode.S || key == KeyCode.DownArrow) return 1;
+        if (key == KeyCode.W || key == KeyCode.UpArrow) return 2;
+        if (key == KeyCode.D || key == KeyCode.RightArrow) return 3;
+        return -1;
     }
 
     void PlayDirectionalAnimation(KeyCode pressedKey, float hitLineX, float noteY)
