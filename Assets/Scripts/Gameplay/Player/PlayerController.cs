@@ -100,8 +100,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Audio System (Sound Effects)")]
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip goodSound;
-    [SerializeField] private AudioClip badMissSound;
+    [Tooltip("เสียงตอนกดโน้ต — ใช้เสียงเดียวกันทุกเกรด (Perfect / Good / Bad / Miss)")]
+    [SerializeField] private AudioClip hitSound;
+    [Tooltip("ความดังของเสียงเอฟเฟกต์กดโน้ต (เทียบกับระดับเสียงของ AudioSource) — ลดไว้ไม่ให้กลบเพลง")]
+    [SerializeField, Range(0f, 1f)] private float soundEffectVolume = 0.45f;
 
     [Header("Directional Arrow Press Feedback")]
     [SerializeField] private float arrowPressScale = 1.18f;
@@ -128,10 +130,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Min(0f)] private float comboFlashFadeSpeed = 3f;
     [SerializeField, Range(0f, 0.1f)] private float comboTintFlicker = 0.015f;
     [SerializeField, Min(0f)] private float comboTintFlickerSpeed = 5f;
-
-    [Header("Perfect Chain Sounds")]
-    [SerializeField] private AudioClip[] perfectStepSounds = new AudioClip[5];
-    [SerializeField] private AudioClip perfectEndSound;
 
     private float nextAllowedPressTime = 0f;
     private int throwStep = 0;
@@ -495,7 +493,7 @@ public class PlayerController : MonoBehaviour
                 ChangeHealth(hpGood);
                 currentPerfectStreak = 0;
                 ShowGrade(goodSprite, pressedKey);
-                PlaySound(goodSound);
+                PlaySound(hitSound);
                 break;
 
             default:
@@ -505,7 +503,7 @@ public class PlayerController : MonoBehaviour
                 PlayAnimation(hitAnimName);
                 currentPerfectStreak = 0;
                 ShowGrade(badSprite, pressedKey);
-                PlaySound(badMissSound);
+                PlaySound(hitSound);
                 break;
         }
 
@@ -521,7 +519,7 @@ public class PlayerController : MonoBehaviour
         ApplyMissDamage();
         PlayAnimation(hitAnimName);
         ShowGrade(missSprite, missedKey);
-        PlaySound(badMissSound);
+        PlaySound(hitSound);
         CameraImpact.Hit(HitResult.Miss);
     }
 
@@ -973,23 +971,18 @@ public class PlayerController : MonoBehaviour
 
     void PlayPerfectSound(bool isLastOfWave)
     {
-        AudioClip clip;
-        if (isLastOfWave || currentPerfectStreak >= PerfectChainLength)
-        {
-            clip = perfectEndSound;
-            currentPerfectStreak = 0;
-        }
-        else
-        {
-            if (perfectStepSounds == null || perfectStepSounds.Length == 0) return;
-            int index = Mathf.Clamp(currentPerfectStreak - 1, 0, perfectStepSounds.Length - 1);
-            clip = perfectStepSounds[index];
-        }
-        PlaySound(clip);
+        PlaySound(hitSound);
+
+        // จบช่วง perfect ต่อเนื่อง (จบเวฟหรือครบเชน) ให้เริ่มนับใหม่
+        if (isLastOfWave || currentPerfectStreak >= PerfectChainLength) currentPerfectStreak = 0;
     }
 
     void PlaySound(AudioClip clip)
     {
-        if (audioSource != null && clip != null) audioSource.PlayOneShot(clip);
+        if (audioSource == null || clip == null) return;
+
+        // ความดังสุทธิ = ค่าใน Inspector x ตัวปรับ NOTE HIT ในหน้า Settings
+        float volume = Mathf.Clamp01(soundEffectVolume * AudioSettingsRuntime.NoteHitVolume);
+        audioSource.PlayOneShot(clip, volume);
     }
 }

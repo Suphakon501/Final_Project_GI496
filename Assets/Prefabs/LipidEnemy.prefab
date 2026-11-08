@@ -112,6 +112,36 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7745123456789012345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441890903775548890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5f8a1c7b9e4f2d8c6a0b3e5f7d1c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlit: 1
+  tint: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &7745123456789012346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441890903775548890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8e2c4a91d3477f8a6c0d3e2f9b7148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squashAmount: 0.1
+  horizontalAmount: 0.35
+  bopDuration: 0.2
+  useSongBeat: 1
 --- !u!1 &3639694726996431690
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +228,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1011320745806124597
@@ -224,34 +254,3 @@ MonoBehaviour:
   waveStartsOnBeatMultiple: 1
   baseSequenceLength: 2
   maxSequenceLength: 6
---- !u!114 &7745123456789012345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 441890903775548890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d5f8a1c7b9e4f2d8c6a0b3e5f7d1c92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unlit: 1
-  tint: {r: 1, g: 1, b: 1, a: 1}
-
---- !u!114 &7745123456789012346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 441890903775548890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b8e2c4a91d3477f8a6c0d3e2f9b7148, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  squashAmount: 0.1
-  horizontalAmount: 0.35
-  bopDuration: 0.2
-  useSongBeat: 1

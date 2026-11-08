@@ -827,9 +827,17 @@ MonoBehaviour:
   feedbackPopScale: 1.4
   feedbackShrinkSpeed: 15
   feedbackMaxTilt: 6
+  gradePopupOffset: {x: 0, y: 34}
+  gradePopupWidth: 2.2
+  gradePopupPop: 0.12
+  gradePopupHold: 0.1
+  gradePopupFade: 0.24
+  gradePopupRise: 26
+  gradePopupStartScale: 1.45
+  gradePopupTilt: 5
   audioSource: {fileID: 197997224}
-  goodSound: {fileID: 8300000, guid: a974c3f8c0af48a4b90724a069b75325, type: 3}
-  badMissSound: {fileID: 8300000, guid: 8768d7d505ffc564eb4573f0c8e65f34, type: 3}
+  hitSound: {fileID: 8300000, guid: a01a0e7fed1b0024f9f4bb847229218b, type: 3}
+  soundEffectVolume: 0.5
   arrowPressScale: 1.18
   arrowFlashBrightness: 1.8
   arrowFlashDuration: 0.18
@@ -847,13 +855,6 @@ MonoBehaviour:
   comboFlashFadeSpeed: 3
   comboTintFlicker: 0.1
   comboTintFlickerSpeed: 5
-  perfectStepSounds:
-  - {fileID: 8300000, guid: 8e600b2a9545af44f88316ebb8102e16, type: 3}
-  - {fileID: 8300000, guid: 620bb7ddb09274441bdb0f76f1fbba34, type: 3}
-  - {fileID: 8300000, guid: 7a0c3af70e98aba4caca505d9b34ada1, type: 3}
-  - {fileID: 8300000, guid: 5638871ce90d19d4ab78a61a9fe020e6, type: 3}
-  - {fileID: 8300000, guid: d9f8dcc56d5dcf846887c2b8adb8a94f, type: 3}
-  perfectEndSound: {fileID: 8300000, guid: e93225866e81e8a4586fdedcb3aa1056, type: 3}
 --- !u!95 &197997223
 Animator:
   serializedVersion: 7
@@ -1876,16 +1877,18 @@ MonoBehaviour:
   backlightHoldMin: 2
   backlightHoldMax: 4.5
   backlightFade: 0.8
-  backlightAlpha: 0.65
+  backlightAlpha: 0.8
   backlightWidth: 30
   backlightHeight: 18
   backlightY: 1.2
-  backlightBeatPulse: 0.12
-  backlightOrder: 0
+  backlightBeatPulse: 0.18
+  addBacklightCore: 1
+  backlightCoreAlpha: 0.85
+  backlightCoreScale: 0.45
+  backlightCoreWhiten: 0.55
   sceneDarkness: 0.55
   nightVeilColor: {r: 0.02, g: 0.03, b: 0.09, a: 1}
   nightVeilAlpha: 0.38
-  nightVeilOrder: 2
   veilMargin: 1.2
 --- !u!4 &516615270
 Transform:
@@ -2785,6 +2788,71 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdf1de1a610adef459cf6256a41498bf, type: 3}
+--- !u!1 &770000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 770000002}
+  - component: {fileID: 770000003}
+  m_Layer: 0
+  m_Name: CheerleaderPopIn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &770000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &770000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1b8e7d5f4a49a2b6e0d9c8f7a51234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cheerleaders:
+  - {fileID: 994397045768948428, guid: a0a244fa79f99204695dc17726e91f38, type: 3}
+  - {fileID: 2610768548007479803, guid: 09958146f0a159c43bf77965f5d1aad6, type: 3}
+  appearChance: 80
+  intervalRange: {x: 6, y: 12}
+  startDelay: 2
+  maxVisible: 1
+  visibleDuration: {x: 2.5, y: 4.5}
+  popUpTime: 0.3
+  popFromBelow: 1.1
+  squash: 0.2
+  swayAngle: 5
+  swayDistance: 0.12
+  swaySpeed: 1.2
+  swayLift: 0.08
+  fadeOut: 0.3
+  floatUp: 0.25
+  swapSideChance: 50
+  flipWhenSwapped: 1
+  worldOffset: {x: 0, y: 0}
+  sortingOrder: 30000
 --- !u!1 &785200214
 GameObject:
   m_ObjectHideFlags: 0
@@ -6930,3 +6998,4 @@ SceneRoots:
   - {fileID: 1142325751}
   - {fileID: 1716451134}
   - {fileID: 122610052}
+  - {fileID: 770000002}

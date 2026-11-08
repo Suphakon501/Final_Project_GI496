@@ -9,12 +9,14 @@ public class AudioSettingsRuntime : MonoBehaviour
     private const string MasterKey = "Audio.Master";
     private const string MusicKey = "Audio.Music";
     private const string EffectsKey = "Audio.Effects";
+    private const string NoteHitKey = "Audio.NoteHit";
 
     private static AudioSettingsRuntime instance;
     private static bool previewActive;
     private static float previewMaster = 1f;
     private static float previewMusic = 1f;
     private static float previewEffects = 1f;
+    private static float previewNoteHit = 1f;
 
     private readonly Dictionary<AudioSource, float> baseVolumes = new Dictionary<AudioSource, float>();
     private readonly List<AudioSource> destroyedSources = new List<AudioSource>();
@@ -25,7 +27,7 @@ public class AudioSettingsRuntime : MonoBehaviour
     {
         instance = null;
         previewActive = false;
-        previewMaster = previewMusic = previewEffects = 1f;
+        previewMaster = previewMusic = previewEffects = previewNoteHit = 1f;
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -64,14 +66,18 @@ public class AudioSettingsRuntime : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => ApplyVolumes();
     private void Update() => ApplyVolumes();
 
-    public static void SetPreview(float master, float music, float effects)
+    public static void SetPreview(float master, float music, float effects, float noteHit = 1f)
     {
         previewActive = true;
         previewMaster = Mathf.Clamp01(master);
         previewMusic = Mathf.Clamp01(music);
         previewEffects = Mathf.Clamp01(effects);
+        previewNoteHit = Mathf.Clamp01(noteHit);
         if (instance != null) instance.ApplyVolumes();
     }
+
+    /// <summary>ความดังเสียงกดโน้ต (0-1) — คูณซ้อนจากสไลเดอร์ Effects อีกชั้น</summary>
+    public static float NoteHitVolume => previewActive ? previewNoteHit : PlayerPrefs.GetFloat(NoteHitKey, 1f);
 
     public static void ClearPreviewAndApplySaved()
     {

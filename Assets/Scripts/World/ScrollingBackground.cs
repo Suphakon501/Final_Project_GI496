@@ -102,8 +102,15 @@ public class ScrollingBackground : MonoBehaviour
     [SerializeField] private float backlightY = 1.2f;
     [Tooltip("แสงวูบวาบเพิ่มตอนบีต (0 = นิ่ง)")]
     [SerializeField, Range(0f, 0.5f)] private float backlightBeatPulse = 0.12f;
-    [Tooltip("ลำดับการวาดของแสง (ต้องอยู่หลังเลเยอร์ตึก order 1)")]
-    [SerializeField] private int backlightOrder = 0;
+    [Header("Glow Core (จุดสว่างจ้าเพิ่มความเรืองแสง)")]
+    [Tooltip("เพิ่มจุดแสงจ้าเล็ก ๆ ซ้อนกลางแสงหลัก ให้ดูเรืองแสงขึ้น")]
+    [SerializeField] private bool addBacklightCore = true;
+    [Tooltip("ความสว่างของจุดแสงจ้าเทียบกับแสงหลัก")]
+    [SerializeField, Range(0f, 1f)] private float backlightCoreAlpha = 0.85f;
+    [Tooltip("ขนาดจุดแสงจ้าเทียบกับแสงหลัก (1 = เท่ากัน)")]
+    [SerializeField, Range(0.1f, 1.5f)] private float backlightCoreScale = 0.45f;
+    [Tooltip("ผสมสีขาวเข้าจุดแสงจ้า (ยิ่งมากยิ่งจ้า)")]
+    [SerializeField, Range(0f, 1f)] private float backlightCoreWhiten = 0.55f;
 
     [Header("Night Ambience (บรรยากาศกลางคืน)")]
     [Tooltip("ความมืดของ BG (1 = ปกติ, 0.55 = กลางคืน) — ไม่เปลี่ยนสี สีเดิมยังอยู่")]
@@ -112,8 +119,6 @@ public class ScrollingBackground : MonoBehaviour
     [SerializeField] private Color nightVeilColor = new Color(0.02f, 0.03f, 0.09f);
     [Tooltip("ความทึบของม่าน (ยิ่งมากยิ่งมืด)")]
     [SerializeField, Range(0f, 0.7f)] private float nightVeilAlpha = 0.38f;
-    [Tooltip("ลำดับการวาดของม่าน (ให้อยู่ใต้ตัวผู้เล่น/โน้ต เพื่อไม่ให้ตัวละครมืด)")]
-    [SerializeField] private int nightVeilOrder = 2;
     [Tooltip("ขนาดม่านเกินขอบจอเท่าไร (กันขอบโผล่)")]
     [SerializeField, Min(1f)] private float veilMargin = 1.2f;
 
@@ -124,6 +129,10 @@ public class ScrollingBackground : MonoBehaviour
     private float beatStrength = 1f;
     private SpriteRenderer nightVeil;
     private SpriteRenderer backlight;
+    private SpriteRenderer backlightCore;
+    private int skyOrder = -3;
+    private int veilOrder = -2;
+    private int glowOrder = -1;
     private Layer skyLayer;
     private Color backlightNow = Color.white;
     private Color backlightTarget = Color.white;
@@ -138,6 +147,9 @@ public class ScrollingBackground : MonoBehaviour
         if (layers != null && layers.Length > 0) skyLayer = layers[0];
 
         layers = AutoAppendCrowdLayers(layers);
+
+        // ต้องรู้ลำดับก่อนสร้าง tile จะได้วางฟ้าไว้หลังสุด
+        ResolveSortOrders();
 
         foreach (var layer in layers)
             BuildLayer(layer);
@@ -405,7 +417,7 @@ public class ScrollingBackground : MonoBehaviour
         clone.gameObject.SetActive(true);
         clone.name = layer.sprite.name + "_tile" + (++layer.spawnCount);
         clone.transform.position = new Vector3(x, layer.y, layer.z);
-        if (layer == skyLayer) clone.sortingOrder = -1; // ท้องฟ้าอยู่หลังแสงเรือง
+        if (layer == skyLayer) clone.sortingOrder = skyOrder; // ท้องฟ้าอยู่หลังแสงเรือง
         layer.tiles.Add(clone.transform);
         layer.renderers.Add(clone);
     }
@@ -424,7 +436,19 @@ public class ScrollingBackground : MonoBehaviour
         backlight.sprite = CreateGlowSprite(128);
         Material unlit = CreateUnlitSpriteMaterial();
         if (unlit != null) backlight.sharedMaterial = unlit;
-        backlight.sortingOrder = backlightOrder;
+        backlight.sortingOrder = glowOrder;
+
+        // จุดแสงจ้าซ้อนกลางแสงหลัก (อยู่บนแสงหลัก แต่ยังใต้ตึก)
+        if (addBacklightCore)
+        {
+            GameObject coreGo = new GameObject("BacklightCore");
+            coreGo.transform.SetParent(transform, false);
+
+            backlightCore = coreGo.AddComponent<SpriteRenderer>();
+            backlightCore.sprite = backlight.sprite;
+            if (unlit != null) backlightCore.sharedMaterial = unlit;
+            backlightCore.sortingOrder = glowOrder;
+        }
 
         backlightTarget = PickBacklightColor();
         backlightNow = backlightTarget;
@@ -453,12 +477,54 @@ public class ScrollingBackground : MonoBehaviour
         if (beatTimer > 0f && backlightBeatPulse > 0f)
             pulse += backlightBeatPulse * (beatTimer / Mathf.Max(0.05f, beatPulseDuration));
 
+        Vector3 center = new Vector3(cam.transform.position.x, cam.transform.position.y + backlightY, 0f);
+
         Color c = backlightNow;
         c.a = Mathf.Clamp01(backlightAlpha * pulse);
         backlight.color = c;
-
-        backlight.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + backlightY, 0f);
+        backlight.transform.position = center;
         backlight.transform.localScale = new Vector3(backlightWidth, backlightHeight, 1f);
+
+        if (backlightCore == null) return;
+
+        // จุดสว่างจ้า: เล็กกว่า ขาวกว่า และเต้นตามบีตแรงกว่าแสงหลัก
+        float corePulse = 1f;
+        if (beatTimer > 0f)
+            corePulse += (backlightBeatPulse + 0.12f) * (beatTimer / Mathf.Max(0.05f, beatPulseDuration));
+
+        Color coreColor = Color.Lerp(backlightNow, Color.white, backlightCoreWhiten);
+        coreColor.a = Mathf.Clamp01(backlightAlpha * backlightCoreAlpha * corePulse);
+        backlightCore.color = coreColor;
+
+        backlightCore.transform.position = center + new Vector3(0f, -backlightHeight * 0.05f, -0.01f);
+        backlightCore.transform.localScale = new Vector3(
+            backlightWidth * backlightCoreScale,
+            backlightHeight * backlightCoreScale * Mathf.Lerp(1f, 1.2f, pulse - 1f),
+            1f);
+    }
+
+    /// <summary>
+    /// วางลำดับการวาดให้อัตโนมัติจากหลังไปหน้า: ท้องฟ้า → ม่านกลางคืน → แสงเรือง → ตึก
+    /// ทำให้แสงเรืองไม่ถูกม่านกลางคืนคลุมจนมืด
+    /// </summary>
+    void ResolveSortOrders()
+    {
+        int lowest = int.MaxValue;
+
+        if (layers != null)
+        {
+            foreach (var layer in layers)
+            {
+                if (layer == null || layer == skyLayer || layer.sprite == null) continue;
+                lowest = Mathf.Min(lowest, layer.sprite.sortingOrder);
+            }
+        }
+
+        if (lowest == int.MaxValue) lowest = 10;
+
+        skyOrder = lowest - 3;
+        veilOrder = lowest - 2;
+        glowOrder = lowest - 1;
     }
 
     /// <summary>สุ่มสีถัดไป (ไม่ซ้ำสีเดิมติดกัน) ถ้าไม่ได้ใส่ palette ไว้จะใช้ backlightColor เดี่ยว ๆ</summary>
@@ -486,7 +552,7 @@ public class ScrollingBackground : MonoBehaviour
             {
                 float d = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(half, half)) / half;
                 float a = Mathf.Clamp01(1f - d);
-                tex.SetPixel(x, y, new Color(1f, 1f, 1f, a * a * a));
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, Mathf.Pow(a, 1.7f)));
             }
         }
 
@@ -508,7 +574,7 @@ public class ScrollingBackground : MonoBehaviour
         nightVeil.sprite = CreateSolidSprite();
         Material unlit = CreateUnlitSpriteMaterial();
         if (unlit != null) nightVeil.sharedMaterial = unlit;
-        nightVeil.sortingOrder = nightVeilOrder;
+        nightVeil.sortingOrder = veilOrder;
 
         Color c = nightVeilColor;
         c.a = nightVeilAlpha;
