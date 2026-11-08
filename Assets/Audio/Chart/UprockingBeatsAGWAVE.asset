@@ -1,0 +1,1343 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3023949f9a7d947bf8d8f4c357050b, type: 3}
+  m_Name: UprockingBeatsAGWAVE
+  m_EditorClassIdentifier: 
+  music: {fileID: 8300000, guid: ffaa5845f731a964ea817191fa7af726, type: 3}
+  bpm: 133
+  offsetSeconds: 0
+  waveGapBeats: 3
+  notes:
+  - beat: 16
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 18
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 19
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 21
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 24
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 26
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 27
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 29
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 38
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 39
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 40
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 41
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 42
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 43
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 45
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 46
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 48
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 49
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 50
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 52
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 54
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 55
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 56
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 57
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 58
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 59
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 61
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 62
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 62.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 63
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 64
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 65
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 66
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 67
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 69
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 76
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 78
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 79
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 80
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 82
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 84
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 85
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 86
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 87
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 88
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 89
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 91
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 92
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 92.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 93
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 94
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 95
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 96
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 97
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 99
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 100
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 101
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 102
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 103
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 104
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 105
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 107
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 114
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 115
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 116
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 117
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 118
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 119
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 121
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 122
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 122.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 123
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 124
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 125
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 126
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 127
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 129
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 130
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 132
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 133
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 134
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 136
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 138
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 139
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 140
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 141
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 142
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 143
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 145
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 152
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 152.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 153
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 154
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 155
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 156
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 157
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 159
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 160
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 161
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 162
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 163
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 164
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 165
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 167
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 168
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 170
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 171
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 172
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 174
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 176
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 176.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 177
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 178
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 179
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 180
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 181
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 183
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 190
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 192
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 193
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 195
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 198
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 200
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 201
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 203
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 212
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 213
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 214
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 215
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 216
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 217
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 219
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 220
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 222
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 223
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 224
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 226
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 228
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 229
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 230
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 231
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 232
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 233
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 235
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 236
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 236.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 237
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 238
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 239
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 240
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 241
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 243
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 250
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 252
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 253
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 254
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 256
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 258
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 259
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 260
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 261
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 262
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 263
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 265
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 266
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 266.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 267
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 268
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 269
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 270
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 271
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 273
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 274
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 275
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 276
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 277
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 278
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 279
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 281
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 288
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 289
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 290
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 291
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 292
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 293
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 295
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 296
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 296.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 297
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 298
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 299
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 300
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 301
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 303
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 304
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 306
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 307
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 308
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 310
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 312
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 313
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 314
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 315
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 316
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 317
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 319
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 326
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 326.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 327
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 328
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 329
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 330
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 331
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 333
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 334
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 335
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 336
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 337
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 338
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 339
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 341
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 342
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 344
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 345
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 346
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 348
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 350
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 350.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 351
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 352
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 353
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 354
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 355
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 357
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 364
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 366
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 367
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 369
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 372
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 374
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 375
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 377
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 386
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 387
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 388
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 389
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 390
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 391
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 393
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 394
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 396
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 397
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 398
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 400
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 402
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 403
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 404
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 405
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 406
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 407
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 409
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 410
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 410.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 411
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 412
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 413
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 414
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 415
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 417
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 424
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 426
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 427
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 428
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 430
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 432
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 433
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 434
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 435
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 436
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 437
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 439
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 440
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 440.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 441
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 442
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 443
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 444
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 445
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 447
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 448
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 449
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 450
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 451
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 452
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 453
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 455
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 462
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 463
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 464
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 465
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 466
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 467
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 469
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 470
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 470.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 471
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 472
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 473
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 474
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 475
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 477
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 478
+    key: 0
+    row: 0
+    holdBeats: 1
+  - beat: 480
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 481
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 482
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 484
+    key: 2
+    row: 2
+    holdBeats: 1
+  - beat: 486
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 487
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 488
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 489
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 490
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 491
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 493
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 500
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 500.5
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 501
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 502
+    key: 1
+    row: 1
+    holdBeats: 0
+  - beat: 503
+    key: 2
+    row: 2
+    holdBeats: 0
+  - beat: 504
+    key: 0
+    row: 0
+    holdBeats: 0
+  - beat: 505
+    key: 3
+    row: 1
+    holdBeats: 0
+  - beat: 507
+    key: 2
+    row: 2
+    holdBeats: 0
