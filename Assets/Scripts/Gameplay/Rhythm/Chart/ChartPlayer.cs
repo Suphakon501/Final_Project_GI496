@@ -48,6 +48,7 @@ public class ChartPlayer : MonoBehaviour
     private bool finished = false;
     private bool musicStarted = false;
     private float lastPlayingTime;
+    private float progressElapsed;
     private NoteKey? recordingKey;
     private float recordingPressBeat;
     private ChartNote recordingNote;
@@ -90,6 +91,7 @@ public class ChartPlayer : MonoBehaviour
     {
         if (!Active || recordMode || !enabled) return;
 
+        progressElapsed = 0f;
         ReadRowYFromHitline();
 
         var lipid = lipidPrefab != null ? lipidPrefab.GetComponent<LipidMovement>() : null;
@@ -144,8 +146,24 @@ public class ChartPlayer : MonoBehaviour
         }
         float t = beat.songPositionInSeconds;
 
-        if (progressTracker != null && chart.music != null)
-            progressTracker.SetProgress(Mathf.Clamp01((t + chart.offsetSeconds) / chart.music.length));
+        if (progressTracker != null)
+        {
+            // Drive the marker from active gameplay time, then catch up if the
+            // actual clip clock is further ahead. Both clocks pause with timeScale.
+            AudioSource source = beat.musicSource;
+            if (source != null && source.clip != null && source.clip.length > 0f)
+            {
+                progressElapsed += Time.deltaTime;
+
+                float sampleTime = source.timeSamples / (float)source.clip.frequency;
+                progressElapsed = Mathf.Max(progressElapsed, sampleTime);
+                progressTracker.SetProgress(Mathf.Clamp01(progressElapsed / source.clip.length));
+            }
+            else if (chart.music != null && chart.music.length > 0f)
+            {
+                progressTracker.SetProgress(Mathf.Clamp01((t + chart.offsetSeconds) / chart.music.length));
+            }
+        }
 
         if (recordMode)
         {

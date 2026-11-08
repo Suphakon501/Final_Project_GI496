@@ -1,0 +1,394 @@
+fileFormatVersion: 2
+guid: 10c261c5896eb1a4d9969c2bfff5440c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -9108639380513861669
+    second: ReBarHp 1_0
+  - first:
+      213: -1991440196683415489
+    second: ReBarHp 1_1
+  - first:
+      213: -8157979153510734625
+    second: ReBarHp 1_2
+  - first:
+      213: -6843773548723447127
+    second: ReBarHp 1_3
+  - first:
+      213: 1680155085630186922
+    second: ReBarHp 1_4
+  - first:
+      213: 4563959145233164126
+    second: ReBarHp 1_5
+  - first:
+      213: -2231604891140712736
+    second: ReBarHp 1_6
+  - first:
+      213: 1944629343671049161
+    second: ReBarHp 1_7
+  - first:
+      213: -837540455785102750
+    second: ReBarHp 1_8
+  - first:
+      213: 6982114981018525525
+    second: ReBarHp 1_9
+  - first:
+      213: -7613214333737037866
+    second: ReBarHp 1_10
+  - first:
+      213: -2812695695281758377
+    second: ReBarHp 1_11
+  - first:
+      213: -2943027444561098545
+    second: ReBarHp 1_12
+  - first:
+      213: -8051595815183526828
+    second: ReBarHp 1_13
+  - first:
+      213: 4888327765270399829
+    second: ReBarHp 1_14
+  - first:
+      213: -2567064144845474544
+    second: ReBarHp 1_15
+  - first:
+      213: 1647738016612325573
+    second: ReBarHp 1_16
+  - first:
+      213: 8297697335750484782
+    second: ReBarHp 1_17
+  - first:
+      213: 6101353403115464362
+    second: ReBarHp 1_18
+  - first:
+      213: -484484764394936387
+    second: ReBarHp 1_19
+  - first:
+      213: -2428860769444818685
+    second: ReBarHp 1_20
+  - first:
+      213: -9078023816363204336
+    second: ReBarHp 1_21
+  - first:
+      213: -1885143840356329069
+    second: ReBarHp 1_22
+  - first:
+      213: -8413346378422319788
+    second: ReBarHp 1_23
+  - first:
+      213: 2869297589413400723
+    second: ReBarHp 1_24
+  - first:
+      213: -7084763686859522793
+    second: ReBarHp 1_25
+  - first:
+      213: -639415998812707997
+    second: ReBarHp 1_26
+  - first:
+      213: 7457884832650880144
+    second: ReBarHp 1_27
+  - first:
+      213: 5129179840999862084
+    second: ReBarHp 1_28
+  - first:
+      213: -5115820377009827793
+    second: ReBarHp 1_29
+  - first:
+      213: -6562092930685980950
+    second: ReBarHp 1_30
+  - first:
+      213: 6412441262077475265
+    second: ReBarHp 1_31
+  - first:
+      213: 5668564177319713410
+    second: ReBarHp 1_32
+  - first:
+      213: -8670780284673996657
+    second: ReBarHp 1_33
+  - first:
+      213: -3399820312957019985
+    second: ReBarHp 1_34
+  - first:
+      213: 775820884473838278
+    second: ReBarHp 1_35
+  - first:
+      213: 7882556069185164398
+    second: ReBarHp 1_36
+  - first:
+      213: -4712456432765395126
+    second: ReBarHp 1_37
+  - first:
+      213: -5718956864343846784
+    second: ReBarHp 1_38
+  - first:
+      213: 3771083378155096896
+    second: ReBarHp 1_39
+  - first:
+      213: 6965391204107167957
+    second: ReBarHp 1_40
+  - first:
+      213: 3636624800656035808
+    second: ReBarHp 1_41
+  - first:
+      213: 4605542191255781310
+    second: ReBarHp 1_42
+  - first:
+      213: -4432005521544816086
+    second: ReBarHp 1_43
+  - first:
+      213: 1808469282959144388
+    second: ReBarHp 1_44
+  - first:
+      213: 4133590709411464852
+    second: ReBarHp 1_45
+  - first:
+      213: 3320630964886636175
+    second: ReBarHp 1_46
+  - first:
+      213: 3244347751201618774
+    second: ReBarHp 1_47
+  - first:
+      213: 3155240705180889069
+    second: ReBarHp 1_48
+  - first:
+      213: -2206129718793735108
+    second: ReBarHp 1_49
+  - first:
+      213: -4645240736255719781
+    second: ReBarHp 1_50
+  - first:
+      213: 8566539673277302638
+    second: ReBarHp 1_51
+  - first:
+      213: 4373286164146034037
+    second: ReBarHp 1_52
+  - first:
+      213: 4240856605201856995
+    second: ReBarHp 1_53
+  - first:
+      213: -9108070696637992772
+    second: ReBarHp 1_54
+  - first:
+      213: -8591739023007262367
+    second: ReBarHp 1_55
+  - first:
+      213: -1149313709431700348
+    second: ReBarHp 1_56
+  - first:
+      213: -7207040768359044651
+    second: ReBarHp 1_57
+  - first:
+      213: 5725156658032230712
+    second: ReBarHp 1_58
+  - first:
+      213: -1328765924390944422
+    second: ReBarHp 1_59
+  - first:
+      213: -6869159474152369584
+    second: ReBarHp 1_60
+  - first:
+      213: -5204235727146029227
+    second: ReBarHp 1_61
+  - first:
+      213: -58733296893219839
+    second: ReBarHp 1_62
+  - first:
+      213: 2420213787003081907
+    second: ReBarHp 1_63
+  - first:
+      213: -7945666566693609674
+    second: ReBarHp 1_64
+  - first:
+      213: 3640719075488809046
+    second: ReBarHp 1_65
+  - first:
+      213: -8836758331982231642
+    second: ReBarHp 1_66
+  - first:
+      213: -3018565233222514153
+    second: ReBarHp 1_67
+  - first:
+      213: -3751210767032816740
+    second: ReBarHp 1_68
+  - first:
+      213: 4127628400052075330
+    second: ReBarHp 1_69
+  - first:
+      213: 5454561016141819875
+    second: ReBarHp 1_70
+  - first:
+      213: -1628999757822886186
+    second: ReBarHp 1_71
+  - first:
+      213: -3180764859794436656
+    second: ReBarHp 1_72
+  - first:
+      213: -7477820312724276746
+    second: ReBarHp 1_73
+  - first:
+      213: 2734659612450643299
+    second: ReBarHp 1_74
+  - first:
+      213: -8070285594233316852
+    second: ReBarHp 1_75
+  - first:
+      213: -4767906120040169368
+    second: ReBarHp 1_76
+  - first:
+      213: -7844456032323440411
+    second: ReBarHp 1_77
+  - first:
+      213: 6861336689490395305
+    second: ReBarHp 1_78
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ReBarHp 1_0
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 1716
+        width: 5617
+        height: 748
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdf46593ebc979180800000000000000
+      internalID: -9108639380513861669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 480bf4691fe2d88499eeaa3558ed971b
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ReBarHp 1_0: -9108639380513861669
+      ReBarHp 1_1: -1991440196683415489
+      ReBarHp 1_10: -7613214333737037866
+      ReBarHp 1_11: -2812695695281758377
+      ReBarHp 1_12: -2943027444561098545
+      ReBarHp 1_13: -8051595815183526828
+      ReBarHp 1_14: 4888327765270399829
+      ReBarHp 1_15: -2567064144845474544
+      ReBarHp 1_16: 1647738016612325573
+      ReBarHp 1_17: 8297697335750484782
+      ReBarHp 1_2: -8157979153510734625
+      ReBarHp 1_3: -6843773548723447127
+      ReBarHp 1_4: 1680155085630186922
+      ReBarHp 1_5: 4563959145233164126
+      ReBarHp 1_6: -2231604891140712736
+      ReBarHp 1_7: 1944629343671049161
+      ReBarHp 1_8: -837540455785102750
+      ReBarHp 1_9: 6982114981018525525
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
