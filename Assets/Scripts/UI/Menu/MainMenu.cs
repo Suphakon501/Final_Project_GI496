@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour
 
     [Header("Scene Names")]
     [SerializeField] private string menuScene = "MainMenu";
-    [SerializeField] private string level1Scene = "Level1";
+    [SerializeField] private string level1Scene = "Cradle";
 
     private static bool openLevelSelectOnStart;
     private Animator levelPanelAnimator;
@@ -227,7 +227,7 @@ public class MainMenu : MonoBehaviour
     public void OnBackClicked() => ShowMainPanel();
     public void LoadSongScene(string sceneName)
     {
-        if (sceneName == level1Scene || sceneName == "Level1")
+        if (sceneName == level1Scene || sceneName == "Level1" || sceneName == "Cradle")
             LoadSongScene(sceneName, "Sub Urban - Cradles", "NORMAL");
         else if (sceneName == "Level1.1")
             LoadSongScene(sceneName, "Red VS White", "EASY");

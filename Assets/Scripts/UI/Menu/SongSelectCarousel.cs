@@ -16,7 +16,7 @@ public class SongSelectCarousel : MonoBehaviour
     [SerializeField] private ScrollRect songScrollRect;
 
     [Header("Scene to load for each button. Leave blank for Coming Soon entries.")]
-    [SerializeField] private string[] sceneNames = { "Level1", "Level1.1", "" };
+    [SerializeField] private string[] sceneNames = { "Cradle", "Level1.1", "" };
 
     [Header("Result labels for each song button")]
     [SerializeField] private string[] songNames = { "Sub Urban - Cradles", "Red VS White", "Coming Soon..." };

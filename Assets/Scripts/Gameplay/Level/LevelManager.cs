@@ -69,6 +69,7 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        TVPowerTransition.PlayOpen();
         if (progressTracker == null) progressTracker = FindFirstObjectByType<ProgressTracker>();
         if (progressTracker != null) progressTracker.SetExternalControl();
 
@@ -107,7 +108,12 @@ public class LevelManager : MonoBehaviour
         if (state == State.Finished) return;
         if (chartPlayer != null)
         {
-            if (state == State.WaitingForLastEnemy) StartBossPhase();
+            if (state == State.WaitingForLastEnemy
+                && LipidMovement.Active.Count == 0 && MiniLipid.Active.Count == 0)
+            {
+                if (progressTracker != null) progressTracker.SetProgress(1f);
+                Finish(true);
+            }
             return;
         }
 
@@ -225,7 +231,7 @@ public class LevelManager : MonoBehaviour
         if (!clear && music != null) music.Stop();
 
         SaveResult();
-        Invoke(nameof(LoadResultScene), delayBeforeLoad);
+        StartCoroutine(LoadResultSceneAfterTransition());
     }
 
     void SaveResult()
@@ -260,8 +266,10 @@ public class LevelManager : MonoBehaviour
         HasResult = true;
     }
 
-    void LoadResultScene()
+    System.Collections.IEnumerator LoadResultSceneAfterTransition()
     {
-        SceneTransition.Load(cleared ? victoryScene : gameOverScene);
+        yield return new WaitForSecondsRealtime(delayBeforeLoad);
+        yield return TVPowerTransition.Close();
+        SceneTransition.Load(cleared ? victoryScene : gameOverScene, 0f, 0f);
     }
 }

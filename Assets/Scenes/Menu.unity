@@ -5541,7 +5541,7 @@ MonoBehaviour:
   settingsNavigation: {fileID: 0}
   settingsBackdropAlpha: 1
   menuScene: MainMenu
-  level1Scene: Level1
+  level1Scene: Cradle
 --- !u!224 &1573329469
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6395,7 +6395,7 @@ MonoBehaviour:
   - {fileID: 346615525}
   songScrollRect: {fileID: 0}
   sceneNames:
-  - Level1
+  - Cradle
   - Level1.1
   - 
   songNames:

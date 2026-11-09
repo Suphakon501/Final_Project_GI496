@@ -37,7 +37,7 @@ public class ResultScreen : MonoBehaviour
 
     [Header("Scene")]
     [SerializeField] private string menuScene = "Menu";
-    [SerializeField] private string fallbackLevelScene = "Level1";
+    [SerializeField] private string fallbackLevelScene = "Cradle";
 
     [Header("Keyboard Navigation")]
     [SerializeField] private Button restartButton;
@@ -45,6 +45,7 @@ public class ResultScreen : MonoBehaviour
 
     void Start()
     {
+        TVPowerTransition.PlayOpen();
         Time.timeScale = 1f;
         var r = LevelManager.LastResult;
 

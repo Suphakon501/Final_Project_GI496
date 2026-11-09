@@ -5248,7 +5248,7 @@ MonoBehaviour:
   mainPanel: {fileID: 0}
   levelPanel: {fileID: 0}
   menuScene: Menu
-  level1Scene: Level1
+  level1Scene: Cradle
   level2Scene: Level2
   level3Scene: Level3
 --- !u!4 &1716451134

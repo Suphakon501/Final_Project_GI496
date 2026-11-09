@@ -676,7 +676,7 @@ MonoBehaviour:
   kcalText: {fileID: 1122673587}
   scorePointsPerKcal: 3000
   menuScene: Menu
-  fallbackLevelScene: Level1
+  fallbackLevelScene: Cradle
   restartKey: 114
   menuKey: 27
 --- !u!4 &473825281

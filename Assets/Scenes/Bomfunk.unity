@@ -5385,7 +5385,7 @@ MonoBehaviour:
   settingsNavigation: {fileID: 0}
   settingsBackdropAlpha: 0.58
   menuScene: Menu
-  level1Scene: Level1
+  level1Scene: Cradle
 --- !u!4 &1716451134
 Transform:
   m_ObjectHideFlags: 0

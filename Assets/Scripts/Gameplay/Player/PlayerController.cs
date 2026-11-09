@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteNumber comboNumber;
     [SerializeField] private GameObject comboRoot;
     [SerializeField] private int minComboToShow = 2;
+    [SerializeField, Min(0f)] private float comboIdleDelay = 2f;
+    [SerializeField, Min(0.01f)] private float comboFadeDuration = 0.6f;
     public int combo { get; private set; }
     public int maxCombo { get; private set; }
 
@@ -152,6 +154,8 @@ public class PlayerController : MonoBehaviour
     private float preQTEAnimatorSpeed = 1f;
     private bool qteReadyPoseActive;
     private bool warnedMissingCombo = false;
+    private CanvasGroup comboCanvasGroup;
+    private float comboIdleTime;
     private class ActiveHoldNote
     {
         public MiniLipid note;
@@ -186,6 +190,12 @@ public class PlayerController : MonoBehaviour
     {
         instance = this;
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        GameObject comboUI = comboRoot != null ? comboRoot : comboNumber != null ? comboNumber.gameObject : null;
+        if (comboUI != null)
+        {
+            comboCanvasGroup = comboUI.GetComponent<CanvasGroup>();
+            if (comboCanvasGroup == null) comboCanvasGroup = comboUI.AddComponent<CanvasGroup>();
+        }
         if (jumpVfxPrefab == null) jumpVfxPrefab = Resources.Load<GameObject>("Vfx/JumpWind");
         CacheDirectionArrows();
         CreateComboTintOverlay();
@@ -233,6 +243,7 @@ public class PlayerController : MonoBehaviour
         UpdateGradeOverlay();
         UpdateDirectionArrowFeedback();
         UpdateComboScreenTint();
+        UpdateComboVisibility();
 
         if (isGameOver || BossMashManager.IsMashActive) return;
 
@@ -243,6 +254,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(key))
             {
                 KeyCode normalizedKey = NormalizeKey(key);
+                RevealComboUI();
                 FlashDirectionArrow(normalizedKey);
                 CancelInvoke(nameof(ReturnHome));
                 if (isAwayFromHome) ReturnHome();
@@ -323,7 +335,12 @@ public class PlayerController : MonoBehaviour
         if (root == null) return;
 
         root.SetActive(visible);
-        if (visible && comboNumber != null) comboNumber.SetValue(combo);
+        if (comboCanvasGroup != null) comboCanvasGroup.alpha = visible ? 1f : 0f;
+        if (visible)
+        {
+            comboIdleTime = 0f;
+            if (comboNumber != null) comboNumber.SetValue(combo);
+        }
     }
 
     public void RefreshComboUI() => UpdateComboUI();
@@ -541,6 +558,8 @@ public class PlayerController : MonoBehaviour
                 activeHolds.RemoveAt(i);
                 continue;
             }
+
+            if (note.IsHoldButtonStillDown) comboIdleTime = 0f;
 
             int holdTicksNow = note.HoldTickCount;
             if (holdTicksNow > hold.ticksAwarded)
@@ -819,6 +838,7 @@ public class PlayerController : MonoBehaviour
     {
         combo++;
         if (combo > maxCombo) maxCombo = combo;
+        comboIdleTime = 0f;
         if (combo == 50) QueueSoundEvent(fullComboSoundEvent);
         UpdateComboUI();
     }
@@ -877,7 +897,32 @@ public class PlayerController : MonoBehaviour
 
         GameObject root = comboRoot != null ? comboRoot : (comboNumber != null ? comboNumber.gameObject : null);
         if (root != null && root.activeSelf != show) root.SetActive(show);
+        if (comboCanvasGroup != null) comboCanvasGroup.alpha = show ? 1f : 0f;
         if (show && comboNumber != null) comboNumber.SetValue(combo);
+    }
+
+    void UpdateComboVisibility()
+    {
+        if (combo < minComboToShow || comboCanvasGroup == null || BossMashManager.IsMashActive) return;
+
+        comboIdleTime += Time.deltaTime;
+        float fadeProgress = Mathf.Clamp01((comboIdleTime - comboIdleDelay) / comboFadeDuration);
+        comboCanvasGroup.alpha = 1f - Mathf.SmoothStep(0f, 1f, fadeProgress);
+        if (fadeProgress >= 1f)
+        {
+            GameObject root = comboRoot != null ? comboRoot : comboNumber.gameObject;
+            root.SetActive(false);
+        }
+    }
+
+    void RevealComboUI()
+    {
+        if (combo < minComboToShow) return;
+
+        comboIdleTime = 0f;
+        GameObject root = comboRoot != null ? comboRoot : comboNumber.gameObject;
+        root.SetActive(true);
+        if (comboCanvasGroup != null) comboCanvasGroup.alpha = 1f;
     }
 
     void ShowFeedbackSprite(Sprite sprite)
