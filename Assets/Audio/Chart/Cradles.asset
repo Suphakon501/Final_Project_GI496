@@ -1057,3 +1057,6 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
+  qteEvents:
+  - beat: 6.5
+    durationSeconds: 10

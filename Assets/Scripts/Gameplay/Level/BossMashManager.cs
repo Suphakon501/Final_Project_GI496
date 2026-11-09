@@ -15,6 +15,12 @@ public class BossMashManager : MonoBehaviour
     [SerializeField] private float playerMoveSpeed = 30f;
     [SerializeField] private float yOffset;
     [SerializeField] private float moveSpeed = 50f;
+    [Header("QTE Camera Transition")]
+    [SerializeField, Min(0.05f)] private float playerFocusDuration = 0.45f;
+    [SerializeField, Min(0.05f)] private float enemyFocusDuration = 0.45f;
+    [SerializeField, Min(0.05f)] private float faceoffDuration = 0.7f;
+    [SerializeField, Min(0.1f)] private float closeupCameraSize = 2.7f;
+    [SerializeField, Min(0.1f)] private float faceoffCameraSize = 4f;
     [SerializeField, Min(0.1f)] private float qteBossScaleMultiplier = 0.85f;
     [SerializeField] private int qteBossSortingOrder = 20;
     [SerializeField, Min(0.05f)] private float qteRevealDuration = 0.8f;
@@ -30,7 +36,7 @@ public class BossMashManager : MonoBehaviour
 
     [Header("Mash Feedback")]
     [SerializeField] private GameObject bossHitEffectPrefab;
-    [SerializeField, Min(0.1f)] private float bossHitEffectScale = 4f;
+    [SerializeField, Min(0.1f)] private float bossHitEffectScale = 2.5f;
     [SerializeField] private Image keyFeedbackBackground;
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private Color hitColor = Color.yellow;
@@ -40,6 +46,17 @@ public class BossMashManager : MonoBehaviour
     private bool isExitingMash;
     private bool isBossMovingIn;
     private bool finishLevelOnEnd;
+    private bool qteIntroComplete;
+    private float qteIntroElapsed;
+    private Camera qteCamera;
+    private Vector3 cameraStartPosition;
+    private float cameraStartSize;
+    private CameraImpact cameraImpact;
+    private LowHealthCameraShake lowHealthCameraShake;
+    private bool cameraImpactWasEnabled;
+    private bool lowHealthCameraShakeWasEnabled;
+    private Vector3 cameraExitStartPosition;
+    private float cameraExitStartSize;
     private float remainingSeconds;
     private float flashTimer;
     private GameObject currentBossInstance;
@@ -72,6 +89,7 @@ public class BossMashManager : MonoBehaviour
 
     void OnDestroy()
     {
+        RestoreQTECamera();
         if (instance == this) instance = null;
     }
 
@@ -90,6 +108,8 @@ public class BossMashManager : MonoBehaviour
         finishLevelOnEnd = finishLevel;
         remainingSeconds = Mathf.Max(0.1f, duration);
         isBossMovingIn = true;
+        qteIntroComplete = false;
+        qteIntroElapsed = 0f;
         flashTimer = 0f;
 
         if (PlayerController.instance != null) PlayerController.instance.SetQTEComboVisible(true);
@@ -109,6 +129,15 @@ public class BossMashManager : MonoBehaviour
         Camera gameCamera = Camera.main;
         if (gameCamera != null)
         {
+            qteCamera = gameCamera;
+            cameraStartPosition = qteCamera.transform.position;
+            cameraStartSize = qteCamera.orthographicSize;
+            cameraImpact = qteCamera.GetComponent<CameraImpact>();
+            lowHealthCameraShake = qteCamera.GetComponent<LowHealthCameraShake>();
+            cameraImpactWasEnabled = cameraImpact != null && cameraImpact.enabled;
+            lowHealthCameraShakeWasEnabled = lowHealthCameraShake != null && lowHealthCameraShake.enabled;
+            if (cameraImpact != null) cameraImpact.enabled = false;
+            if (lowHealthCameraShake != null) lowHealthCameraShake.enabled = false;
             float depth = Mathf.Abs(playerStartPosition.z - gameCamera.transform.position.z);
             centerX = gameCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, depth)).x;
         }
@@ -157,11 +186,18 @@ public class BossMashManager : MonoBehaviour
 
         UpdateQTEReveal();
 
-        if (qtePlayer != null)
-            qtePlayer.position = Vector3.MoveTowards(qtePlayer.position, playerTargetPosition, playerMoveSpeed * Time.deltaTime);
-
-        UpdateBossMovement();
+        UpdateQTECameraIntro();
+        if (qteIntroComplete)
+        {
+            if (qtePlayer != null)
+                qtePlayer.position = Vector3.MoveTowards(qtePlayer.position, playerTargetPosition, playerMoveSpeed * Time.unscaledDeltaTime);
+            UpdateBossMovement();
+        }
         EnsureQTEBossVisible();
+        UpdateBossImpact();
+
+        // Let the camera finish its player -> enemy -> faceoff sequence before accepting mash input or counting QTE time.
+        if (!qteIntroComplete) return;
 
         if (!PlayerController.isGameOver && Input.GetKeyDown(KeyCode.Space))
         {
@@ -171,8 +207,6 @@ public class BossMashManager : MonoBehaviour
             SpawnBossHitEffect();
             if (PlayerController.instance != null) PlayerController.instance.RegisterQTEHit(scorePerPress);
         }
-
-        UpdateBossImpact();
 
         if (flashTimer > 0f)
         {
@@ -188,6 +222,11 @@ public class BossMashManager : MonoBehaviour
             {
                 isExitingMash = true;
                 qteRevealElapsed = 0f;
+                if (qteCamera != null)
+                {
+                    cameraExitStartPosition = qteCamera.transform.position;
+                    cameraExitStartSize = qteCamera.orthographicSize;
+                }
             }
         }
     }
@@ -204,6 +243,80 @@ public class BossMashManager : MonoBehaviour
 
         bossBasePosition = Vector3.MoveTowards(bossBasePosition, bossTargetPosition, moveSpeed * Time.deltaTime);
         if (Vector3.Distance(bossBasePosition, bossTargetPosition) < 0.01f) isBossMovingIn = false;
+    }
+
+    void UpdateQTECameraIntro()
+    {
+        if (qteIntroComplete)
+        {
+            if (qteCamera != null)
+            {
+                Vector3 target = playerTargetPosition + (bossTargetPosition - playerTargetPosition) * 0.5f;
+                qteCamera.transform.position = Vector3.Lerp(qteCamera.transform.position, target + Vector3.forward * (cameraStartPosition.z - target.z), 1f - Mathf.Exp(-10f * Time.unscaledDeltaTime));
+                qteCamera.orthographicSize = Mathf.Lerp(qteCamera.orthographicSize, Mathf.Min(cameraStartSize, faceoffCameraSize), 1f - Mathf.Exp(-10f * Time.unscaledDeltaTime));
+            }
+            return;
+        }
+
+        qteIntroElapsed += Time.unscaledDeltaTime;
+        float playerEnd = Mathf.Max(0.05f, playerFocusDuration);
+        float enemyEnd = playerEnd + Mathf.Max(0.05f, enemyFocusDuration);
+        float introEnd = enemyEnd + Mathf.Max(0.05f, faceoffDuration);
+        if (qteCamera != null)
+        {
+            Vector3 playerFocus = GetFocusPoint(qtePlayer, playerTargetPosition);
+            Vector3 enemyFocus = GetFocusPoint(currentBossInstance != null ? currentBossInstance.transform : null, bossTargetPosition);
+            float closeSize = Mathf.Min(cameraStartSize, closeupCameraSize);
+            if (qteIntroElapsed < playerEnd)
+            {
+                float t = SmoothStep(qteIntroElapsed / playerEnd);
+                qteCamera.transform.position = Vector3.Lerp(cameraStartPosition, playerFocus, t);
+                qteCamera.orthographicSize = Mathf.Lerp(cameraStartSize, closeSize, t);
+            }
+            else if (qteIntroElapsed < enemyEnd)
+            {
+                float t = SmoothStep((qteIntroElapsed - playerEnd) / (enemyEnd - playerEnd));
+                qteCamera.transform.position = Vector3.Lerp(playerFocus, enemyFocus, t);
+                qteCamera.orthographicSize = closeSize;
+            }
+            else
+            {
+                float t = SmoothStep((qteIntroElapsed - enemyEnd) / (introEnd - enemyEnd));
+                Vector3 meetingPoint = (playerTargetPosition + bossTargetPosition) * 0.5f;
+                meetingPoint.z = cameraStartPosition.z;
+                qteCamera.transform.position = Vector3.Lerp(enemyFocus, meetingPoint, t);
+                qteCamera.orthographicSize = Mathf.Lerp(closeSize, Mathf.Min(cameraStartSize, faceoffCameraSize), t);
+
+                if (qtePlayer != null)
+                    qtePlayer.position = Vector3.MoveTowards(qtePlayer.position, playerTargetPosition, playerMoveSpeed * Time.unscaledDeltaTime);
+                UpdateBossMovement();
+            }
+        }
+        else
+        {
+            // Still stage the two characters together when no active camera is available.
+            if (qteIntroElapsed >= enemyEnd)
+            {
+                if (qtePlayer != null)
+                    qtePlayer.position = Vector3.MoveTowards(qtePlayer.position, playerTargetPosition, playerMoveSpeed * Time.unscaledDeltaTime);
+                UpdateBossMovement();
+            }
+        }
+
+        if (qteIntroElapsed >= introEnd) qteIntroComplete = true;
+    }
+
+    static Vector3 GetFocusPoint(Transform target, Vector3 fallback)
+    {
+        if (target != null && TryGetSpriteBounds(target, out Bounds bounds))
+            return new Vector3(bounds.center.x, bounds.center.y, Camera.main != null ? Camera.main.transform.position.z : target.position.z);
+        return fallback;
+    }
+
+    static float SmoothStep(float value)
+    {
+        value = Mathf.Clamp01(value);
+        return value * value * (3f - 2f * value);
     }
 
     void TriggerBossImpact()
@@ -263,6 +376,7 @@ public class BossMashManager : MonoBehaviour
         qteRevealMaterial = new Material(shader);
         qteRevealMaterial.SetFloat("_Radius", qteRevealStartRadius);
         qteRevealMaterial.SetFloat("_Edge", 0.04f);
+        qteRevealMaterial.SetFloat("_SpeedLineIntensity", 1f);
         overlay.material = qteRevealMaterial;
         qteRevealElapsed = 0f;
     }
@@ -274,6 +388,7 @@ public class BossMashManager : MonoBehaviour
         qteRevealElapsed += Time.unscaledDeltaTime;
         float progress = Mathf.Clamp01(qteRevealElapsed / qteRevealDuration);
         qteRevealMaterial.SetFloat("_Radius", Mathf.Lerp(qteRevealStartRadius, qteRevealRadius, progress));
+        qteRevealMaterial.SetFloat("_SpeedLineTime", Time.unscaledTime);
     }
 
     void UpdateQTEExit()
@@ -281,9 +396,18 @@ public class BossMashManager : MonoBehaviour
         qteRevealElapsed += Time.unscaledDeltaTime;
         float progress = Mathf.Clamp01(qteRevealElapsed / qteExitDuration);
         if (qteRevealMaterial != null)
+        {
             qteRevealMaterial.SetFloat("_Radius", Mathf.Lerp(qteRevealRadius, 1.2f, progress));
+            qteRevealMaterial.SetFloat("_SpeedLineIntensity", 1f - SmoothStep(progress));
+            qteRevealMaterial.SetFloat("_SpeedLineTime", Time.unscaledTime);
+        }
         if (qtePlayer != null)
             qtePlayer.position = Vector3.MoveTowards(qtePlayer.position, playerStartPosition, playerMoveSpeed * Time.unscaledDeltaTime);
+        if (qteCamera != null)
+        {
+            qteCamera.transform.position = Vector3.Lerp(cameraExitStartPosition, cameraStartPosition, SmoothStep(progress));
+            qteCamera.orthographicSize = Mathf.Lerp(cameraExitStartSize, cameraStartSize, SmoothStep(progress));
+        }
         UpdateBossImpact();
         if (progress >= 1f) EndMash();
     }
@@ -470,6 +594,7 @@ public class BossMashManager : MonoBehaviour
         qtePlayerSprites = null;
         playerSortingOrders = null;
         EndQTEReveal();
+        RestoreQTECamera();
         if (currentBossInstance != null) Destroy(currentBossInstance);
         currentBossInstance = null;
         RestoreGameplayUIAndEnemies();
@@ -477,5 +602,19 @@ public class BossMashManager : MonoBehaviour
 
         if (finishLevelOnEnd && LevelManager.instance != null)
             LevelManager.instance.FinishBossPhase();
+    }
+
+    void RestoreQTECamera()
+    {
+        if (qteCamera != null)
+        {
+            qteCamera.transform.position = cameraStartPosition;
+            qteCamera.orthographicSize = cameraStartSize;
+        }
+        if (cameraImpact != null) cameraImpact.enabled = cameraImpactWasEnabled;
+        if (lowHealthCameraShake != null) lowHealthCameraShake.enabled = lowHealthCameraShakeWasEnabled;
+        qteCamera = null;
+        cameraImpact = null;
+        lowHealthCameraShake = null;
     }
 }

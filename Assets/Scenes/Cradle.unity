@@ -838,6 +838,13 @@ MonoBehaviour:
   audioSource: {fileID: 197997224}
   hitSound: {fileID: 0}
   soundEffectVolume: 0.45
+  perfectSoundEvent: {fileID: 8300000, guid: 128c900062264004f8ebc70997f05260, type: 3}
+  fullComboSoundEvent: {fileID: 8300000, guid: 8d500b97b025a8d48bae14309d71365e, type: 3}
+  goodJobSoundEvent: {fileID: 8300000, guid: f670506829b5cf14fa037ab4354b25ed, type: 3}
+  tryAgainSoundEvent: {fileID: 8300000, guid: fc512f09b150ba74a81027e7b54621e2, type: 3}
+  soundEventMusicVolume: 0.25
+  soundEventDuckFade: 0.15
+  soundEventRestoreFade: 0.25
   arrowPressScale: 1.18
   arrowFlashBrightness: 1.8
   arrowFlashDuration: 0.18
@@ -4359,7 +4366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossPrefab: {fileID: 2579650259631024252, guid: f1e9ceb848d9cda40b16f86b3d5fd5f0, type: 3}
-  spawnDistance: 1.5
+  spawnDistance: 4
   qtePlayerOffset: 1.5
   qteEnemyOffset: 1.5
   playerMoveSpeed: 30
@@ -4376,7 +4383,7 @@ MonoBehaviour:
   bossTiltDegrees: 8
   bossSquashAmount: 0.12
   bossHitEffectPrefab: {fileID: 6420530290822883872, guid: 71e5ecc676fe5cd44b873ac3efdaa041, type: 3}
-  bossHitEffectScale: 4
+  bossHitEffectScale: 2.5
   keyFeedbackBackground: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hitColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

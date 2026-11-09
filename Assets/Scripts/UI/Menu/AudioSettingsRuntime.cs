@@ -17,6 +17,7 @@ public class AudioSettingsRuntime : MonoBehaviour
     private static float previewMusic = 1f;
     private static float previewEffects = 1f;
     private static float previewNoteHit = 1f;
+    private static float musicDuck = 1f;
 
     private readonly Dictionary<AudioSource, float> baseVolumes = new Dictionary<AudioSource, float>();
     private readonly List<AudioSource> destroyedSources = new List<AudioSource>();
@@ -27,7 +28,7 @@ public class AudioSettingsRuntime : MonoBehaviour
     {
         instance = null;
         previewActive = false;
-        previewMaster = previewMusic = previewEffects = previewNoteHit = 1f;
+        previewMaster = previewMusic = previewEffects = previewNoteHit = musicDuck = 1f;
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -79,6 +80,12 @@ public class AudioSettingsRuntime : MonoBehaviour
     /// <summary>ความดังเสียงกดโน้ต (0-1) — คูณซ้อนจากสไลเดอร์ Effects อีกชั้น</summary>
     public static float NoteHitVolume => previewActive ? previewNoteHit : PlayerPrefs.GetFloat(NoteHitKey, 1f);
 
+    public static void SetMusicDuck(float amount)
+    {
+        musicDuck = Mathf.Clamp01(amount);
+        if (instance != null) instance.ApplyVolumes();
+    }
+
     public static void ClearPreviewAndApplySaved()
     {
         previewActive = false;
@@ -118,7 +125,7 @@ public class AudioSettingsRuntime : MonoBehaviour
             bool isMusic = (BeatManager.instance != null && source == BeatManager.instance.musicSource)
                 || sourceName.Contains("music")
                 || sourceName.Contains("bgm");
-            source.volume = baseVolumes[source] * (isMusic ? music : effects);
+            source.volume = baseVolumes[source] * (isMusic ? music * musicDuck : effects);
         }
     }
 }

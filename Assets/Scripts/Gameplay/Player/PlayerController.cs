@@ -105,6 +105,15 @@ public class PlayerController : MonoBehaviour
     [Tooltip("ความดังของเสียงเอฟเฟกต์กดโน้ต (เทียบกับระดับเสียงของ AudioSource) — ลดไว้ไม่ให้กลบเพลง")]
     [SerializeField, Range(0f, 1f)] private float soundEffectVolume = 0.45f;
 
+    [Header("Sound Events")]
+    [SerializeField] private AudioClip perfectSoundEvent;
+    [SerializeField] private AudioClip fullComboSoundEvent;
+    [SerializeField] private AudioClip goodJobSoundEvent;
+    [SerializeField] private AudioClip tryAgainSoundEvent;
+    [SerializeField, Range(0f, 1f)] private float soundEventMusicVolume = 0.25f;
+    [SerializeField, Min(0f)] private float soundEventDuckFade = 0.15f;
+    [SerializeField, Min(0f)] private float soundEventRestoreFade = 0.25f;
+
     [Header("Directional Arrow Press Feedback")]
     [SerializeField] private float arrowPressScale = 1.18f;
     [SerializeField] private float arrowFlashBrightness = 1.8f;
@@ -136,6 +145,10 @@ public class PlayerController : MonoBehaviour
     private int missStreak = 0;
     private int activeWaves = 0;
     private int currentPerfectStreak = 0;
+    private int soundEventPerfectStreak;
+    private readonly Queue<AudioClip> pendingSoundEvents = new Queue<AudioClip>();
+    private Coroutine soundEventRoutine;
+    private float currentSoundEventMusicDuck = 1f;
     private bool warnedMissingCombo = false;
     private class ActiveHoldNote
     {
@@ -177,6 +190,11 @@ public class PlayerController : MonoBehaviour
         CreateGradeOverlay();
     }
 
+    void OnDestroy()
+    {
+        AudioSettingsRuntime.SetMusicDuck(1f);
+    }
+
     void Start()
     {
         homePosition = transform.position;
@@ -189,6 +207,9 @@ public class PlayerController : MonoBehaviour
         goodCount = 0;
         badCount = 0;
         missCount = 0;
+        soundEventPerfectStreak = 0;
+        currentSoundEventMusicDuck = 1f;
+        AudioSettingsRuntime.SetMusicDuck(1f);
 
         // ถ้าใช้ SpriteNumber ให้มันเด้งด้วยระบบ pop ของมันเอง (ไม่ให้แย่งกันเขียน scale)
         if (scoreNumber == null)
@@ -546,6 +567,8 @@ public class PlayerController : MonoBehaviour
         {
             case HitResult.Perfect:
                 perfectCount++;
+                soundEventPerfectStreak++;
+                if (soundEventPerfectStreak == 15) QueueSoundEvent(perfectSoundEvent);
                 score += PerfectScore;
                 ChangeHealth(hpPerfect);
                 currentPerfectStreak++;
@@ -555,6 +578,8 @@ public class PlayerController : MonoBehaviour
 
             case HitResult.Good:
                 goodCount++;
+                soundEventPerfectStreak = 0;
+                if (goodCount == 10) QueueSoundEvent(goodJobSoundEvent);
                 score += GoodScore;
                 ChangeHealth(hpGood);
                 currentPerfectStreak = 0;
@@ -564,6 +589,8 @@ public class PlayerController : MonoBehaviour
 
             default:
                 badCount++;
+                soundEventPerfectStreak = 0;
+                if (badCount == 6) QueueSoundEvent(tryAgainSoundEvent);
                 score += BadScore;
                 ChangeHealth(-badDamage);
                 PlayAnimation(hitAnimName);
@@ -579,6 +606,7 @@ public class PlayerController : MonoBehaviour
     void OnNoteMissed(KeyCode missedKey = KeyCode.None)
     {
         missCount++;
+        soundEventPerfectStreak = 0;
         CancelDirectionalMove();
         currentPerfectStreak = 0;
         BreakCombo();
@@ -767,7 +795,45 @@ public class PlayerController : MonoBehaviour
     {
         combo++;
         if (combo > maxCombo) maxCombo = combo;
+        if (combo == 50) QueueSoundEvent(fullComboSoundEvent);
         UpdateComboUI();
+    }
+
+    void QueueSoundEvent(AudioClip clip)
+    {
+        if (clip == null) return;
+        pendingSoundEvents.Enqueue(clip);
+        if (soundEventRoutine == null) soundEventRoutine = StartCoroutine(PlaySoundEventQueue());
+    }
+
+    IEnumerator PlaySoundEventQueue()
+    {
+        while (pendingSoundEvents.Count > 0)
+        {
+            AudioClip clip = pendingSoundEvents.Dequeue();
+            yield return FadeSoundEventMusic(soundEventMusicVolume, soundEventDuckFade);
+            AudioSettingsRuntime.PlayEffect(clip);
+            yield return new WaitForSecondsRealtime(clip.length);
+        }
+
+        yield return FadeSoundEventMusic(1f, soundEventRestoreFade);
+        soundEventRoutine = null;
+    }
+
+    IEnumerator FadeSoundEventMusic(float target, float duration)
+    {
+        float start = currentSoundEventMusicDuck;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            currentSoundEventMusicDuck = Mathf.Lerp(start, target, Mathf.Clamp01(elapsed / duration));
+            AudioSettingsRuntime.SetMusicDuck(currentSoundEventMusicDuck);
+            yield return null;
+        }
+
+        currentSoundEventMusicDuck = target;
+        AudioSettingsRuntime.SetMusicDuck(target);
     }
 
     void BreakCombo()
