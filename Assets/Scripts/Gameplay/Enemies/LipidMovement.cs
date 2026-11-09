@@ -23,6 +23,11 @@ public class LipidMovement : MonoBehaviour
     public GameObject miniLipidPrefab;
     [SerializeField] private float spawnInterval = 0.4f;
 
+    [Header("Death Burst")]
+    [SerializeField, Min(4)] private int burstPieceCount = 10;
+    [SerializeField, Min(0.05f)] private float burstLifetime = 0.8f;
+    [SerializeField, Min(0f)] private float burstSpeed = 6f;
+
     [Header("Beat Sync")]
     [SerializeField] private bool syncToBeat = true;
     [SerializeField] private float beatsBetweenNotes = 1f;
@@ -169,8 +174,93 @@ public class LipidMovement : MonoBehaviour
         {
             waveEnded = true;
             if (PlayerController.instance != null) PlayerController.instance.OnWaveEnd(hadMiss);
-            Destroy(gameObject);
+            StartCoroutine(DeathBurst());
         }
+    }
+
+    IEnumerator DeathBurst()
+    {
+        // Briefly swell, then collapse the parent before releasing visual-only pieces.
+        Vector3 originalScale = transform.localScale;
+        float pulseDuration = 0.16f;
+        float elapsed = 0f;
+
+        while (elapsed < pulseDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / pulseDuration);
+            float swell = t < 0.45f ? Mathf.SmoothStep(1f, 1.18f, t / 0.45f) : Mathf.SmoothStep(1.18f, 0.05f, (t - 0.45f) / 0.55f);
+            transform.localScale = originalScale * swell;
+            yield return null;
+        }
+
+        transform.localScale = Vector3.zero;
+        SpawnBurstPieces();
+        // Keep this coroutine host alive until the fragment animations finish.
+        // Destroying it here would stop every AnimateBurstPiece coroutine.
+        yield return new WaitForSeconds(burstLifetime);
+        Destroy(gameObject);
+    }
+
+    void SpawnBurstPieces()
+    {
+        if (miniLipidPrefab == null) return;
+
+        for (int i = 0; i < burstPieceCount; i++)
+        {
+            // Spread fragments over the full circle with a little randomness, like a pop.
+            float angle = (360f / burstPieceCount) * i + Random.Range(-22f, 22f);
+            Vector2 direction = Quaternion.Euler(0f, 0f, angle) * Vector2.right;
+            Vector3 origin = transform.position + (Vector3)(direction * Random.Range(0.02f, 0.12f));
+            GameObject piece = Instantiate(miniLipidPrefab, origin, Quaternion.identity);
+
+            // Keep only the existing lipid sprite. Burst pieces must not register or behave as notes.
+            MiniLipid note = piece.GetComponent<MiniLipid>();
+            if (note != null)
+            {
+                note.enabled = false;
+                Destroy(note);
+            }
+            foreach (var canvas in piece.GetComponentsInChildren<Canvas>(true)) canvas.enabled = false;
+            foreach (var collider in piece.GetComponentsInChildren<Collider2D>(true)) collider.enabled = false;
+
+            piece.transform.localScale *= Random.Range(1.4f, 1.9f);
+            var sprite = piece.GetComponent<SpriteRenderer>();
+            if (sprite != null)
+            {
+                sprite.sortingOrder = 20;
+                sprite.color = new Color(1f, 0.82f, 0.12f, 1f);
+            }
+
+            StartCoroutine(AnimateBurstPiece(piece.transform, sprite, direction));
+        }
+    }
+
+    IEnumerator AnimateBurstPiece(Transform piece, SpriteRenderer sprite, Vector2 direction)
+    {
+        Vector3 startScale = piece.localScale;
+        Vector3 velocity = (Vector3)(direction * burstSpeed * Random.Range(0.8f, 1.35f));
+        float spin = Random.Range(-720f, 720f);
+        float elapsed = 0f;
+
+        while (elapsed < burstLifetime && piece != null)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / burstLifetime);
+            piece.position += velocity * Time.deltaTime;
+            velocity = Vector3.Lerp(velocity, Vector3.zero, Time.deltaTime * 0.9f);
+            piece.Rotate(0f, 0f, spin * Time.deltaTime);
+            piece.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
+            if (sprite != null)
+            {
+                Color color = sprite.color;
+                color.a = 1f - t;
+                sprite.color = color;
+            }
+            yield return null;
+        }
+
+        if (piece != null) Destroy(piece.gameObject);
     }
 
     void HideFinishedLipids()
