@@ -95,6 +95,13 @@ public class LipidMovement : MonoBehaviour
         spawnedNotes++;
     }
 
+    public void RegisterSkippedChartNote()
+    {
+        spawnedNotes++;
+        finishedNotes++;
+        FinishWaveIfComplete();
+    }
+
     IEnumerator ReleaseRandomNotes()
     {
         if (miniLipidPrefab == null) yield break;
@@ -153,6 +160,11 @@ public class LipidMovement : MonoBehaviour
         finishedNotes++;
         if (result == HitResult.Miss) hadMiss = true;
 
+        FinishWaveIfComplete();
+    }
+
+    void FinishWaveIfComplete()
+    {
         if (!waveEnded && AllNotesSpawned && finishedNotes >= totalNotes)
         {
             waveEnded = true;

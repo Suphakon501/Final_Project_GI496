@@ -787,6 +787,7 @@ MonoBehaviour:
   feedbackShrinkSpeed: 15
   feedbackMaxTilt: 6
   audioSource: {fileID: 197997224}
+  hitSound: {fileID: 8300000, guid: ddb9263f57338ef4eb42a5b79e20c758, type: 3}
   goodSound: {fileID: 8300000, guid: a974c3f8c0af48a4b90724a069b75325, type: 3}
   badMissSound: {fileID: 8300000, guid: 8768d7d505ffc564eb4573f0c8e65f34, type: 3}
   perfectStepSounds:
@@ -4084,10 +4085,16 @@ MonoBehaviour:
   playerMoveSpeed: 30
   yOffset: 0
   moveSpeed: 10
+  playerFocusDuration: 0.8
+  enemyFocusDuration: 0.7
+  faceoffDuration: 0.85
+  closeupCameraSize: 2.7
+  faceoffCameraSize: 4
+  qteReadyAnimationSpeed: 0.35
   qteBossScaleMultiplier: 0.85
   qteBossSortingOrder: 20
   qteRevealDuration: 0.8
-  qteRevealStartRadius: 0.35
+  qteRevealStartRadius: 0.3
   qteRevealRadius: 0.82
   qteExitDuration: 0.6
   bossImpactDuration: 0.18
@@ -4096,6 +4103,7 @@ MonoBehaviour:
   bossSquashAmount: 0.12
   bossHitEffectPrefab: {fileID: 6420530290822883872, guid: 71e5ecc676fe5cd44b873ac3efdaa041, type: 3}
   bossHitEffectScale: 2.5
+  qteStartSound: {fileID: 8300000, guid: 97250da435881664aa1cf68b5a39fc53, type: 3}
   scoreSpriteNumber: {fileID: 1599429135}
   scoreRectTransform: {fileID: 2023434776}
   bossPositionCenter: {x: 0, y: -250}

@@ -100,6 +100,7 @@ public class CheerleaderPopIn : MonoBehaviour
     {
         if (cheerleaders == null || cheerleaders.Length == 0) return false;
         if (Camera.main == null) return false;
+        if (BossMashManager.IsMashActive) return false;
         if (visibleCount >= Mathf.Max(1, maxVisible)) return false;
         if (PlayerController.isGameOver) return false;
         if (LevelManager.instance != null && LevelManager.instance.IsFinished) return false;
@@ -166,7 +167,6 @@ public class CheerleaderPopIn : MonoBehaviour
             // บางครั้งสลับข้าง: บอยไปฝั่งขวา / สาวไปฝั่งซ้าย
             bool swapped = swapSideChance > 0f && Random.value * 100f < swapSideChance;
             float sideX = swapped ? -authored.x : authored.x;
-
             Vector3 restPos = new Vector3(
                 cam.position.x + sideX + worldOffset.x,
                 cam.position.y + authored.y + worldOffset.y,
@@ -199,6 +199,7 @@ public class CheerleaderPopIn : MonoBehaviour
             float t = 0f;
             while (t < popUpTime)
             {
+                if (BossMashManager.IsMashActive) yield break;
                 t += Time.deltaTime;
                 float k = Mathf.Clamp01(t / popUpTime);
                 float ease = EaseOutBack(k);
@@ -223,6 +224,7 @@ public class CheerleaderPopIn : MonoBehaviour
             t = 0f;
             while (t < hold)
             {
+                if (BossMashManager.IsMashActive) yield break;
                 t += Time.deltaTime;
                 float sway = Mathf.Sin(t * swaySpeed * Mathf.PI * 2f);
 
@@ -235,6 +237,7 @@ public class CheerleaderPopIn : MonoBehaviour
             t = 0f;
             while (t < fadeOut)
             {
+                if (BossMashManager.IsMashActive) yield break;
                 t += Time.deltaTime;
                 float k = Mathf.Clamp01(t / fadeOut);
                 float sway = Mathf.Sin((hold + t) * swaySpeed * Mathf.PI * 2f);

@@ -149,6 +149,8 @@ public class PlayerController : MonoBehaviour
     private readonly Queue<AudioClip> pendingSoundEvents = new Queue<AudioClip>();
     private Coroutine soundEventRoutine;
     private float currentSoundEventMusicDuck = 1f;
+    private float preQTEAnimatorSpeed = 1f;
+    private bool qteReadyPoseActive;
     private bool warnedMissingCombo = false;
     private class ActiveHoldNote
     {
@@ -192,6 +194,7 @@ public class PlayerController : MonoBehaviour
 
     void OnDestroy()
     {
+        EndQTEReadyPose(false);
         AudioSettingsRuntime.SetMusicDuck(1f);
     }
 
@@ -262,6 +265,27 @@ public class PlayerController : MonoBehaviour
         if (playerAnimator.HasState(0, Animator.StringToHash(jumpAttackAnimName))) attacks.Add(jumpAttackAnimName);
 
         if (attacks.Count > 0) PlayAnimation(attacks[Random.Range(0, attacks.Count)]);
+    }
+
+    public void PlayQTEHitSound() => PlaySound(hitSound);
+    public void PlayQTEStartSound(AudioClip clip) => PlaySound(clip);
+
+    public void BeginQTEReadyPose(float playbackSpeed)
+    {
+        if (playerAnimator == null) return;
+        preQTEAnimatorSpeed = playerAnimator.speed;
+        qteReadyPoseActive = true;
+        playerAnimator.speed = Mathf.Clamp(playbackSpeed, 0.05f, 1f);
+        PlayAnimation(drawAnimName);
+    }
+
+    public void EndQTEReadyPose(bool holdReadyPose = true)
+    {
+        if (!qteReadyPoseActive) return;
+        qteReadyPoseActive = false;
+        if (playerAnimator == null) return;
+        playerAnimator.speed = preQTEAnimatorSpeed;
+        if (holdReadyPose) PlayAnimation("Player_Ready");
     }
 
     public bool IsQTEPersistentUI(Graphic graphic)

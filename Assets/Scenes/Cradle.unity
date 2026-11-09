@@ -836,7 +836,7 @@ MonoBehaviour:
   gradePopupStartScale: 1.45
   gradePopupTilt: 5
   audioSource: {fileID: 197997224}
-  hitSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: ddb9263f57338ef4eb42a5b79e20c758, type: 3}
   soundEffectVolume: 0.45
   perfectSoundEvent: {fileID: 8300000, guid: 128c900062264004f8ebc70997f05260, type: 3}
   fullComboSoundEvent: {fileID: 8300000, guid: 8d500b97b025a8d48bae14309d71365e, type: 3}
@@ -4372,10 +4372,16 @@ MonoBehaviour:
   playerMoveSpeed: 30
   yOffset: 0
   moveSpeed: 50
+  playerFocusDuration: 0.8
+  enemyFocusDuration: 0.7
+  faceoffDuration: 0.85
+  closeupCameraSize: 2.7
+  faceoffCameraSize: 4
+  qteReadyAnimationSpeed: 0.35
   qteBossScaleMultiplier: 0.85
   qteBossSortingOrder: 20
   qteRevealDuration: 0.8
-  qteRevealStartRadius: 0.35
+  qteRevealStartRadius: 0.3
   qteRevealRadius: 0.82
   qteExitDuration: 0.6
   bossImpactDuration: 0.18
@@ -4384,6 +4390,7 @@ MonoBehaviour:
   bossSquashAmount: 0.12
   bossHitEffectPrefab: {fileID: 6420530290822883872, guid: 71e5ecc676fe5cd44b873ac3efdaa041, type: 3}
   bossHitEffectScale: 2.5
+  qteStartSound: {fileID: 8300000, guid: 97250da435881664aa1cf68b5a39fc53, type: 3}
   keyFeedbackBackground: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hitColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

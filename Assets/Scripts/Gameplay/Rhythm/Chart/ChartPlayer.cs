@@ -231,9 +231,11 @@ public class ChartPlayer : MonoBehaviour
             float arriveAt = n.beat * beatDur;
             if (arriveAt <= t)
             {
-                nextNote++;
                 while (noteWaveIndex < waves.Count - 1 && nextNote >= waves[noteWaveIndex].first + waves[noteWaveIndex].count)
                     noteWaveIndex++;
+                if (waves[noteWaveIndex].enemy != null)
+                    waves[noteWaveIndex].enemy.RegisterSkippedChartNote();
+                nextNote++;
                 continue;
             }
             if (t < arriveAt - travelTime) break;
