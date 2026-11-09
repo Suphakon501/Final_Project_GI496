@@ -677,8 +677,8 @@ MonoBehaviour:
   scorePointsPerKcal: 3000
   menuScene: Menu
   fallbackLevelScene: Cradle
-  restartKey: 114
-  menuKey: 27
+  restartButton: {fileID: 299861818}
+  menuButton: {fileID: 1176520296}
 --- !u!4 &473825281
 Transform:
   m_ObjectHideFlags: 0
@@ -3099,7 +3099,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -846.8254, y: 464}
+  m_AnchoredPosition: {x: -849, y: 398}
   m_SizeDelta: {x: 194.9039, y: 54.3823}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1796723009
@@ -3174,8 +3174,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -525.35, y: 451.66}
-  m_SizeDelta: {x: 869.2919, y: 176.6896}
+  m_AnchoredPosition: {x: -512.8021, y: 389.03806}
+  m_SizeDelta: {x: 894.3876, y: 301.9334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1817528115
 MonoBehaviour:
@@ -3310,11 +3310,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 995129023}
   - {fileID: 299861817}
   - {fileID: 1176520295}
   - {fileID: 1210915806}
   - {fileID: 1817528114}
+  - {fileID: 995129023}
   - {fileID: 1796723008}
   - {fileID: 1014238785}
   - {fileID: 1455571767}

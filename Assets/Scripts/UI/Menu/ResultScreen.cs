@@ -126,12 +126,11 @@ public class ResultScreen : MonoBehaviour
             ? result.levelScene
             : SceneManager.GetActiveScene().name;
 
-        string songName = MainMenu.SelectedSongName;
-        string modeName = MainMenu.SelectedModeName;
-
-        // ถ้าเริ่มเล่นจาก Editor หรือโหลดซีนตรงๆ ค่าที่เมนูส่งมาจะว่าง -> เดาจากซีนที่เล่น
-        if (string.IsNullOrWhiteSpace(songName)) songName = SongNameForScene(levelScene);
-        if (string.IsNullOrWhiteSpace(modeName)) modeName = ModeForScene(levelScene);
+        // ใช้ซีนที่เล่นจริงเป็นหลัก ป้องกันค่า static จากเพลงก่อนหน้าค้างข้ามซีน
+        string songName = SongNameForScene(levelScene);
+        if (string.IsNullOrWhiteSpace(songName)) songName = MainMenu.SelectedSongName;
+        string modeName = ModeForScene(levelScene);
+        if (string.IsNullOrWhiteSpace(modeName)) modeName = MainMenu.SelectedModeName;
 
         if (songNameText != null && !string.IsNullOrWhiteSpace(songName)) songNameText.text = songName;
         if (modeText != null && !string.IsNullOrWhiteSpace(modeName)) modeText.text = modeName;
@@ -175,14 +174,35 @@ public class ResultScreen : MonoBehaviour
     static string SongNameForScene(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName)) return null;
-        if (sceneName.Contains("1.1") || sceneName.ToUpperInvariant().Contains("LEVEL2")) return "Red VS White";
-        return "Sub Urban - Cradles";
+        switch (sceneName.Trim().ToUpperInvariant())
+        {
+            case "CRADLE":
+            case "LEVEL1":
+                return "Sub Urban - Cradles";
+            case "BOMFUNK":
+                return "Bomfunk MC's - Uprocking Beats";
+            case "MOVES LIKE JAGGER":
+                return "Moves Like Jagger - Maroon 5";
+            default:
+                return null;
+        }
     }
 
     static string ModeForScene(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName)) return null;
-        return sceneName.Contains("1.1") || sceneName.ToUpperInvariant().Contains("LEVEL2") ? "EASY" : "NORMAL";
+        switch (sceneName.Trim().ToUpperInvariant())
+        {
+            case "CRADLE":
+            case "LEVEL1":
+                return "EASY";
+            case "BOMFUNK":
+                return "NORMAL";
+            case "MOVES LIKE JAGGER":
+                return "HARD";
+            default:
+                return null;
+        }
     }
 
     public void Restart()

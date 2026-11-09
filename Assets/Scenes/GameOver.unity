@@ -761,9 +761,9 @@ MonoBehaviour:
   songNameText: {fileID: 0}
   modeText: {fileID: 0}
   modeImage: {fileID: 0}
-  normalModeSprite: {fileID: 0}
-  easyModeSprite: {fileID: 0}
-  hardModeSprite: {fileID: 0}
+  normalModeSprite: {fileID: 9095853184155359625, guid: a3cf451377f64db4db9cdcb1feef081f, type: 3}
+  easyModeSprite: {fileID: -5798597686317507224, guid: 064d83c1bf2942045ae91f326102a009, type: 3}
+  hardModeSprite: {fileID: 5412257750835826718, guid: f05dd8a093228264294dc80342804cf4, type: 3}
   kcalText: {fileID: 0}
   scorePointsPerKcal: 3000
   menuScene: Menu

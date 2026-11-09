@@ -219,18 +219,18 @@ public class MainMenu : MonoBehaviour
 #endif
     }
 
-    public void OnLevel1Clicked() => LoadSongScene(level1Scene, "Sub Urban - Cradles", "NORMAL");
-    // The second available song is stored in the Level1.1 scene in this project.
-    public void OnLevel2Clicked() => LoadSongScene("Level1.1", "Red VS White", "EASY");
-    // Level 3 is currently a Coming Soon slot in the song selector.
-    public void OnLevel3Clicked() { }
+    public void OnLevel1Clicked() => LoadSongScene(level1Scene, "Sub Urban - Cradles", "EASY");
+    public void OnLevel2Clicked() => LoadSongScene("Bomfunk", "Bomfunk MC's - Uprocking Beats", "NORMAL");
+    public void OnLevel3Clicked() => LoadSongScene("Moves Like Jagger", "Moves Like Jagger - Maroon 5", "HARD");
     public void OnBackClicked() => ShowMainPanel();
     public void LoadSongScene(string sceneName)
     {
         if (sceneName == level1Scene || sceneName == "Level1" || sceneName == "Cradle")
-            LoadSongScene(sceneName, "Sub Urban - Cradles", "NORMAL");
-        else if (sceneName == "Level1.1")
-            LoadSongScene(sceneName, "Red VS White", "EASY");
+            LoadSongScene(sceneName, "Sub Urban - Cradles", "EASY");
+        else if (sceneName == "Bomfunk")
+            LoadSongScene(sceneName, "Bomfunk MC's - Uprocking Beats", "NORMAL");
+        else if (sceneName == "Moves Like Jagger")
+            LoadSongScene(sceneName, "Moves Like Jagger - Maroon 5", "HARD");
         else
             LoadSongScene(sceneName, sceneName, "NORMAL");
     }
@@ -309,6 +309,10 @@ public class MainMenu : MonoBehaviour
                 levelPanelAnimator.Play("LevelSelectUI", 0, 0f);
                 levelPanelAnimator.Update(0f);
             }
+
+            // Return to the first song and its visible position whenever the list opens.
+            SongSelectCarousel carousel = levelPanel.GetComponent<SongSelectCarousel>();
+            if (carousel != null) carousel.ResetSelectionToFirst();
         }
     }
 
