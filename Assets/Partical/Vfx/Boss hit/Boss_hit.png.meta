@@ -1,0 +1,937 @@
+fileFormatVersion: 2
+guid: 77f14b8acfcf1cd489245a6bfa64d47b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4100171253466720790
+    second: comic-impact-burst-sheet_0
+  - first:
+      213: -3671667060890971767
+    second: comic-impact-burst-sheet_1
+  - first:
+      213: -3265129028861942607
+    second: comic-impact-burst-sheet_2
+  - first:
+      213: 2511643871064517211
+    second: comic-impact-burst-sheet_3
+  - first:
+      213: -7359303406907606762
+    second: comic-impact-burst-sheet_4
+  - first:
+      213: -5386452474393580828
+    second: comic-impact-burst-sheet_5
+  - first:
+      213: 2886022842204502750
+    second: comic-impact-burst-sheet_6
+  - first:
+      213: -7872581234082230403
+    second: comic-impact-burst-sheet_7
+  - first:
+      213: -4492909235645999272
+    second: comic-impact-burst-sheet_8
+  - first:
+      213: 2637678188405189255
+    second: comic-impact-burst-sheet_9
+  - first:
+      213: -6803535291740399224
+    second: comic-impact-burst-sheet_10
+  - first:
+      213: -531938687192762021
+    second: comic-impact-burst-sheet_11
+  - first:
+      213: -6429416735715002334
+    second: comic-impact-burst-sheet_12
+  - first:
+      213: -8586702238601133050
+    second: comic-impact-burst-sheet_13
+  - first:
+      213: 8345867769193298402
+    second: comic-impact-burst-sheet_14
+  - first:
+      213: 73429702737771772
+    second: comic-impact-burst-sheet_15
+  - first:
+      213: -7355888937496014794
+    second: comic-impact-burst-sheet_16
+  - first:
+      213: -8893297087791718729
+    second: comic-impact-burst-sheet_17
+  - first:
+      213: 2921459519376176193
+    second: comic-impact-burst-sheet_18
+  - first:
+      213: 7890981375916937143
+    second: comic-impact-burst-sheet_19
+  - first:
+      213: 3376417394917578692
+    second: comic-impact-burst-sheet_20
+  - first:
+      213: -1006392340287433199
+    second: comic-impact-burst-sheet_21
+  - first:
+      213: -6699188363980954896
+    second: comic-impact-burst-sheet_22
+  - first:
+      213: 1052024326155810725
+    second: comic-impact-burst-sheet_23
+  - first:
+      213: -4905848179425283289
+    second: comic-impact-burst-sheet_24
+  - first:
+      213: 4053612167580158637
+    second: comic-impact-burst-sheet_25
+  - first:
+      213: -7468393733310599806
+    second: comic-impact-burst-sheet_26
+  - first:
+      213: -2751530207330939724
+    second: comic-impact-burst-sheet_27
+  - first:
+      213: 5169640698259885612
+    second: comic-impact-burst-sheet_28
+  - first:
+      213: -5637071982410314308
+    second: comic-impact-burst-sheet_29
+  - first:
+      213: 510431403919949005
+    second: comic-impact-burst-sheet_30
+  - first:
+      213: 2624314798540336835
+    second: comic-impact-burst-sheet_31
+  - first:
+      213: -463853368088979157
+    second: comic-impact-burst-sheet_32
+  - first:
+      213: 1791297994625598967
+    second: comic-impact-burst-sheet_33
+  - first:
+      213: 817326462239003976
+    second: comic-impact-burst-sheet_34
+  - first:
+      213: 5517783541563039677
+    second: comic-impact-burst-sheet_35
+  - first:
+      213: 8842554095364556270
+    second: comic-impact-burst-sheet_36
+  - first:
+      213: -5185142401344085977
+    second: comic-impact-burst-sheet_37
+  - first:
+      213: 3817489573978024868
+    second: comic-impact-burst-sheet_38
+  - first:
+      213: -7099607686799880186
+    second: comic-impact-burst-sheet_39
+  - first:
+      213: 9212143148651693023
+    second: comic-impact-burst-sheet_40
+  - first:
+      213: -8640541356608227666
+    second: comic-impact-burst-sheet_41
+  - first:
+      213: -3514958497237452536
+    second: comic-impact-burst-sheet_42
+  - first:
+      213: 1184705165007448463
+    second: comic-impact-burst-sheet_43
+  - first:
+      213: 4766387556538064527
+    second: comic-impact-burst-sheet_44
+  - first:
+      213: 1421326056051973240
+    second: comic-impact-burst-sheet_45
+  - first:
+      213: -2761380226110879122
+    second: comic-impact-burst-sheet_46
+  - first:
+      213: 7805251953937980218
+    second: comic-impact-burst-sheet_47
+  - first:
+      213: -7100789604619704822
+    second: comic-impact-burst-sheet_48
+  - first:
+      213: -1585237229235018962
+    second: comic-impact-burst-sheet_49
+  - first:
+      213: 6990001503365122847
+    second: comic-impact-burst-sheet_50
+  - first:
+      213: -6616147390848650981
+    second: comic-impact-burst-sheet_51
+  - first:
+      213: 2219650689649111339
+    second: comic-impact-burst-sheet_52
+  - first:
+      213: 1116226253007851938
+    second: comic-impact-burst-sheet_53
+  - first:
+      213: -4811761582197705900
+    second: comic-impact-burst-sheet_54
+  - first:
+      213: -3274635809336634903
+    second: comic-impact-burst-sheet_55
+  - first:
+      213: 2896374465077474870
+    second: comic-impact-burst-sheet_56
+  - first:
+      213: 8035976964066617661
+    second: comic-impact-burst-sheet_57
+  - first:
+      213: -6088195523646182610
+    second: comic-impact-burst-sheet_58
+  - first:
+      213: 8424242511243696865
+    second: comic-impact-burst-sheet_59
+  - first:
+      213: 2167288808189514728
+    second: comic-impact-burst-sheet_60
+  - first:
+      213: -2481074766763310776
+    second: comic-impact-burst-sheet_61
+  - first:
+      213: 3678582349091052307
+    second: comic-impact-burst-sheet_62
+  - first:
+      213: 6295491904489485584
+    second: comic-impact-burst-sheet_63
+  - first:
+      213: -1459536879264968116
+    second: comic-impact-burst-sheet_64
+  - first:
+      213: -5590094040952311391
+    second: comic-impact-burst-sheet_65
+  - first:
+      213: -4658635558397435784
+    second: comic-impact-burst-sheet_66
+  - first:
+      213: -7740374966993978361
+    second: comic-impact-burst-sheet_67
+  - first:
+      213: -3318231879258605979
+    second: comic-impact-burst-sheet_68
+  - first:
+      213: 6897427821114281593
+    second: comic-impact-burst-sheet_69
+  - first:
+      213: -7259253451320597350
+    second: comic-impact-burst-sheet_70
+  - first:
+      213: 3133896286667771381
+    second: comic-impact-burst-sheet_71
+  - first:
+      213: 8092601909911513090
+    second: comic-impact-burst-sheet_72
+  - first:
+      213: 8432427469567275160
+    second: comic-impact-burst-sheet_73
+  - first:
+      213: -5920840131730011615
+    second: comic-impact-burst-sheet_74
+  - first:
+      213: 8878533032743687173
+    second: comic-impact-burst-sheet_75
+  - first:
+      213: 413270805180579623
+    second: comic-impact-burst-sheet_76
+  - first:
+      213: -7169111918442516524
+    second: comic-impact-burst-sheet_77
+  - first:
+      213: -6544558445736259720
+    second: comic-impact-burst-sheet_78
+  - first:
+      213: 809555035517612102
+    second: comic-impact-burst-sheet_79
+  - first:
+      213: 6906841196355742052
+    second: comic-impact-burst-sheet_80
+  - first:
+      213: 4931273789640688753
+    second: comic-impact-burst-sheet_81
+  - first:
+      213: 2613208535658320904
+    second: comic-impact-burst-sheet_82
+  - first:
+      213: -4999187719015766646
+    second: comic-impact-burst-sheet_83
+  - first:
+      213: -7051229568522002738
+    second: comic-impact-burst-sheet_84
+  - first:
+      213: -214786134256645230
+    second: comic-impact-burst-sheet_85
+  - first:
+      213: -6560357409876830899
+    second: comic-impact-burst-sheet_86
+  - first:
+      213: -7934009527130508922
+    second: comic-impact-burst-sheet_87
+  - first:
+      213: 5670902169574834603
+    second: comic-impact-burst-sheet_88
+  - first:
+      213: 5668606061303988325
+    second: comic-impact-burst-sheet_89
+  - first:
+      213: 6226052440097288730
+    second: comic-impact-burst-sheet_90
+  - first:
+      213: 8153306316961953306
+    second: comic-impact-burst-sheet_91
+  - first:
+      213: -2011961902862025924
+    second: comic-impact-burst-sheet_92
+  - first:
+      213: 6887223211886580528
+    second: comic-impact-burst-sheet_93
+  - first:
+      213: -3591796337250316217
+    second: comic-impact-burst-sheet_94
+  - first:
+      213: 7769519581801824370
+    second: comic-impact-burst-sheet_95
+  - first:
+      213: 5934951977041722689
+    second: comic-impact-burst-sheet_96
+  - first:
+      213: -3803823027569343775
+    second: comic-impact-burst-sheet_97
+  - first:
+      213: 3900070005906432351
+    second: comic-impact-burst-sheet_98
+  - first:
+      213: -6187192388018951758
+    second: comic-impact-burst-sheet_99
+  - first:
+      213: -8734038465803409794
+    second: comic-impact-burst-sheet_100
+  - first:
+      213: 2842643847251612656
+    second: comic-impact-burst-sheet_101
+  - first:
+      213: -6848201071063244116
+    second: comic-impact-burst-sheet_102
+  - first:
+      213: -5915879232284167671
+    second: comic-impact-burst-sheet_103
+  - first:
+      213: -1017116584431205246
+    second: comic-impact-burst-sheet_104
+  - first:
+      213: -2660865177693752579
+    second: comic-impact-burst-sheet_105
+  - first:
+      213: 4421687500741635648
+    second: comic-impact-burst-sheet_106
+  - first:
+      213: -2781247803295470616
+    second: comic-impact-burst-sheet_107
+  - first:
+      213: -6046043025418913828
+    second: comic-impact-burst-sheet_108
+  - first:
+      213: 7467344739365725751
+    second: comic-impact-burst-sheet_109
+  - first:
+      213: -5524030033450674850
+    second: comic-impact-burst-sheet_110
+  - first:
+      213: -4802603470664466221
+    second: comic-impact-burst-sheet_111
+  - first:
+      213: 689543365795846043
+    second: comic-impact-burst-sheet_112
+  - first:
+      213: -4665749477996019562
+    second: comic-impact-burst-sheet_113
+  - first:
+      213: 5090620673637169689
+    second: comic-impact-burst-sheet_114
+  - first:
+      213: 5116411118419378000
+    second: comic-impact-burst-sheet_115
+  - first:
+      213: -8952699041012625034
+    second: comic-impact-burst-sheet_116
+  - first:
+      213: 4631199771116778276
+    second: comic-impact-burst-sheet_117
+  - first:
+      213: -3603565647217190408
+    second: comic-impact-burst-sheet_118
+  - first:
+      213: -3889291847384204729
+    second: comic-impact-burst-sheet_119
+  - first:
+      213: -2915945867473360657
+    second: comic-impact-burst-sheet_120
+  - first:
+      213: 1816855384939527825
+    second: comic-impact-burst-sheet_121
+  - first:
+      213: -8015072927018988566
+    second: comic-impact-burst-sheet_122
+  - first:
+      213: 5319417820713389072
+    second: comic-impact-burst-sheet_123
+  - first:
+      213: -160189837663366503
+    second: comic-impact-burst-sheet_124
+  - first:
+      213: -5044349661768288173
+    second: comic-impact-burst-sheet_125
+  - first:
+      213: -3962569108633645001
+    second: comic-impact-burst-sheet_126
+  - first:
+      213: 8174145172609233874
+    second: comic-impact-burst-sheet_127
+  - first:
+      213: -6824449750891840198
+    second: comic-impact-burst-sheet_128
+  - first:
+      213: 3143430045941221141
+    second: comic-impact-burst-sheet_129
+  - first:
+      213: -7313357898668165298
+    second: comic-impact-burst-sheet_130
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1065
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae519d6f7f34917c0800000000000000
+      internalID: -4100171253466720790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_1
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 1065
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 981571ee24e9b0dc0800000000000000
+      internalID: -3671667060890971767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_2
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 1065
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b42ed8927eefa2d0800000000000000
+      internalID: -3265129028861942607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_3
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 1065
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5a66112bc62bd220800000000000000
+      internalID: 2511643871064517211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_4
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 1065
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61933fcea808ed990800000000000000
+      internalID: -7359303406907606762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 710
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea2f30630a7f35b0800000000000000
+      internalID: -5386452474393580828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_6
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 710
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eda3343fb763d0820800000000000000
+      internalID: 2886022842204502750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_7
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 710
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7f4f1d0419feb290800000000000000
+      internalID: -7872581234082230403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_8
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 710
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8579f39cadaf5a1c0800000000000000
+      internalID: -4492909235645999272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 710
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78aefab565aea9420800000000000000
+      internalID: 2637678188405189255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 355
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 889daf6e2bcf491a0800000000000000
+      internalID: -6803535291740399224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_11
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 355
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b597693159c2e98f0800000000000000
+      internalID: -531938687192762021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_12
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 355
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22871ca1b8f16c6a0800000000000000
+      internalID: -6429416735715002334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_13
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 355
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 604c02ceec7e5d880800000000000000
+      internalID: -8586702238601133050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_14
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 355
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e9f52d848a72d370800000000000000
+      internalID: 8345867769193298402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfcb5a3fcefd40100800000000000000
+      internalID: 73429702737771772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_16
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 0
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63013590cf1aae990800000000000000
+      internalID: -7355888937496014794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: comic-impact-burst-sheet_17
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 0
+        width: 283
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7be9828da69a49480800000000000000
+      internalID: -8893297087791718729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: b469696db9904c14ead8b942281b18dc
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      comic-impact-burst-sheet_0: -4100171253466720790
+      comic-impact-burst-sheet_1: -3671667060890971767
+      comic-impact-burst-sheet_10: -6803535291740399224
+      comic-impact-burst-sheet_11: -531938687192762021
+      comic-impact-burst-sheet_12: -6429416735715002334
+      comic-impact-burst-sheet_13: -8586702238601133050
+      comic-impact-burst-sheet_14: 8345867769193298402
+      comic-impact-burst-sheet_15: 73429702737771772
+      comic-impact-burst-sheet_16: -7355888937496014794
+      comic-impact-burst-sheet_17: -8893297087791718729
+      comic-impact-burst-sheet_2: -3265129028861942607
+      comic-impact-burst-sheet_3: 2511643871064517211
+      comic-impact-burst-sheet_4: -7359303406907606762
+      comic-impact-burst-sheet_5: -5386452474393580828
+      comic-impact-burst-sheet_6: 2886022842204502750
+      comic-impact-burst-sheet_7: -7872581234082230403
+      comic-impact-burst-sheet_8: -4492909235645999272
+      comic-impact-burst-sheet_9: 2637678188405189255
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

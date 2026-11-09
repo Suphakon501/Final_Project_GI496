@@ -13,7 +13,7 @@ public class LipidDrop : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             CollectDrop();
         }

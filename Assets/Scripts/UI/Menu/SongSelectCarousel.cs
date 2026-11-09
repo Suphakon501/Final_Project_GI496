@@ -104,7 +104,7 @@ public class SongSelectCarousel : MonoBehaviour
             nextWheelStep = Time.unscaledTime + 0.16f;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             LaunchSelectedSong();
 
         for (int i = 0; i < cards.Count && i < baseScales.Count; i++)

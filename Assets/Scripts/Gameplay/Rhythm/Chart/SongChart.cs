@@ -35,6 +35,13 @@ public class ChartNote
     }
 }
 
+[Serializable]
+public class ChartQTE
+{
+    [Min(0f)] public float beat;
+    [Min(0.1f)] public float durationSeconds = 5f;
+}
+
 [CreateAssetMenu(menuName = "Rhythm/Song Chart", fileName = "NewSongChart")]
 public class SongChart : ScriptableObject
 {
@@ -48,6 +55,9 @@ public class SongChart : ScriptableObject
 
     [Header("Notes")]
     public List<ChartNote> notes = new List<ChartNote>();
+
+    [Header("QTE Events")]
+    public List<ChartQTE> qteEvents = new List<ChartQTE>();
 
     public float BeatDuration => 60f / Mathf.Max(1f, bpm);
 

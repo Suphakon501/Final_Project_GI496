@@ -45,7 +45,7 @@ public class HealthBarUI : MonoBehaviour
     {
         if (PlayerController.isGameOver) return;
 
-        if (!invincible && hpDrainPerSecond > 0f && (!drainOnlyDuringWaves || waveActive))
+        if (!BossMashManager.IsMashActive && !invincible && hpDrainPerSecond > 0f && (!drainOnlyDuringWaves || waveActive))
         {
             currentHP = Mathf.Max(0f, currentHP - (hpDrainPerSecond * Time.deltaTime));
         }

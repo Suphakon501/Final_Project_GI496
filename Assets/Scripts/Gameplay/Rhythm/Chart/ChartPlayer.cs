@@ -41,6 +41,7 @@ public class ChartPlayer : MonoBehaviour
     private int noteWaveIndex = 0;
     private int nextNote = 0;
     private int nextWave = 0;
+    private int nextQTE = 0;
     private float travelTime;
     private float walkTime;
     private GameObject miniPrefab;
@@ -49,6 +50,7 @@ public class ChartPlayer : MonoBehaviour
     private bool musicStarted = false;
     private float lastPlayingTime;
     private float progressElapsed;
+    private bool wasQTEActive;
     private NoteKey? recordingKey;
     private float recordingPressBeat;
     private ChartNote recordingNote;
@@ -110,6 +112,7 @@ public class ChartPlayer : MonoBehaviour
 
         notes.AddRange(chart.notes);
         notes.Sort((a, b) => a.beat.CompareTo(b.beat));
+        if (chart.qteEvents != null) chart.qteEvents.Sort((a, b) => a.beat.CompareTo(b.beat));
         BuildWaves();
 
         Debug.Log($"[ChartPlayer] Playing '{chart.name}': {notes.Count} notes, {waves.Count} waves");
@@ -138,6 +141,11 @@ public class ChartPlayer : MonoBehaviour
     void Update()
     {
         if (!Active || PlayerController.isGameOver || finished) return;
+        if (BossMashManager.IsMashActive)
+        {
+            wasQTEActive = true;
+            return;
+        }
 
         if (beat.musicSource != null && beat.musicSource.isPlaying)
         {
@@ -145,6 +153,13 @@ public class ChartPlayer : MonoBehaviour
             lastPlayingTime = beat.musicSource.time;
         }
         float t = beat.songPositionInSeconds;
+        if (wasQTEActive)
+        {
+            while (chart.qteEvents != null && nextQTE < chart.qteEvents.Count
+                && chart.qteEvents[nextQTE].beat * chart.BeatDuration <= t)
+                nextQTE++;
+            wasQTEActive = false;
+        }
 
         if (progressTracker != null)
         {
@@ -172,9 +187,36 @@ public class ChartPlayer : MonoBehaviour
             return;
         }
 
+        while (chart.qteEvents != null && nextQTE < chart.qteEvents.Count && t >= chart.qteEvents[nextQTE].beat * chart.BeatDuration)
+        {
+            ChartQTE qte = chart.qteEvents[nextQTE++];
+            if (BossMashManager.instance != null)
+            {
+                BossMashManager.instance.StartChartQTE(qte.durationSeconds);
+                return;
+            }
+            Debug.LogWarning("[ChartPlayer] QTE event skipped because BossMashManager is missing");
+        }
+
+        float beatDur = chart.BeatDuration;
         while (nextWave < waves.Count && t >= waves[nextWave].enemyTime)
         {
             var w = waves[nextWave];
+            bool hasUpcomingNote = false;
+            for (int i = w.first; i < w.first + w.count; i++)
+            {
+                if (i >= nextNote && notes[i].beat * beatDur > t)
+                {
+                    hasUpcomingNote = true;
+                    break;
+                }
+            }
+            if (!hasUpcomingNote)
+            {
+                nextWave++;
+                continue;
+            }
+
             var go = Instantiate(lipidPrefab);
             w.enemy = go.GetComponent<LipidMovement>();
             w.enemy.BeginChartWave(w.count);
@@ -183,11 +225,17 @@ public class ChartPlayer : MonoBehaviour
             nextWave++;
         }
 
-        float beatDur = chart.BeatDuration;
         while (nextNote < notes.Count)
         {
             var n = notes[nextNote];
             float arriveAt = n.beat * beatDur;
+            if (arriveAt <= t)
+            {
+                nextNote++;
+                while (noteWaveIndex < waves.Count - 1 && nextNote >= waves[noteWaveIndex].first + waves[noteWaveIndex].count)
+                    noteWaveIndex++;
+                continue;
+            }
             if (t < arriveAt - travelTime) break;
 
             while (noteWaveIndex < waves.Count - 1 && nextNote >= waves[noteWaveIndex].first + waves[noteWaveIndex].count) noteWaveIndex++;

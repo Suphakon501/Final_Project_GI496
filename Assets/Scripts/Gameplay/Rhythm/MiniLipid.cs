@@ -178,6 +178,18 @@ public class MiniLipid : MonoBehaviour
         FollowSongTime();
     }
 
+    public bool DiscardIfExpiredDuringQTE()
+    {
+        if (isFinished || !UsingSongClock || SecondsUntilLine() > 0f) return false;
+
+        isFinished = true;
+        if (parentLipid != null) parentLipid.OnMiniFinished(HitResult.Miss);
+        foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            renderer.enabled = false;
+        Destroy(gameObject);
+        return true;
+    }
+
     public void SetHoldDuration(float seconds)
     {
         holdDuration = Mathf.Max(0f, seconds);

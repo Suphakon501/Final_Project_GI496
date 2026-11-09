@@ -210,7 +210,7 @@ public class PlayerController : MonoBehaviour
         UpdateDirectionArrowFeedback();
         UpdateComboScreenTint();
 
-        if (isGameOver) return;
+        if (isGameOver || BossMashManager.IsMashActive) return;
 
         UpdateHoldNote();
 
@@ -226,6 +226,72 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void PlayRandomQTEAttack()
+    {
+        if (playerAnimator == null) return;
+
+        var attacks = new List<string>();
+        if (playerAnimator.HasState(0, Animator.StringToHash(shootingAnimName))) attacks.Add(shootingAnimName);
+        if (throwAnimNames != null)
+            foreach (string attack in throwAnimNames)
+                if (!string.IsNullOrEmpty(attack) && playerAnimator.HasState(0, Animator.StringToHash(attack))) attacks.Add(attack);
+        if (playerAnimator.HasState(0, Animator.StringToHash(kickDownAnimName))) attacks.Add(kickDownAnimName);
+        if (playerAnimator.HasState(0, Animator.StringToHash(jumpAttackAnimName))) attacks.Add(jumpAttackAnimName);
+
+        if (attacks.Count > 0) PlayAnimation(attacks[Random.Range(0, attacks.Count)]);
+    }
+
+    public bool IsQTEPersistentUI(Graphic graphic)
+    {
+        if (graphic == null) return false;
+        Transform target = graphic.transform;
+        return IsUnder(target, scoreText != null ? scoreText.transform : null)
+            || IsUnder(target, scoreNumber != null ? scoreNumber.transform.parent : null)
+            || IsUnder(target, comboRoot != null ? comboRoot.transform : comboNumber != null ? comboNumber.transform : null);
+    }
+
+    public void KeepQTEHudVisible()
+    {
+        if (scoreNumber != null)
+        {
+            scoreNumber.gameObject.SetActive(true);
+            scoreNumber.SetValue(score, false);
+            EnableGraphics(scoreNumber.transform.parent != null ? scoreNumber.transform.parent : scoreNumber.transform);
+        }
+        if (scoreText != null)
+        {
+            scoreText.gameObject.SetActive(true);
+            scoreText.text = "Score: " + score;
+            EnableGraphics(scoreText.transform);
+        }
+
+        SetQTEComboVisible(true);
+        Transform comboVisualRoot = comboRoot != null ? comboRoot.transform : comboNumber != null ? comboNumber.transform : null;
+        if (comboVisualRoot != null) EnableGraphics(comboVisualRoot);
+    }
+
+    public void SetQTEComboVisible(bool visible)
+    {
+        GameObject root = comboRoot != null ? comboRoot : comboNumber != null ? comboNumber.gameObject : null;
+        if (root == null) return;
+
+        root.SetActive(visible);
+        if (visible && comboNumber != null) comboNumber.SetValue(combo);
+    }
+
+    public void RefreshComboUI() => UpdateComboUI();
+
+    static void EnableGraphics(Transform root)
+    {
+        foreach (Graphic graphic in root.GetComponentsInChildren<Graphic>(true))
+            graphic.enabled = true;
+    }
+
+    static bool IsUnder(Transform target, Transform root)
+    {
+        return root != null && (target == root || target.IsChildOf(root));
     }
 
     private void CacheDirectionArrows()
@@ -610,6 +676,15 @@ public class PlayerController : MonoBehaviour
     {
         if (scoreText != null) scoreText.text = "Score: " + score;
         if (scoreNumber != null) scoreNumber.SetValue(score);
+    }
+
+    public void RegisterQTEHit(int scoreValue)
+    {
+        if (!BossMashManager.IsMashActive) return;
+
+        score += scoreValue;
+        UpdateScoreUI();
+        AddCombo();
     }
 
     Transform ScorePopTransform()

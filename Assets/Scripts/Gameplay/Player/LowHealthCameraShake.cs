@@ -28,6 +28,7 @@ public class LowHealthCameraShake : MonoBehaviour
     public Vector3 CurrentOffset { get; private set; }
     private float noiseSeed;
     private Image darknessOverlay;
+    private Canvas darknessCanvas;
     private float currentDarkness;
 
     private void Awake()
@@ -65,6 +66,7 @@ public class LowHealthCameraShake : MonoBehaviour
         // Render below the game's normal overlay UI so HUD elements stay clear.
         var canvasObject = new GameObject("LowHealthDarknessOverlay", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         var canvas = canvasObject.GetComponent<Canvas>();
+        darknessCanvas = canvas;
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;
         canvas.sortingOrder = -100;
@@ -123,7 +125,7 @@ public class LowHealthCameraShake : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (darknessOverlay != null)
-            Destroy(darknessOverlay.canvas.gameObject);
+        if (darknessCanvas != null)
+            Destroy(darknessCanvas.gameObject);
     }
 }

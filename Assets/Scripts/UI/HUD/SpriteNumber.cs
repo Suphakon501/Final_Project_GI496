@@ -45,10 +45,21 @@ public class SpriteNumber : MonoBehaviour
 
     void OnEnable()
     {
-        if (suffixSprite == null && gameObject.name == "ComboNumber")
-            suffixSprite = Resources.Load<Sprite>("ComboX");
+        if (gameObject.name == "ComboNumber")
+        {
+            Sprite whiteComboSuffix = LoadWhiteComboSuffix();
+            if (whiteComboSuffix != null) suffixSprite = whiteComboSuffix;
+        }
         CollectPool();
         dirty = true;
+    }
+
+    static Sprite LoadWhiteComboSuffix()
+    {
+        Sprite[] sprites = Resources.LoadAll<Sprite>("ComboX_white");
+        foreach (Sprite sprite in sprites)
+            if (sprite.name == "ComboX_white_0") return sprite;
+        return sprites.Length > 0 ? sprites[0] : null;
     }
 
     void OnValidate()
@@ -167,6 +178,7 @@ public class SpriteNumber : MonoBehaviour
             if (showSuffix)
             {
                 suffixImage.sprite = suffixSprite;
+                suffixImage.color = Color.white;
                 RectTransform suffixRt = suffixImage.rectTransform;
                 suffixRt.anchorMin = suffixRt.anchorMax = rt.pivot;
                 suffixRt.pivot = new Vector2(0f, 0.5f);

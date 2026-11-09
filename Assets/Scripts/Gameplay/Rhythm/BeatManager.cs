@@ -70,7 +70,7 @@ public class BeatManager : MonoBehaviour
         songPositionInSeconds = HasMusic ? ReadMusicClock() : Time.time - virtualStartTime - songOffsetSeconds;
         songPositionInBeats = songPositionInSeconds / BeatDuration;
 
-        HandleCalibrationKeys();
+        if (!BossMashManager.IsMashActive) HandleCalibrationKeys();
     }
 
     float ReadMusicClock()

@@ -4071,12 +4071,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossPrefab: {fileID: 2579650259631024252, guid: f1e9ceb848d9cda40b16f86b3d5fd5f0, type: 3}
-  spawnStartX: 15
-  targetX: 3
-  fixedY: -0.25
+  spawnDistance: 1.5
+  qtePlayerOffset: 1.5
+  qteEnemyOffset: 1.5
+  playerMoveSpeed: 30
+  yOffset: 0
   moveSpeed: 10
-  mashParticlePrefab: {fileID: 391463048371747209, guid: 09f670a2135db2f439171abf32cbe0e8, type: 3}
-  particleLifetime: 0.5
+  qteBossScaleMultiplier: 0.85
+  qteBossSortingOrder: 20
+  qteRevealDuration: 0.8
+  qteRevealStartRadius: 0.35
+  qteRevealRadius: 0.82
+  qteExitDuration: 0.6
+  bossImpactDuration: 0.18
+  bossRecoilDistance: 0.3
+  bossTiltDegrees: 8
+  bossSquashAmount: 0.12
+  bossHitEffectPrefab: {fileID: 6420530290822883872, guid: 71e5ecc676fe5cd44b873ac3efdaa041, type: 3}
+  bossHitEffectScale: 4
   scoreSpriteNumber: {fileID: 1599429135}
   scoreRectTransform: {fileID: 2023434776}
   bossPositionCenter: {x: 0, y: -250}
