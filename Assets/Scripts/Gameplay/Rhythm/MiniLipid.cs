@@ -15,7 +15,13 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private float moveSpeed = 3.0f;
     public float hitLineX = -3.0f;
 
-[Header("4-Lane Y Positions (Top to Bottom: ขึ้น -> ซ้าย -> ขวา -> ล่าง)")]
+    [Header("Direction Note Prefabs")]
+    [SerializeField] private GameObject noteUpPrefab;
+    [SerializeField] private GameObject noteLeftPrefab;
+    [SerializeField] private GameObject noteRightPrefab;
+    [SerializeField] private GameObject noteDownPrefab;
+
+    [Header("4-Lane Y Positions (Top to Bottom: ขึ้น -> ซ้าย -> ขวา -> ล่าง)")]
     [SerializeField] private float yPosTop = 3.0f;     // บน / W
     [SerializeField] private float yPosMid1 = 1.0f;    // ซ้าย / A
     [SerializeField] private float yPosMid2 = -1.0f;   // ขวา / D
@@ -73,6 +79,8 @@ public class MiniLipid : MonoBehaviour
     private bool holdStarted;
     private LineRenderer holdTrail;
     private SpriteRenderer noteRenderer;
+    private SpriteRenderer directionRenderer;
+    private GameObject directionVisual;
     private SpriteRenderer holdHeadRenderer;
     private SpriteRenderer holdBodyRenderer;
     private SpriteRenderer holdTailRenderer;
@@ -123,6 +131,28 @@ public class MiniLipid : MonoBehaviour
         assignedKey = key;
         parentLipid = owner;
 
+        noteRenderer = GetComponent<SpriteRenderer>();
+        GameObject directionPrefab = DirectionPrefabForKey(key);
+        if (directionPrefab != null)
+        {
+            directionVisual = Instantiate(directionPrefab, transform, false);
+            directionVisual.name = directionPrefab.name;
+            directionVisual.transform.localPosition = Vector3.zero;
+            directionVisual.transform.localRotation = Quaternion.identity;
+
+            Vector3 parentScale = transform.lossyScale;
+            Vector3 prefabScale = directionPrefab.transform.lossyScale;
+            directionVisual.transform.localScale = new Vector3(
+                prefabScale.x / Mathf.Max(0.0001f, parentScale.x),
+                prefabScale.y / Mathf.Max(0.0001f, parentScale.y),
+                prefabScale.z / Mathf.Max(0.0001f, parentScale.z));
+
+            directionRenderer = directionVisual.GetComponent<SpriteRenderer>();
+            if (directionRenderer != null)
+                directionRenderer.sortingOrder = noteRenderer != null ? noteRenderer.sortingOrder : 5;
+            if (noteRenderer != null) noteRenderer.enabled = false;
+        }
+
         // ใช้ตำแหน่งลูกศรจริงในซีนเป็นจุดตัดสิน: โน้ตวิ่งมาหยุดที่ลูกศรของปุ่มนั้น
         if (TryGetLaneAnchor(assignedKey, out Vector3 anchor))
         {
@@ -141,6 +171,18 @@ public class MiniLipid : MonoBehaviour
         else if (assignedKey == KeyCode.D) pos.y = yPosMid2;
         else if (assignedKey == KeyCode.S) pos.y = yPosBottom;
         transform.position = pos;
+    }
+
+    GameObject DirectionPrefabForKey(KeyCode key)
+    {
+        switch (key)
+        {
+            case KeyCode.W: return noteUpPrefab;
+            case KeyCode.A: return noteLeftPrefab;
+            case KeyCode.D: return noteRightPrefab;
+            case KeyCode.S: return noteDownPrefab;
+            default: return null;
+        }
     }
 
     static bool TryGetLaneAnchor(KeyCode key, out Vector3 anchor)
@@ -175,6 +217,13 @@ public class MiniLipid : MonoBehaviour
     {
         hasTargetTime = true;
         targetSongTime = songTime;
+        FollowSongTime();
+    }
+
+    public void DelayTargetSongTime(float delaySeconds)
+    {
+        if (!hasTargetTime || holdStarted || delaySeconds <= 0f) return;
+        targetSongTime += delaySeconds;
         FollowSongTime();
     }
 
@@ -238,6 +287,7 @@ public class MiniLipid : MonoBehaviour
         holdTailRenderer = CreateHoldPart("HoldTail", holdTailSprite);
 
         noteRenderer.enabled = false;
+        if (directionRenderer != null) directionRenderer.enabled = false;
         UpdateHoldVisual();
     }
 
@@ -303,6 +353,7 @@ public class MiniLipid : MonoBehaviour
     void SetHoldColor(Color color)
     {
         if (noteRenderer != null) noteRenderer.color = color;
+        if (directionRenderer != null) directionRenderer.color = color;
         if (holdHeadRenderer != null) holdHeadRenderer.color = color;
         if (holdBodyRenderer != null) holdBodyRenderer.color = color;
         if (holdTailRenderer != null) holdTailRenderer.color = color;

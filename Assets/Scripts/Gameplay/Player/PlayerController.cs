@@ -648,7 +648,6 @@ public class PlayerController : MonoBehaviour
 
     void OnNoteMissed(KeyCode missedKey = KeyCode.None)
     {
-        if (BossMashManager.IsPostQTEGraceActive) return;
         missCount++;
         soundEventPerfectStreak = 0;
         CancelDirectionalMove();

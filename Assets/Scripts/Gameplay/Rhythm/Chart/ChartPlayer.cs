@@ -51,12 +51,27 @@ public class ChartPlayer : MonoBehaviour
     private float lastPlayingTime;
     private float progressElapsed;
     private bool wasQTEActive;
+    private float chartTimelineOffset;
+    private float postQTEGapEndSongTime;
+    private bool postQTEGapActive;
     private NoteKey? recordingKey;
     private float recordingPressBeat;
     private ChartNote recordingNote;
     private const float SongEndTolerance = 1f;
 
     bool Active => chart != null;
+
+    public void BeginPostQTEGap(float duration)
+    {
+        if (duration <= 0f || beat == null) return;
+
+        chartTimelineOffset += duration;
+        postQTEGapEndSongTime = beat.songPositionInSeconds + duration;
+        postQTEGapActive = true;
+
+        foreach (MiniLipid mini in MiniLipid.Active)
+            if (mini != null) mini.DelayTargetSongTime(duration);
+    }
 
     void Awake()
     {
@@ -152,14 +167,7 @@ public class ChartPlayer : MonoBehaviour
             musicStarted = true;
             lastPlayingTime = beat.musicSource.time;
         }
-        float t = beat.songPositionInSeconds;
-        if (wasQTEActive)
-        {
-            while (chart.qteEvents != null && nextQTE < chart.qteEvents.Count
-                && chart.qteEvents[nextQTE].beat * chart.BeatDuration <= t)
-                nextQTE++;
-            wasQTEActive = false;
-        }
+        float songTime = beat.songPositionInSeconds;
 
         if (progressTracker != null)
         {
@@ -176,8 +184,22 @@ public class ChartPlayer : MonoBehaviour
             }
             else if (chart.music != null && chart.music.length > 0f)
             {
-                progressTracker.SetProgress(Mathf.Clamp01((t + chart.offsetSeconds) / chart.music.length));
+                progressTracker.SetProgress(Mathf.Clamp01((songTime + chart.offsetSeconds) / chart.music.length));
             }
+        }
+
+        if (postQTEGapActive)
+        {
+            if (songTime < postQTEGapEndSongTime) return;
+            postQTEGapActive = false;
+        }
+        float t = songTime - chartTimelineOffset;
+        if (wasQTEActive)
+        {
+            while (chart.qteEvents != null && nextQTE < chart.qteEvents.Count
+                && chart.qteEvents[nextQTE].beat * chart.BeatDuration <= t)
+                nextQTE++;
+            wasQTEActive = false;
         }
 
         if (recordMode)
@@ -244,7 +266,7 @@ public class ChartPlayer : MonoBehaviour
             var w = waves[noteWaveIndex];
             if (w.enemy == null) break;
 
-            SpawnNote(n, w.enemy, arriveAt);
+            SpawnNote(n, w.enemy, arriveAt + chartTimelineOffset);
             nextNote++;
         }
 

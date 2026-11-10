@@ -181,7 +181,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_Sprite: {fileID: -2413806693520163455, guid: 2a40fa93b6f2b004a88bbfff20b92542, type: 3}
-  m_Color: {r: 1, g: 0.6747296, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -206,6 +206,10 @@ MonoBehaviour:
   assignedKey: 0
   moveSpeed: 9
   hitLineX: -3.5
+  noteUpPrefab: {fileID: 6856782584627795147, guid: 2786a52456cc8374fb5d2d511d660f21, type: 3}
+  noteLeftPrefab: {fileID: 2312329244411339806, guid: d0234f312b68b3a43851f5029e7da5a2, type: 3}
+  noteRightPrefab: {fileID: 2061271487012231918, guid: 07ca292d971f45f488af1b819a01bde5, type: 3}
+  noteDownPrefab: {fileID: 3414420492428549426, guid: 9141561a0d8b7814ca21e2a3dd4182ca, type: 3}
   yPosTop: 2.25
   yPosMid1: 0.75
   yPosMid2: -0.75
