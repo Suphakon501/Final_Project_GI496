@@ -9,12 +9,9 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     public static bool isGameOver = false;
 
-    // ลำดับเลนบนลงล่าง: ขึ้น (W), ซ้าย (A), ขวา (D), ล่าง (S)
+    // Layout for the four rhythm lanes: D (up), F (left), J (right), K (down).
     private static readonly KeyCode[] InputKeys = {
-        KeyCode.W, KeyCode.UpArrow,
-        KeyCode.A, KeyCode.LeftArrow,
-        KeyCode.D, KeyCode.RightArrow,
-        KeyCode.S, KeyCode.DownArrow
+        KeyCode.D, KeyCode.F, KeyCode.J, KeyCode.K
     };
 
     private const int PerfectScore = 300;
@@ -514,10 +511,10 @@ public class PlayerController : MonoBehaviour
     // Normalize key while preserving each direction's assigned animation.
     KeyCode NormalizeKey(KeyCode key)
     {
-        if (key == KeyCode.W || key == KeyCode.UpArrow) return KeyCode.W;       // บน
-        if (key == KeyCode.A || key == KeyCode.LeftArrow) return KeyCode.A;     // ซ้าย
-        if (key == KeyCode.D || key == KeyCode.RightArrow) return KeyCode.D;    // ขวา
-        if (key == KeyCode.S || key == KeyCode.DownArrow) return KeyCode.S;     // ล่าง
+        if (key == KeyCode.D) return KeyCode.W; // บน
+        if (key == KeyCode.F) return KeyCode.A; // ซ้าย
+        if (key == KeyCode.J) return KeyCode.D; // ขวา
+        if (key == KeyCode.K) return KeyCode.S; // ล่าง
         return key;
     }
 
@@ -1089,10 +1086,12 @@ public class PlayerController : MonoBehaviour
 
     static int KeyGradeIndex(KeyCode key)
     {
-        if (key == KeyCode.A || key == KeyCode.LeftArrow) return 0;
-        if (key == KeyCode.S || key == KeyCode.DownArrow) return 1;
-        if (key == KeyCode.W || key == KeyCode.UpArrow) return 2;
-        if (key == KeyCode.D || key == KeyCode.RightArrow) return 3;
+        // ShowGrade receives normalized chart directions: W, A, D, S.
+        // Keep these indexes aligned with CacheDirectionArrows: up, left, right, down.
+        if (key == KeyCode.W) return 0;
+        if (key == KeyCode.A) return 1;
+        if (key == KeyCode.D) return 2;
+        if (key == KeyCode.S) return 3;
         return -1;
     }
 

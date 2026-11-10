@@ -6053,7 +6053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cheerleaders:
   - {fileID: 994397045768948428, guid: a0a244fa79f99204695dc17726e91f38, type: 3}
-  - {fileID: 4935764364040481718, guid: b2e091c41a9cd3e449a168deb8e1044c, type: 3}
+  - {fileID: 8889126762453452729, guid: 54efaebbea7448444ac678d91a0f9b95, type: 3}
   appearChance: 80
   intervalRange: {x: 6, y: 12}
   startDelay: 2

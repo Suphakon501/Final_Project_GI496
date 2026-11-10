@@ -391,10 +391,10 @@ public class MiniLipid : MonoBehaviour
             if (!holdStarted) return false;
             switch (assignedKey)
             {
-                case KeyCode.W: return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
-                case KeyCode.A: return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
-                case KeyCode.D: return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
-                case KeyCode.S: return Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+                case KeyCode.W: return Input.GetKey(KeyCode.D);
+                case KeyCode.A: return Input.GetKey(KeyCode.F);
+                case KeyCode.D: return Input.GetKey(KeyCode.J);
+                case KeyCode.S: return Input.GetKey(KeyCode.K);
                 default: return Input.GetKey(assignedKey);
             }
         }
@@ -404,10 +404,10 @@ public class MiniLipid : MonoBehaviour
     {
         switch (assignedKey)
         {
-            case KeyCode.W: return Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow);
-            case KeyCode.A: return Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow);
-            case KeyCode.D: return Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow);
-            case KeyCode.S: return Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow);
+            case KeyCode.W: return Input.GetKeyUp(KeyCode.D);
+            case KeyCode.A: return Input.GetKeyUp(KeyCode.F);
+            case KeyCode.D: return Input.GetKeyUp(KeyCode.J);
+            case KeyCode.S: return Input.GetKeyUp(KeyCode.K);
             default: return Input.GetKeyUp(assignedKey);
         }
     }

@@ -214,7 +214,15 @@ public class BossMashManager : MonoBehaviour
         // Let the camera finish its player -> enemy -> faceoff sequence before accepting mash input or counting QTE time.
         if (!qteIntroComplete) return;
 
-        if (!PlayerController.isGameOver && Input.GetKeyDown(KeyCode.Space))
+        bool mashPressed = Input.GetKeyDown(KeyCode.D)
+            || Input.GetKeyDown(KeyCode.F)
+            || Input.GetKeyDown(KeyCode.J)
+            || Input.GetKeyDown(KeyCode.K)
+            || Input.GetKeyDown(KeyCode.UpArrow)
+            || Input.GetKeyDown(KeyCode.DownArrow)
+            || Input.GetKeyDown(KeyCode.LeftArrow)
+            || Input.GetKeyDown(KeyCode.RightArrow);
+        if (!PlayerController.isGameOver && mashPressed)
         {
             if (PlayerController.instance != null)
             {

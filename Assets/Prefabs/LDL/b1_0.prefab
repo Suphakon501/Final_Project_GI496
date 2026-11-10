@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedKey: 0
-  moveSpeed: 6
+  moveSpeed: 9
   hitLineX: -3.5
   noteUpPrefab: {fileID: 6856782584627795147, guid: 2786a52456cc8374fb5d2d511d660f21, type: 3}
   noteLeftPrefab: {fileID: 2312329244411339806, guid: d0234f312b68b3a43851f5029e7da5a2, type: 3}
