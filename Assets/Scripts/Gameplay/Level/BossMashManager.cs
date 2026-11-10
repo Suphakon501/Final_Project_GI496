@@ -28,7 +28,8 @@ public class BossMashManager : MonoBehaviour
     [SerializeField, Range(0f, 0.8f)] private float qteRevealStartRadius = 0.3f;
     [SerializeField, Range(0.1f, 1.1f)] private float qteRevealRadius = 0.82f;
     [SerializeField, Min(0.05f)] private float qteExitDuration = 0.6f;
-    [SerializeField, Min(0f)] private float postQTEGapDuration = 1.25f;
+    [Tooltip("เวลาพักหลัง QTE ก่อนปล่อยโน้ตชุดถัดไป เพลงยังเล่นต่อระหว่างนี้")]
+    [SerializeField, Min(0f)] private float postQTEGapDuration = 2.5f;
 
     [Header("QTE Hit Impact")]
     [SerializeField, Min(0.01f)] private float bossImpactDuration = 0.18f;
@@ -645,7 +646,6 @@ public class BossMashManager : MonoBehaviour
 
     void BeginPostQTEGap()
     {
-        if (postQTEGapDuration <= 0f) return;
         ChartPlayer chartPlayer = FindFirstObjectByType<ChartPlayer>();
         if (chartPlayer != null) chartPlayer.BeginPostQTEGap(postQTEGapDuration);
     }

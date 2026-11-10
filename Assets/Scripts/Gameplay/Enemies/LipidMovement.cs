@@ -46,6 +46,7 @@ public class LipidMovement : MonoBehaviour
     private int spawnedNotes = 0;
     private int finishedNotes = 0;
     private bool hadMiss = false;
+    private bool hadQTESkip = false;
     private bool waveEnded = false;
 
     public float MoveSpeed => moveSpeed;
@@ -168,12 +169,19 @@ public class LipidMovement : MonoBehaviour
         FinishWaveIfComplete();
     }
 
+    public void OnMiniDiscardedForQTE()
+    {
+        finishedNotes++;
+        hadQTESkip = true;
+        FinishWaveIfComplete();
+    }
+
     void FinishWaveIfComplete()
     {
         if (!waveEnded && AllNotesSpawned && finishedNotes >= totalNotes)
         {
             waveEnded = true;
-            if (PlayerController.instance != null) PlayerController.instance.OnWaveEnd(hadMiss);
+            if (PlayerController.instance != null) PlayerController.instance.OnWaveEnd(hadMiss || hadQTESkip);
             StartCoroutine(DeathBurst());
         }
     }

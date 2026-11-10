@@ -53,6 +53,10 @@ public class SongChart : ScriptableObject
     [Header("Waves")]
     public float waveGapBeats = 3f;
 
+    [Header("Note Speed")]
+    [Tooltip("ความเร็วโน้ตเทียบกับค่าปกติ (1 = ปกติ, 0.5 = ช้าลงครึ่งหนึ่ง, 2 = เร็วขึ้นสองเท่า)")]
+    [Range(0.5f, 2f)] public float noteSpeedMultiplier = 1f;
+
     [Header("Notes")]
     public List<ChartNote> notes = new List<ChartNote>();
 

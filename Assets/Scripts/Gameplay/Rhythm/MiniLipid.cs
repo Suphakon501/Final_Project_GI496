@@ -12,7 +12,7 @@ public class MiniLipid : MonoBehaviour
 
     [Header("Settings")]
     public KeyCode assignedKey;
-    [SerializeField] private float moveSpeed = 3.0f;
+    [SerializeField, HideInInspector] private float moveSpeed = 3.0f;
     public float hitLineX = -3.0f;
 
     [Header("Direction Note Prefabs")]
@@ -27,9 +27,8 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private float yPosMid2 = -1.0f;   // ขวา / D
     [SerializeField] private float yPosBottom = -3.0f; // ล่าง / S
 
-    [Header("Progressive Speed Settings")]
-    [SerializeField] private float maxMoveSpeed = 13.0f;
-    [SerializeField] private float speedIncreaseRate = 0.05f;
+    [SerializeField, HideInInspector] private float maxMoveSpeed = 13.0f;
+    [SerializeField, HideInInspector] private float speedIncreaseRate = 0.05f;
 
     [Header("Timing Window (seconds)")]
     [SerializeField] private float perfectWindow = 0.09f;
@@ -75,6 +74,7 @@ public class MiniLipid : MonoBehaviour
     private bool isFinished = false;
     private bool hasTargetTime = false;
     private float targetSongTime;
+    private float moveSpeedMultiplier = 1f;
     private float holdDuration;
     private bool holdStarted;
     private LineRenderer holdTrail;
@@ -98,8 +98,13 @@ public class MiniLipid : MonoBehaviour
         {
             float timePassed = Time.timeSinceLevelLoad;
             float calculatedSpeed = moveSpeed + (timePassed * speedIncreaseRate);
-            return Mathf.Min(calculatedSpeed, maxMoveSpeed);
+            return Mathf.Min(calculatedSpeed, maxMoveSpeed) * moveSpeedMultiplier;
         }
+    }
+
+    public void SetMoveSpeedMultiplier(float multiplier)
+    {
+        moveSpeedMultiplier = Mathf.Max(0.1f, multiplier);
     }
 
     bool UsingSongClock => hasTargetTime && BeatManager.instance != null;
@@ -109,7 +114,8 @@ public class MiniLipid : MonoBehaviour
 
     void Update()
     {
-        if (PauseMenu.IsPaused || PlayerController.isGameOver || isFinished) return;
+        if (PauseMenu.IsPaused || PlayerController.isGameOver || isFinished
+            || BossMashManager.IsMashActive || ChartPlayer.IsPostQTEGapActive) return;
 
         if (!holdStarted)
         {
@@ -222,9 +228,17 @@ public class MiniLipid : MonoBehaviour
 
     public void DelayTargetSongTime(float delaySeconds)
     {
-        if (!hasTargetTime || holdStarted || delaySeconds <= 0f) return;
+        if (!hasTargetTime || delaySeconds <= 0f) return;
         targetSongTime += delaySeconds;
         FollowSongTime();
+    }
+
+    public void DiscardForQTE()
+    {
+        if (isFinished) return;
+        isFinished = true;
+        if (parentLipid != null) parentLipid.OnMiniDiscardedForQTE();
+        Destroy(gameObject);
     }
 
     public bool DiscardIfExpiredDuringQTE()

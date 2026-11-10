@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 [DefaultExecutionOrder(-200)]
 public class ChartPlayer : MonoBehaviour
 {
+    public static bool IsPostQTEGapActive { get; private set; }
+
     [Header("Chart (empty = random mode)")]
     public SongChart chart;
     public GameObject lipidPrefab;
@@ -51,8 +53,10 @@ public class ChartPlayer : MonoBehaviour
     private float lastPlayingTime;
     private float progressElapsed;
     private bool wasQTEActive;
+    private float qteStartSongTime;
     private float chartTimelineOffset;
     private float postQTEGapEndSongTime;
+    private float pendingNoteDelay;
     private bool postQTEGapActive;
     private NoteKey? recordingKey;
     private float recordingPressBeat;
@@ -61,16 +65,42 @@ public class ChartPlayer : MonoBehaviour
 
     bool Active => chart != null;
 
+    void OnDisable()
+    {
+        IsPostQTEGapActive = false;
+        postQTEGapActive = false;
+        pendingNoteDelay = 0f;
+#if UNITY_EDITOR
+        if (!Active || !recordMode) return;
+        if (recordingKey.HasValue && beat != null)
+            FinishRecordedHold(beat.songPositionInBeats);
+        chart.SortNotes();
+        UnityEditor.EditorUtility.SetDirty(chart);
+        UnityEditor.AssetDatabase.SaveAssets();
+        Debug.Log($"[ChartPlayer] Saved {chart.notes.Count} notes to '{chart.name}'");
+#endif
+    }
+
     public void BeginPostQTEGap(float duration)
     {
-        if (duration <= 0f || beat == null) return;
+        if (beat == null) return;
 
-        chartTimelineOffset += duration;
-        postQTEGapEndSongTime = beat.songPositionInSeconds + duration;
-        postQTEGapActive = true;
+        float qteDuration = wasQTEActive
+            ? Mathf.Max(0f, beat.songPositionInSeconds - qteStartSongTime)
+            : 0f;
+        float totalDelay = qteDuration + Mathf.Max(0f, duration);
+        chartTimelineOffset += totalDelay;
+        wasQTEActive = false;
 
-        foreach (MiniLipid mini in MiniLipid.Active)
-            if (mini != null) mini.DelayTargetSongTime(duration);
+        if (duration > 0f)
+        {
+            postQTEGapEndSongTime = beat.songPositionInSeconds + duration;
+            postQTEGapActive = true;
+            IsPostQTEGapActive = true;
+            pendingNoteDelay += totalDelay;
+        }
+        else
+            DelayActiveNotes(totalDelay);
     }
 
     void Awake()
@@ -122,7 +152,8 @@ public class ChartPlayer : MonoBehaviour
         var mini = lipid.miniLipidPrefab.GetComponent<MiniLipid>();
         miniPrefab = lipid.miniLipidPrefab;
         stopX = lipid.stopPosX;
-        travelTime = (lipid.stopPosX - mini.hitLineX) / Mathf.Max(0.01f, mini.MoveSpeed);
+        travelTime = (lipid.stopPosX - mini.hitLineX)
+                   / Mathf.Max(0.01f, mini.MoveSpeed * chart.noteSpeedMultiplier);
         walkTime = lipid.WalkInDuration;
 
         notes.AddRange(chart.notes);
@@ -158,7 +189,11 @@ public class ChartPlayer : MonoBehaviour
         if (!Active || PlayerController.isGameOver || finished) return;
         if (BossMashManager.IsMashActive)
         {
-            wasQTEActive = true;
+            if (!wasQTEActive)
+            {
+                wasQTEActive = true;
+                qteStartSongTime = beat.songPositionInSeconds;
+            }
             return;
         }
 
@@ -192,16 +227,11 @@ public class ChartPlayer : MonoBehaviour
         {
             if (songTime < postQTEGapEndSongTime) return;
             postQTEGapActive = false;
+            IsPostQTEGapActive = false;
+            DelayActiveNotes(pendingNoteDelay);
+            pendingNoteDelay = 0f;
         }
         float t = songTime - chartTimelineOffset;
-        if (wasQTEActive)
-        {
-            while (chart.qteEvents != null && nextQTE < chart.qteEvents.Count
-                && chart.qteEvents[nextQTE].beat * chart.BeatDuration <= t)
-                nextQTE++;
-            wasQTEActive = false;
-        }
-
         if (recordMode)
         {
             RecordInput();
@@ -214,6 +244,9 @@ public class ChartPlayer : MonoBehaviour
             ChartQTE qte = chart.qteEvents[nextQTE++];
             if (BossMashManager.instance != null)
             {
+                wasQTEActive = true;
+                qteStartSongTime = songTime;
+                DiscardActiveNotesForQTE();
                 BossMashManager.instance.StartChartQTE(qte.durationSeconds);
                 return;
             }
@@ -273,6 +306,21 @@ public class ChartPlayer : MonoBehaviour
         CheckSongEnded(false);
     }
 
+    void DelayActiveNotes(float delay)
+    {
+        if (delay <= 0f) return;
+        foreach (MiniLipid mini in MiniLipid.Active)
+            if (mini != null) mini.DelayTargetSongTime(delay);
+    }
+
+    void DiscardActiveNotesForQTE()
+    {
+        MiniLipid[] activeNotes = new MiniLipid[MiniLipid.Active.Count];
+        for (int i = 0; i < activeNotes.Length; i++) activeNotes[i] = MiniLipid.Active[i];
+        foreach (MiniLipid mini in activeNotes)
+            if (mini != null) mini.DiscardForQTE();
+    }
+
     // แต่ละปุ่มใช้ตำแหน่งลูกศรทิศของตัวเอง; W/S ย้ายเลนได้จากตำแหน่งลูกศรในฉาก
     float RowYFor(NoteKey k)
     {
@@ -317,6 +365,7 @@ public class ChartPlayer : MonoBehaviour
 
         var mini = go.GetComponent<MiniLipid>();
         if (mini == null) return;
+        mini.SetMoveSpeedMultiplier(chart.noteSpeedMultiplier);
         mini.InitializeMini(n.KeyCode, owner);
         mini.SetHoldDuration(Mathf.Max(0f, n.holdBeats) * chart.BeatDuration);
         mini.SetTargetSongTime(arriveAt);
@@ -390,16 +439,4 @@ public class ChartPlayer : MonoBehaviour
         Debug.Log($"[ChartPlayer] Recorded {recordingNote.beat:0.##} {recordingNote.key} hold {recordingNote.holdBeats:0.##} beats ({chart.notes.Count} notes)");
     }
 
-#if UNITY_EDITOR
-    void OnDisable()
-    {
-        if (!Active || !recordMode) return;
-        if (recordingKey.HasValue && beat != null)
-            FinishRecordedHold(beat.songPositionInBeats);
-        chart.SortNotes();
-        UnityEditor.EditorUtility.SetDirty(chart);
-        UnityEditor.AssetDatabase.SaveAssets();
-        Debug.Log($"[ChartPlayer] Saved {chart.notes.Count} notes to '{chart.name}'");
-    }
-#endif
 }

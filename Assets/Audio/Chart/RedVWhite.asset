@@ -16,6 +16,7 @@ MonoBehaviour:
   bpm: 120
   offsetSeconds: 0
   waveGapBeats: 3
+  noteSpeedMultiplier: 1
   notes:
   - beat: 3
     key: 2

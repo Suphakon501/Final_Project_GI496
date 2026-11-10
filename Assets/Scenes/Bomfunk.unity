@@ -4387,7 +4387,7 @@ MonoBehaviour:
   qteRevealStartRadius: 0.3
   qteRevealRadius: 0.82
   qteExitDuration: 0.6
-  postQTEGapDuration: 1.25
+  postQTEGapDuration: 2.5
   bossImpactDuration: 0.18
   bossRecoilDistance: 0.3
   bossTiltDegrees: 8

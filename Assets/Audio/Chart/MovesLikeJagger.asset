@@ -16,34 +16,19 @@ MonoBehaviour:
   bpm: 128
   offsetSeconds: 0
   waveGapBeats: 3
+  noteSpeedMultiplier: 0.9
   notes:
-  - beat: 8
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 8.5
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 9.5
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 10
     key: 0
     row: 0
     holdBeats: 1.5
-  - beat: 11
-    key: 3
-    row: 1
-    holdBeats: 0
   - beat: 12
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 13
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 14
     key: 3
@@ -52,10 +37,6 @@ MonoBehaviour:
   - beat: 20
     key: 2
     row: 2
-    holdBeats: 0
-  - beat: 20.5
-    key: 1
-    row: 1
     holdBeats: 0
   - beat: 22
     key: 3
@@ -81,35 +62,15 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 32.5
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 33.5
     key: 3
     row: 1
-    holdBeats: 0
-  - beat: 34.5
-    key: 1
-    row: 1
-    holdBeats: 2
-  - beat: 35
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 36
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 37
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 38
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 44
     key: 3
     row: 1
     holdBeats: 0
@@ -137,40 +98,20 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 56
-    key: 1
-    row: 1
-    holdBeats: 0
   - beat: 56.5
     key: 0
     row: 0
     holdBeats: 0
-  - beat: 57.5
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 58.5
     key: 0
     row: 0
-    holdBeats: 2.5
-  - beat: 59.5
-    key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 60
-    key: 2
-    row: 2
-    holdBeats: 0
+    holdBeats: 1.5
   - beat: 61
     key: 3
     row: 1
     holdBeats: 0
   - beat: 62
     key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 68
-    key: 3
     row: 1
     holdBeats: 0
   - beat: 68.5
@@ -201,29 +142,13 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 80.5
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 81.5
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 82.5
-    key: 1
-    row: 1
-    holdBeats: 1.5
   - beat: 83.5
     key: 3
     row: 1
-    holdBeats: 0
-  - beat: 84.5
-    key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 85
-    key: 0
-    row: 0
     holdBeats: 0
   - beat: 86
     key: 2
@@ -232,14 +157,6 @@ MonoBehaviour:
   - beat: 92
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 92.5
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 93.5
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 94.5
     key: 0
@@ -257,33 +174,17 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 104
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 104.5
     key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 105.5
-    key: 3
     row: 1
     holdBeats: 0
   - beat: 106.5
     key: 0
     row: 0
-    holdBeats: 2
-  - beat: 107.5
-    key: 3
-    row: 1
-    holdBeats: 0
+    holdBeats: 1.5
   - beat: 108.5
     key: 2
     row: 2
-    holdBeats: 0
-  - beat: 109.5
-    key: 0
-    row: 0
     holdBeats: 0
   - beat: 110
     key: 2
@@ -291,10 +192,6 @@ MonoBehaviour:
     holdBeats: 0
   - beat: 116
     key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 116.5
-    key: 1
     row: 1
     holdBeats: 0
   - beat: 117.5
@@ -321,28 +218,12 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 129
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 129.5
     key: 2
     row: 2
     holdBeats: 0
-  - beat: 130.5
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 131
-    key: 0
-    row: 0
-    holdBeats: 2.5
   - beat: 132
     key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 133
-    key: 3
     row: 1
     holdBeats: 0
   - beat: 134
@@ -352,10 +233,6 @@ MonoBehaviour:
   - beat: 140
     key: 3
     row: 1
-    holdBeats: 0
-  - beat: 141.5
-    key: 0
-    row: 0
     holdBeats: 0
   - beat: 142
     key: 2
@@ -377,30 +254,14 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 152
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 153
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 153.5
-    key: 0
-    row: 0
     holdBeats: 0
   - beat: 154.5
     key: 1
     row: 1
     holdBeats: 1.5
-  - beat: 155.5
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 156
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 157
     key: 0
     row: 0
@@ -416,10 +277,6 @@ MonoBehaviour:
   - beat: 165
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 165.5
-    key: 0
-    row: 0
     holdBeats: 0
   - beat: 167
     key: 2
@@ -441,29 +298,13 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 177
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 177.5
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 178.5
-    key: 0
-    row: 0
-    holdBeats: 2
   - beat: 179.5
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 180.5
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 181
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 182
     key: 3
@@ -476,10 +317,6 @@ MonoBehaviour:
   - beat: 189
     key: 0
     row: 0
-    holdBeats: 0
-  - beat: 189.5
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 190.5
     key: 0
@@ -501,27 +338,11 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 201
-    key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 201.5
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 202.5
     key: 3
     row: 1
-    holdBeats: 2.5
-  - beat: 203.5
-    key: 2
-    row: 2
-    holdBeats: 0
+    holdBeats: 1.5
   - beat: 204.5
-    key: 0
-    row: 0
-    holdBeats: 0
-  - beat: 205.5
     key: 0
     row: 0
     holdBeats: 0
@@ -532,10 +353,6 @@ MonoBehaviour:
   - beat: 212
     key: 0
     row: 0
-    holdBeats: 0
-  - beat: 213
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 213.5
     key: 3
@@ -561,29 +378,13 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 225
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 226
     key: 0
     row: 0
     holdBeats: 0
-  - beat: 226.5
-    key: 2
-    row: 2
-    holdBeats: 1.5
-  - beat: 227.5
-    key: 1
-    row: 1
-    holdBeats: 0
   - beat: 228
     key: 0
     row: 0
-    holdBeats: 0
-  - beat: 229
-    key: 3
-    row: 1
     holdBeats: 0
   - beat: 230
     key: 1
@@ -596,10 +397,6 @@ MonoBehaviour:
   - beat: 237
     key: 2
     row: 2
-    holdBeats: 0
-  - beat: 237.5
-    key: 3
-    row: 1
     holdBeats: 0
   - beat: 238.5
     key: 1
@@ -617,30 +414,14 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 248
-    key: 1
-    row: 1
-    holdBeats: 0
   - beat: 249
     key: 0
     row: 0
     holdBeats: 0
-  - beat: 250
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 250.5
     key: 1
     row: 1
-    holdBeats: 2
-  - beat: 251.5
-    key: 0
-    row: 0
-    holdBeats: 0
-  - beat: 252.5
-    key: 3
-    row: 1
-    holdBeats: 0
+    holdBeats: 1.5
   - beat: 253
     key: 1
     row: 1
@@ -659,10 +440,6 @@ MonoBehaviour:
     holdBeats: 0
   - beat: 262.5
     key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 263
-    key: 1
     row: 1
     holdBeats: 0
   - beat: 264
@@ -685,24 +462,8 @@ MonoBehaviour:
     key: 0
     row: 0
     holdBeats: 0
-  - beat: 274
-    key: 2
-    row: 2
-    holdBeats: 0
-  - beat: 274.5
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 275.5
     key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 276.5
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 277.5
-    key: 1
     row: 1
     holdBeats: 0
   - beat: 278
@@ -721,10 +482,6 @@ MonoBehaviour:
     key: 2
     row: 2
     holdBeats: 0
-  - beat: 297
-    key: 3
-    row: 1
-    holdBeats: 0
   - beat: 298
     key: 2
     row: 2
@@ -741,25 +498,13 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 307
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 308
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 309
-    key: 3
-    row: 1
-    holdBeats: 2.5
   - beat: 309.5
     key: 2
     row: 2
-    holdBeats: 0
-  - beat: 310.5
-    key: 1
-    row: 1
     holdBeats: 0
   - beat: 311
     key: 2
@@ -781,10 +526,6 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 320.5
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 322
     key: 3
     row: 1
@@ -801,10 +542,6 @@ MonoBehaviour:
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 331
-    key: 3
-    row: 1
-    holdBeats: 0
   - beat: 332
     key: 2
     row: 2
@@ -813,16 +550,8 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 1.5
-  - beat: 333.5
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 334.5
     key: 1
-    row: 1
-    holdBeats: 0
-  - beat: 335.5
-    key: 3
     row: 1
     holdBeats: 0
   - beat: 336
@@ -836,10 +565,6 @@ MonoBehaviour:
   - beat: 343
     key: 1
     row: 1
-    holdBeats: 0
-  - beat: 344
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 344.5
     key: 1
@@ -869,21 +594,9 @@ MonoBehaviour:
     key: 3
     row: 1
     holdBeats: 0
-  - beat: 357
-    key: 1
-    row: 1
-    holdBeats: 2
-  - beat: 358
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 358.5
     key: 3
     row: 1
-    holdBeats: 0
-  - beat: 359.5
-    key: 2
-    row: 2
     holdBeats: 0
   - beat: 360
     key: 3
@@ -901,10 +614,6 @@ MonoBehaviour:
     key: 2
     row: 2
     holdBeats: 0
-  - beat: 368.5
-    key: 3
-    row: 1
-    holdBeats: 0
   - beat: 369.5
     key: 2
     row: 2
@@ -921,26 +630,14 @@ MonoBehaviour:
     key: 0
     row: 0
     holdBeats: 0
-  - beat: 378.5
-    key: 3
-    row: 1
-    holdBeats: 0
   - beat: 379
     key: 1
     row: 1
     holdBeats: 0
-  - beat: 380
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 381
     key: 3
     row: 1
-    holdBeats: 2.5
-  - beat: 382
-    key: 0
-    row: 0
-    holdBeats: 0
+    holdBeats: 1.5
   - beat: 383
     key: 0
     row: 0
@@ -961,10 +658,6 @@ MonoBehaviour:
     key: 2
     row: 2
     holdBeats: 0
-  - beat: 393.5
-    key: 0
-    row: 0
-    holdBeats: 0
   - beat: 394
     key: 1
     row: 1
@@ -981,10 +674,6 @@ MonoBehaviour:
     key: 0
     row: 0
     holdBeats: 0
-  - beat: 403
-    key: 2
-    row: 2
-    holdBeats: 0
   - beat: 404
     key: 2
     row: 2
@@ -994,14 +683,6 @@ MonoBehaviour:
     row: 1
     holdBeats: 1.5
   - beat: 406
-    key: 0
-    row: 0
-    holdBeats: 0
-  - beat: 407
-    key: 3
-    row: 1
-    holdBeats: 0
-  - beat: 407.5
     key: 0
     row: 0
     holdBeats: 0
@@ -1020,10 +701,6 @@ MonoBehaviour:
   - beat: 416.5
     key: 2
     row: 2
-    holdBeats: 0
-  - beat: 417.5
-    key: 0
-    row: 0
     holdBeats: 0
   - beat: 418
     key: 1
