@@ -15,11 +15,11 @@ public class MiniLipid : MonoBehaviour
     [SerializeField] private float moveSpeed = 3.0f;
     public float hitLineX = -3.0f;
 
-[Header("4-Lane Y Positions (Top to Bottom: ซ้าย -> ขึ้น -> ลง -> ขวา)")]
-    [SerializeField] private float yPosTop = 3.0f;     // แถวที่ 1 (บนสุด: ซ้าย / A) -> พิกัด 3.0
-    [SerializeField] private float yPosMid1 = 1.0f;    // แถวที่ 2 (ถัดลงมา: ขึ้น / W) -> พิกัด 1.0
-    [SerializeField] private float yPosMid2 = -1.0f;   // แถวที่ 3 (ถัดลงมา: ล่าง / S) -> พิกัด -1.0
-    [SerializeField] private float yPosBottom = -3.0f; // แถวที่ 4 (ล่างสุด: ขวา / D) -> พิกัด -3.0
+[Header("4-Lane Y Positions (Top to Bottom: ขึ้น -> ซ้าย -> ขวา -> ล่าง)")]
+    [SerializeField] private float yPosTop = 3.0f;     // บน / W
+    [SerializeField] private float yPosMid1 = 1.0f;    // ซ้าย / A
+    [SerializeField] private float yPosMid2 = -1.0f;   // ขวา / D
+    [SerializeField] private float yPosBottom = -3.0f; // ล่าง / S
 
     [Header("Progressive Speed Settings")]
     [SerializeField] private float maxMoveSpeed = 13.0f;
@@ -136,10 +136,10 @@ public class MiniLipid : MonoBehaviour
 
         // Fallback: ตำแหน่ง Y จากพรีแฟ็บ (ซีนที่ไม่มี Hitline/ลูกศร)
         Vector3 pos = transform.position;
-        if (assignedKey == KeyCode.A) pos.y = yPosTop;
-        else if (assignedKey == KeyCode.W) pos.y = yPosMid1;
-        else if (assignedKey == KeyCode.S) pos.y = yPosMid2;
-        else if (assignedKey == KeyCode.D) pos.y = yPosBottom;
+        if (assignedKey == KeyCode.W) pos.y = yPosTop;
+        else if (assignedKey == KeyCode.A) pos.y = yPosMid1;
+        else if (assignedKey == KeyCode.D) pos.y = yPosMid2;
+        else if (assignedKey == KeyCode.S) pos.y = yPosBottom;
         transform.position = pos;
     }
 

@@ -6,6 +6,7 @@ public class BossMashManager : MonoBehaviour
 {
     public static BossMashManager instance;
     public static bool IsMashActive => instance != null && instance.isMashActive;
+    public static bool IsPostQTEGraceActive => instance != null && instance.isPostQTEGraceActive;
 
     [Header("Boss Prefab & Spawn Settings")]
     [SerializeField] private GameObject bossPrefab;
@@ -28,6 +29,7 @@ public class BossMashManager : MonoBehaviour
     [SerializeField, Range(0f, 0.8f)] private float qteRevealStartRadius = 0.3f;
     [SerializeField, Range(0.1f, 1.1f)] private float qteRevealRadius = 0.82f;
     [SerializeField, Min(0.05f)] private float qteExitDuration = 0.6f;
+    [SerializeField, Min(0f)] private float postQTEGraceDuration = 1.25f;
 
     [Header("QTE Hit Impact")]
     [SerializeField, Min(0.01f)] private float bossImpactDuration = 0.18f;
@@ -46,6 +48,8 @@ public class BossMashManager : MonoBehaviour
 
     private bool isMashActive;
     private bool isExitingMash;
+    private bool isPostQTEGraceActive;
+    private float postQTEGraceRemaining;
     private bool isBossMovingIn;
     private bool finishLevelOnEnd;
     private bool qteIntroComplete;
@@ -92,6 +96,7 @@ public class BossMashManager : MonoBehaviour
 
     void OnDestroy()
     {
+        isPostQTEGraceActive = false;
         if (qteReadyPoseActive && PlayerController.instance != null)
             PlayerController.instance.EndQTEReadyPose();
         RestoreQTECamera();
@@ -101,7 +106,7 @@ public class BossMashManager : MonoBehaviour
     // Final encounter: keep the existing win-after-mash behavior.
     public void StartMash(float duration) => BeginMash(duration, true);
 
-    // Chart encounter: leave music running and resume the chart at the current song time.
+    // Chart encounter: continue from current song time, with a short combo grace period.
     public void StartChartQTE(float duration) => BeginMash(duration, false);
 
     void BeginMash(float duration, bool finishLevel)
@@ -190,6 +195,8 @@ public class BossMashManager : MonoBehaviour
 
     void Update()
     {
+        if (isPostQTEGraceActive)
+            UpdatePostQTEGrace();
         if (!isMashActive) return;
         if (PlayerController.instance != null) PlayerController.instance.KeepQTEHudVisible();
         if (isExitingMash)
@@ -630,6 +637,28 @@ public class BossMashManager : MonoBehaviour
 
         if (finishLevelOnEnd && LevelManager.instance != null)
             LevelManager.instance.FinishBossPhase();
+        else if (!finishLevelOnEnd)
+            BeginPostQTEGrace();
+    }
+
+    void BeginPostQTEGrace()
+    {
+        if (postQTEGraceDuration <= 0f) return;
+
+        isPostQTEGraceActive = true;
+        postQTEGraceRemaining = postQTEGraceDuration;
+    }
+
+    void UpdatePostQTEGrace()
+    {
+        postQTEGraceRemaining -= Time.unscaledDeltaTime;
+        if (postQTEGraceRemaining <= 0f) EndPostQTEGrace();
+    }
+
+    void EndPostQTEGrace()
+    {
+        isPostQTEGraceActive = false;
+        postQTEGraceRemaining = 0f;
     }
 
     void RestoreQTECamera()

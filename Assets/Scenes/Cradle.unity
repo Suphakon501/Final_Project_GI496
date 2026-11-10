@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -106.08777, y: 0}
+  m_AnchoredPosition: {x: -106.66259, y: 0}
   m_SizeDelta: {x: 82.47488, y: 98.1}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &16750160
@@ -371,6 +371,7 @@ RectTransform:
   - {fileID: 68312440}
   - {fileID: 1699540641}
   - {fileID: 1078961644}
+  - {fileID: 2089194474}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -535,7 +536,7 @@ Transform:
   m_GameObject: {fileID: 126287416}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1199999, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0.1199999, y: 1.14, z: 0}
   m_LocalScale: {x: 0.24752928, y: 0.24752928, z: 0.24752928}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -793,6 +794,8 @@ MonoBehaviour:
   comboNumber: {fileID: 1619992243}
   comboRoot: {fileID: 1690900385}
   minComboToShow: 2
+  comboIdleDelay: 2
+  comboFadeDuration: 0.6
   playerAnimator: {fileID: 197997223}
   idleAnimName: Player_Idle
   drawAnimName: Player_Draw
@@ -807,7 +810,7 @@ MonoBehaviour:
   sheatheDelay: 0.5
   attackStopBeforeHitLine: 0.75
   jumpAttackLeftOffset: 0.25
-  jumpAttackBelowNote: 0.5
+  jumpAttackHeight: 0.5
   jumpAttackDuration: 0.35
   hpPerfect: 2
   hpGood: 1
@@ -1627,8 +1630,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 62.08777, y: 0}
-  m_SizeDelta: {x: 44, y: 44}
+  m_AnchoredPosition: {x: 61.512947, y: 0}
+  m_SizeDelta: {x: 45.149643, y: 44}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &462143711
 MonoBehaviour:
@@ -1650,7 +1653,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 246f0f06ee0f4fbcb0c26772d7608cf7, type: 3}
+  m_Sprite: {fileID: -5461351977106791524, guid: 5904e938b3822c047b6c995c977bd8e7, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2083,7 +2086,7 @@ Transform:
   m_GameObject: {fileID: 526387221}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1199999, y: -1.75, z: 0}
+  m_LocalPosition: {x: 0.1199999, y: -3.3, z: 0}
   m_LocalScale: {x: 0.2685, y: 0.2685, z: 0.2685}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2494,7 +2497,7 @@ Transform:
   m_GameObject: {fileID: 615474035}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1199999, y: -3.25, z: 0}
+  m_LocalPosition: {x: 0.1199999, y: -1.78, z: 0}
   m_LocalScale: {x: 0.25307986, y: 0.25307986, z: 0.25307986}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3424,7 +3427,7 @@ Transform:
   m_GameObject: {fileID: 1006660241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.119999886, y: 1.25, z: 0}
+  m_LocalPosition: {x: 0.119999886, y: -0.3, z: 0}
   m_LocalScale: {x: 0.25035012, y: 0.25035012, z: 0.25035012}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4384,6 +4387,7 @@ MonoBehaviour:
   qteRevealStartRadius: 0.3
   qteRevealRadius: 0.82
   qteExitDuration: 0.6
+  postQTEGraceDuration: 1.25
   bossImpactDuration: 0.18
   bossRecoilDistance: 0.3
   bossTiltDegrees: 8
@@ -5845,7 +5849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -29.612892, y: 0}
+  m_AnchoredPosition: {x: -30.187714, y: 0}
   m_SizeDelta: {x: 81.70066, y: 98.1}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1955800308
@@ -6067,7 +6071,6 @@ MonoBehaviour:
   swapSideChance: 50
   flipWhenSwapped: 1
   worldOffset: {x: 0, y: 0}
-  sortingOrder: 30000
 --- !u!4 &2089194474
 Transform:
   m_ObjectHideFlags: 0
@@ -6081,7 +6084,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 70798412}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2096160667
 PrefabInstance:
@@ -7024,4 +7027,3 @@ SceneRoots:
   - {fileID: 1142325751}
   - {fileID: 1716451134}
   - {fileID: 122610052}
-  - {fileID: 2089194474}

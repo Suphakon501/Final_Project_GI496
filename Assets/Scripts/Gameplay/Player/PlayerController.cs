@@ -9,12 +9,12 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     public static bool isGameOver = false;
 
-    // รองรับปุ่มตามลำดับเลนใหม่: ซ้าย (A), ล่าง (S), ขึ้น (W), ขวา (D)
+    // ลำดับเลนบนลงล่าง: ขึ้น (W), ซ้าย (A), ขวา (D), ล่าง (S)
     private static readonly KeyCode[] InputKeys = {
-        KeyCode.A, KeyCode.LeftArrow,
-        KeyCode.S, KeyCode.DownArrow,
         KeyCode.W, KeyCode.UpArrow,
-        KeyCode.D, KeyCode.RightArrow
+        KeyCode.A, KeyCode.LeftArrow,
+        KeyCode.D, KeyCode.RightArrow,
+        KeyCode.S, KeyCode.DownArrow
     };
 
     private const int PerfectScore = 300;
@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sheatheDelay = 0.5f;
     [SerializeField] private float attackStopBeforeHitLine = 0.75f;
     [SerializeField] private float jumpAttackLeftOffset = 0.25f;
-    [SerializeField] private float jumpAttackBelowNote = 0.5f;
+    [SerializeField] private float jumpAttackHeight = 0.5f;
     [SerializeField] private float jumpAttackDuration = 0.35f;
 
     [Header("HP Balance")]
@@ -361,8 +361,8 @@ public class PlayerController : MonoBehaviour
         Transform hitline = GameObject.Find("Hitline")?.transform;
         if (hitline == null) return;
 
-        // Keep array order aligned with FlashDirectionArrow: A, S, W, D.
-        string[] names = { "Left2_1", "Down2_1", "Up2_1", "Right2_0" };
+        // Keep array order aligned with FlashDirectionArrow: W, A, D, S.
+        string[] names = { "Up2_1", "Left2_1", "Right2_0", "Down2_1" };
         for (int i = 0; i < names.Length; i++)
         {
             Transform arrow = hitline.Find(names[i]);
@@ -376,7 +376,7 @@ public class PlayerController : MonoBehaviour
 
     private void FlashDirectionArrow(KeyCode key)
     {
-        int index = key == KeyCode.A ? 0 : key == KeyCode.S ? 1 : key == KeyCode.W ? 2 : key == KeyCode.D ? 3 : -1;
+        int index = key == KeyCode.W ? 0 : key == KeyCode.A ? 1 : key == KeyCode.D ? 2 : key == KeyCode.S ? 3 : -1;
         if (index >= 0 && directionArrows[index] != null)
         {
             arrowFlashTimers[index] = arrowFlashDuration;
@@ -511,13 +511,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // แปลงปุ่มกดให้ตรงกับเลนใหม่ (A=ซ้าย, S=ล่าง, W=ขึ้น, D=ขวา)
+    // Normalize key while preserving each direction's assigned animation.
     KeyCode NormalizeKey(KeyCode key)
     {
-        if (key == KeyCode.A || key == KeyCode.LeftArrow) return KeyCode.A;     // บนสุด: ซ้าย
-        if (key == KeyCode.S || key == KeyCode.DownArrow) return KeyCode.S;     // ถัดมา: ล่าง
-        if (key == KeyCode.W || key == KeyCode.UpArrow) return KeyCode.W;       // ถัดมา: ขึ้น
-        if (key == KeyCode.D || key == KeyCode.RightArrow) return KeyCode.D;    // ล่างสุด: ขวา
+        if (key == KeyCode.W || key == KeyCode.UpArrow) return KeyCode.W;       // บน
+        if (key == KeyCode.A || key == KeyCode.LeftArrow) return KeyCode.A;     // ซ้าย
+        if (key == KeyCode.D || key == KeyCode.RightArrow) return KeyCode.D;    // ขวา
+        if (key == KeyCode.S || key == KeyCode.DownArrow) return KeyCode.S;     // ล่าง
         return key;
     }
 
@@ -533,7 +533,7 @@ public class PlayerController : MonoBehaviour
             if (target.TryStartHold())
             {
                 HitResult headResult = target.EvaluateAccuracy();
-                OnNoteHit(headResult, false, pressedKey, target.hitLineX, target.transform.position.y);
+                OnNoteHit(headResult, false, pressedKey, target.hitLineX);
                 activeHolds.Add(new ActiveHoldNote { note = target });
                 UpdateScoreUI();
             }
@@ -541,7 +541,7 @@ public class PlayerController : MonoBehaviour
         }
 
         HitResult result = target.EvaluateAccuracy();
-        OnNoteHit(result, target.IsLastInRow(), pressedKey, target.hitLineX, target.transform.position.y);
+        OnNoteHit(result, target.IsLastInRow(), pressedKey, target.hitLineX);
         target.ConsumeMini(result);
         UpdateScoreUI();
     }
@@ -599,10 +599,10 @@ public class PlayerController : MonoBehaviour
         UpdateScoreUI();
     }
 
-    void OnNoteHit(HitResult result, bool isLastOfWave, KeyCode pressedKey, float hitLineX, float noteY)
+    void OnNoteHit(HitResult result, bool isLastOfWave, KeyCode pressedKey, float hitLineX)
     {
         if (result == HitResult.Bad) CancelDirectionalMove();
-        else PlayDirectionalAnimation(pressedKey, hitLineX, noteY);
+        else PlayDirectionalAnimation(pressedKey, hitLineX);
         AddCombo();
         missStreak = 0;
 
@@ -648,6 +648,7 @@ public class PlayerController : MonoBehaviour
 
     void OnNoteMissed(KeyCode missedKey = KeyCode.None)
     {
+        if (BossMashManager.IsPostQTEGraceActive) return;
         missCount++;
         soundEventPerfectStreak = 0;
         CancelDirectionalMove();
@@ -1096,15 +1097,15 @@ public class PlayerController : MonoBehaviour
         return -1;
     }
 
-    void PlayDirectionalAnimation(KeyCode pressedKey, float hitLineX, float noteY)
+    void PlayDirectionalAnimation(KeyCode pressedKey, float hitLineX)
     {
-        // Current lanes top-to-bottom: A/W/S/D = jump, shoot, throw, kick-down.
+        // Lane order and actions: W jump, A shoot, D throw, S kick.
         switch (pressedKey)
         {
-            case KeyCode.A:
+            case KeyCode.W:
                 StartDirectionalMove(new Vector3(
                     hitLineX - attackStopBeforeHitLine - jumpAttackLeftOffset,
-                    noteY - jumpAttackBelowNote,
+                    homePosition.y + jumpAttackHeight,
                     homePosition.z));
                 PlayAnimation(jumpAttackAnimName);
                 Invoke(nameof(ReturnHome), jumpAttackDuration);
@@ -1112,10 +1113,10 @@ public class PlayerController : MonoBehaviour
                 SpawnJumpVfx(homePosition, jumpVfxScale);
                 ProcParticles.Burst(homePosition + jumpVfxOffset, new Color(0.9f, 0.95f, 1f), 8, 3.5f, 0.3f, 0.28f);
                 break;
-            case KeyCode.W:
+            case KeyCode.A:
                 PlayAnimation(shootingAnimName);
                 break;
-            case KeyCode.S:
+            case KeyCode.D:
                 if (throwAnimNames != null && throwAnimNames.Length > 0)
                 {
                     PlayAnimation(throwAnimNames[throwStep % throwAnimNames.Length]);

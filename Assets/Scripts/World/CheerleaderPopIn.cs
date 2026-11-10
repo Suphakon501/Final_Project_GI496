@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// สุ่มให้ Cheer_boy / Cheer_girl โผล่มาที่ขอบจอระหว่างเล่นเกม
@@ -59,9 +60,6 @@ public class CheerleaderPopIn : MonoBehaviour
     [Header("Placement")]
     [Tooltip("ขยับตำแหน่งที่โผล่เพิ่มจากตำแหน่งในพรีแฟบ")]
     [SerializeField] private Vector2 worldOffset = Vector2.zero;
-    [Tooltip("ลำดับการวาด — ตั้งสูงมากไว้หน้าสุด ไม่ให้อะไรในฉากบัง (ปุ่มโน้ตอยู่ที่ 7)")]
-    [SerializeField] private int sortingOrder = 30000;
-
     Coroutine routine;
     int visibleCount;
     bool warnedNoPrefab;
@@ -155,13 +153,23 @@ public class CheerleaderPopIn : MonoBehaviour
         Camera mainCamera = Camera.main;
         if (mainCamera == null) yield break;
 
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
+        if (canvas == null) yield break;
+
+        RectTransform canvasRect = canvas.transform as RectTransform;
+        if (canvasRect == null) yield break;
+
         Transform cam = mainCamera.transform;
         visibleCount++;
         GameObject go = null;
 
         try
         {
-            // ตำแหน่งจากพรีแฟบ (อยู่ติดขอบจอซ้าย/ขวา) แล้วยึดกับกล้อง
+            SpriteRenderer sourceRenderer = prefab.GetComponentInChildren<SpriteRenderer>();
+            if (sourceRenderer == null || sourceRenderer.sprite == null) yield break;
+
+            // Keep authored world placement, then convert it to Canvas-local screen coordinates.
             Vector3 authored = prefab.transform.position;
 
             // บางครั้งสลับข้าง: บอยไปฝั่งขวา / สาวไปฝั่งซ้าย
@@ -174,6 +182,13 @@ public class CheerleaderPopIn : MonoBehaviour
 
             Vector3 startPos = restPos + Vector3.down * popFromBelow;
 
+            Vector3 restScreen = mainCamera.WorldToScreenPoint(restPos);
+            Vector3 startScreen = mainCamera.WorldToScreenPoint(startPos);
+            Camera canvasCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, restScreen, canvasCamera, out Vector2 restLocal) ||
+                !RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, startScreen, canvasCamera, out Vector2 startLocal))
+                yield break;
+
             // สลับฝั่งให้เอียงตัวไปทางเดิมเมื่อเทียบกับกลางจอ
             Quaternion spawnRot = prefab.transform.rotation;
             if (swapped)
@@ -183,16 +198,32 @@ public class CheerleaderPopIn : MonoBehaviour
                 spawnRot = Quaternion.Euler(0f, 0f, -tilt);
             }
 
-            go = Instantiate(prefab, startPos, spawnRot);
-            go.name = prefab.name + "_popin";
+            go = new GameObject(prefab.name + "_popin", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            go.transform.SetParent(canvasRect, false);
+            RectTransform rect = (RectTransform)go.transform;
+            Image image = go.GetComponent<Image>();
+            rect.pivot = sourceRenderer.sprite.pivot / sourceRenderer.sprite.rect.size;
+            rect.anchoredPosition = startLocal;
+            rect.localRotation = spawnRot;
+            rect.localScale = Vector3.one;
+            image.sprite = sourceRenderer.sprite;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+            image.color = sourceRenderer.color;
 
-            SpriteRenderer sr = go.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null) sr.sortingOrder = sortingOrder;
-            if (sr != null && swapped && flipWhenSwapped) sr.flipX = true;
+            Vector3 worldRight = mainCamera.WorldToScreenPoint(restPos + cam.right * sourceRenderer.bounds.size.x);
+            Vector3 worldUp = mainCamera.WorldToScreenPoint(restPos + cam.up * sourceRenderer.bounds.size.y);
+            float scaleFactor = Mathf.Max(0.01f, canvas.scaleFactor);
+            float worldToCanvasX = Vector2.Distance(restScreen, mainCamera.WorldToScreenPoint(restPos + cam.right)) / scaleFactor;
+            float worldToCanvasY = Vector2.Distance(restScreen, mainCamera.WorldToScreenPoint(restPos + cam.up)) / scaleFactor;
+            rect.sizeDelta = new Vector2(
+                Vector2.Distance(restScreen, worldRight) / scaleFactor,
+                Vector2.Distance(restScreen, worldUp) / scaleFactor);
+            if (swapped && flipWhenSwapped) rect.localScale = new Vector3(-1f, 1f, 1f);
 
-            Vector3 baseScale = go.transform.localScale;
-            Quaternion baseRot = go.transform.rotation;
-            Color tint = sr != null ? sr.color : Color.white;
+            Vector3 baseScale = rect.localScale;
+            Quaternion baseRot = rect.localRotation;
+            Color tint = image.color;
             float hold = Random.Range(Mathf.Min(visibleDuration.x, visibleDuration.y), Mathf.Max(visibleDuration.x, visibleDuration.y));
 
             // 1) เด้งขึ้นมาจากด้านล่างแบบการ์ตูน: ตัวยืดตอนพุ่งขึ้น แล้วบี้ตอนลงถึงที่
@@ -204,21 +235,21 @@ public class CheerleaderPopIn : MonoBehaviour
                 float k = Mathf.Clamp01(t / popUpTime);
                 float ease = EaseOutBack(k);
 
-                go.transform.position = new Vector3(startPos.x, Mathf.Lerp(startPos.y, restPos.y, ease), startPos.z);
+                rect.anchoredPosition = Vector2.Lerp(startLocal, restLocal, ease);
 
                 float stretch = Mathf.Sin(Mathf.PI * k);
-                go.transform.localScale = new Vector3(
+                rect.localScale = new Vector3(
                     baseScale.x * (1f - squash * 0.55f * stretch),
                     baseScale.y * (1f + squash * stretch),
                     baseScale.z);
 
-                if (sr != null) sr.color = WithAlpha(tint, Mathf.Clamp01(k * 1.6f));
+                image.color = WithAlpha(tint, Mathf.Clamp01(k * 1.6f));
                 yield return null;
             }
 
-            go.transform.position = restPos;
-            go.transform.localScale = baseScale;
-            if (sr != null) sr.color = WithAlpha(tint, 1f);
+            rect.anchoredPosition = restLocal;
+            rect.localScale = baseScale;
+            image.color = WithAlpha(tint, 1f);
 
             // 2) โยกซ้าย-ขวา (พร้อมเด้งขึ้นลงเบา ๆ)
             t = 0f;
@@ -228,8 +259,10 @@ public class CheerleaderPopIn : MonoBehaviour
                 t += Time.deltaTime;
                 float sway = Mathf.Sin(t * swaySpeed * Mathf.PI * 2f);
 
-                go.transform.position = restPos + new Vector3(sway * swayDistance, Mathf.Abs(sway) * swayLift, 0f);
-                go.transform.rotation = baseRot * Quaternion.Euler(0f, 0f, sway * swayAngle);
+                rect.anchoredPosition = restLocal + new Vector2(
+                    sway * swayDistance * worldToCanvasX,
+                    Mathf.Abs(sway) * swayLift * worldToCanvasY);
+                rect.localRotation = baseRot * Quaternion.Euler(0f, 0f, sway * swayAngle);
                 yield return null;
             }
 
@@ -242,9 +275,11 @@ public class CheerleaderPopIn : MonoBehaviour
                 float k = Mathf.Clamp01(t / fadeOut);
                 float sway = Mathf.Sin((hold + t) * swaySpeed * Mathf.PI * 2f);
 
-                go.transform.position = restPos + new Vector3(sway * swayDistance * (1f - k), floatUp * k, 0f);
-                go.transform.rotation = baseRot * Quaternion.Euler(0f, 0f, sway * swayAngle * (1f - k));
-                if (sr != null) sr.color = WithAlpha(tint, 1f - k * k);
+                rect.anchoredPosition = restLocal + new Vector2(
+                    sway * swayDistance * (1f - k) * worldToCanvasX,
+                    floatUp * k * worldToCanvasY);
+                rect.localRotation = baseRot * Quaternion.Euler(0f, 0f, sway * swayAngle * (1f - k));
+                image.color = WithAlpha(tint, 1f - k * k);
                 yield return null;
             }
         }

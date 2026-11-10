@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedKey: 0
-  moveSpeed: 9
+  moveSpeed: 6
   hitLineX: -3.5
   yPosTop: 2.25
   yPosMid1: 0.75
@@ -116,6 +116,20 @@ MonoBehaviour:
   perfectParticlePrefab: {fileID: 0}
   badMissParticlePrefab: {fileID: 0}
   particleLifetime: 0.6
+  knockAwayOnHit: 1
+  knockUpSpeed: 9
+  knockLeftSpeed: 3.5
+  knockSideJitter: 1
+  knockGravity: 26
+  knockSpinSpeed: 540
+  knockLifetime: 1.2
+  knockPopScale: 1.35
+  knockPopPhase: 0.12
+  flyToScore: 1
+  flyDuration: 0.35
+  flyArcHeight: 1.2
+  flySpinSpeed: 260
+  flyEndScale: 0.3
   holdHeadSprite: {fileID: 6943535168657398750, guid: ff1ae5c6194ad4847b821df7202fe696, type: 3}
   holdBodySprite: {fileID: -1880120661550918566, guid: d1599dec6fd18e74ebb00cf686c0fc06, type: 3}
   holdTailSprite: {fileID: -6254662425824378823, guid: 70cf02e89e28e17458a9562ee4236c96, type: 3}
