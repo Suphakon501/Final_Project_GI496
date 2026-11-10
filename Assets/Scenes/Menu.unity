@@ -1250,7 +1250,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 39.924, y: -667.97}
+  m_AnchoredPosition: {x: 80.92401, y: -142.96997}
   m_SizeDelta: {x: 934.6332, y: 262.4886}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &346615525
@@ -4683,7 +4683,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25.315, y: -943.28}
+  m_AnchoredPosition: {x: 66.315, y: -418.28003}
   m_SizeDelta: {x: 934.6332, y: 262.4886}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1273055001
@@ -4870,8 +4870,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0009176018}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 0.5271077}
+  m_SizeDelta: {x: 0, y: 1114.7}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1315359702
 GameObject:
@@ -4911,7 +4911,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 27.60669, y: -379}
+  m_AnchoredPosition: {x: 68.60669, y: 146}
   m_SizeDelta: {x: 930.0503, y: 261.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1315359704
@@ -5748,7 +5748,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 27, y: -100}
+  m_AnchoredPosition: {x: 68, y: 425}
   m_SizeDelta: {x: 931.2639, y: 261.534}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1531294541
@@ -6540,8 +6540,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2323.43, y: -8.1251}
-  m_SizeDelta: {x: 1091.2, y: 1080.3}
+  m_AnchoredPosition: {x: 2367, y: 9.073097}
+  m_SizeDelta: {x: 1091.2, y: 1114.6962}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1892225944
 MonoBehaviour:
@@ -6862,8 +6862,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 340232237}
   m_HandleRect: {fileID: 340232236}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99988115
+  m_Value: -138.29033
+  m_Size: 0.9882297
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

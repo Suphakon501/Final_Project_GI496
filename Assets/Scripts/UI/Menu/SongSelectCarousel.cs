@@ -38,7 +38,7 @@ public class SongSelectCarousel : MonoBehaviour
     private float nextWheelStep;
     private Vector2 lastPointerPosition;
     private bool hasPointerPosition;
-    private float lastScrollPosition = -1f;
+    private float layoutScale = 1f;
 
     public void Initialize(MainMenu owner)
     {
@@ -52,10 +52,9 @@ public class SongSelectCarousel : MonoBehaviour
         }
         if (songScrollRect != null)
         {
-            // Route wheel input through the same cyclic selection as the keyboard.
+            // Keep all existing song buttons visible together; input changes selection only.
             songScrollRect.scrollSensitivity = 0f;
-            PrepareScrollContentForCentering();
-            lastScrollPosition = songScrollRect.verticalNormalizedPosition;
+            FitExistingCardsInViewport();
         }
 
         initialized = true;
@@ -65,11 +64,7 @@ public class SongSelectCarousel : MonoBehaviour
     {
         if (!initialized || cards.Count == 0) return;
         selectedIndex = 0;
-        if (songScrollRect == null) return;
-
-        if (!scrollContentPrepared) PrepareScrollContentForCentering();
-        if (scrollContentPrepared) CenterSelectedCard();
-        lastScrollPosition = songScrollRect.verticalNormalizedPosition;
+        if (songScrollRect != null && !scrollContentPrepared) FitExistingCardsInViewport();
     }
 
     private void CollectButtons()
@@ -78,7 +73,7 @@ public class SongSelectCarousel : MonoBehaviour
         if (songScrollRect != null && songScrollRect.content != null)
         {
             cards.AddRange(songScrollRect.content.GetComponentsInChildren<Button>(true));
-            // The Scroll View handles wheel and scrollbar dragging. Keyboard selection keeps it in sync.
+            // Include existing placeholder buttons so all four can be navigated.
             return;
         }
 
@@ -100,19 +95,8 @@ public class SongSelectCarousel : MonoBehaviour
     {
         if (!initialized) return;
         if (songScrollRect != null && !scrollContentPrepared)
-            PrepareScrollContentForCentering();
+            FitExistingCardsInViewport();
         ReadPointerHover();
-
-        if (songScrollRect != null && cards.Count > 1)
-        {
-            float position = songScrollRect.verticalNormalizedPosition;
-            if (Mathf.Abs(position - lastScrollPosition) > 0.001f)
-            {
-                int index = Mathf.Clamp(Mathf.RoundToInt((1f - position) * (cards.Count - 1)), 0, cards.Count - 1);
-                SetSelection(index, false);
-                lastScrollPosition = position;
-            }
-        }
 
         if (Input.GetKeyDown(KeyCode.DownArrow)) ChangeSelection(1);
         else if (Input.GetKeyDown(KeyCode.UpArrow)) ChangeSelection(-1);
@@ -136,7 +120,7 @@ public class SongSelectCarousel : MonoBehaviour
         {
             if (cards[i] == null) continue;
             float multiplier = i == selectedIndex ? selectedScale : unselectedScale;
-            Vector3 targetScale = baseScales[i] * multiplier;
+            Vector3 targetScale = baseScales[i] * (layoutScale * multiplier);
             cards[i].transform.localScale = Vector3.Lerp(cards[i].transform.localScale, targetScale,
                 1f - Mathf.Exp(-animationSpeed * Time.unscaledDeltaTime));
         }
@@ -158,7 +142,7 @@ public class SongSelectCarousel : MonoBehaviour
             Button hitButton = hit.gameObject.GetComponentInParent<Button>();
             for (int i = 0; i < cards.Count; i++)
             {
-                if (cards[i] == hitButton) { SetSelection(i, false); return; }
+                if (cards[i] == hitButton) { SetSelection(i); return; }
             }
         }
     }
@@ -171,27 +155,21 @@ public class SongSelectCarousel : MonoBehaviour
             int candidate = (selectedIndex + direction * step + cards.Count * 2) % cards.Count;
             if (cards[candidate] != null)
             {
-                SetSelection(candidate, true);
+                SetSelection(candidate);
                 return;
             }
         }
     }
 
-    private void SetSelection(int index, bool scrollToSelection)
+    private void SetSelection(int index)
     {
         if (index < 0 || index >= cards.Count || cards[index] == null) return;
         selectedIndex = index;
         if (EventSystem.current != null && cards[index].gameObject.activeInHierarchy)
             EventSystem.current.SetSelectedGameObject(cards[index].gameObject);
-
-        if (scrollToSelection && songScrollRect != null && cards.Count > 1)
-        {
-            CenterSelectedCard();
-            lastScrollPosition = songScrollRect.verticalNormalizedPosition;
-        }
     }
 
-    private void PrepareScrollContentForCentering()
+    private void FitExistingCardsInViewport()
     {
         if (songScrollRect == null || songScrollRect.content == null || cards.Count == 0) return;
 
@@ -204,7 +182,7 @@ public class SongSelectCarousel : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         if (viewport.rect.height <= 1f)
         {
-            // Repair an un-sized existing Viewport so ScrollRect can measure and center its cards.
+            // Repair the existing zero-sized Viewport to fill its existing Scroll View.
             viewport.anchorMin = Vector2.zero;
             viewport.anchorMax = Vector2.one;
             viewport.offsetMin = Vector2.zero;
@@ -215,82 +193,56 @@ public class SongSelectCarousel : MonoBehaviour
         float viewportHeight = viewport.rect.height * viewport.lossyScale.y / content.lossyScale.y;
         if (viewportHeight <= 0f) return;
 
-        RectTransform firstCard = cards[0].transform as RectTransform;
-        if (firstCard == null) return;
+        // This is a static selector now, so turn off scrolling and fit the existing cards inside it.
+        songScrollRect.StopMovement();
+        songScrollRect.vertical = false;
+        if (songScrollRect.verticalScrollbar != null)
+            songScrollRect.verticalScrollbar.gameObject.SetActive(false);
+        content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, viewportHeight);
+        Canvas.ForceUpdateCanvases();
 
-        Vector3 firstCenter = content.InverseTransformPoint(firstCard.TransformPoint(firstCard.rect.center));
-        float topPadding = -viewportHeight * 0.5f - firstCenter.y;
-        foreach (Button card in cards)
+        float[] rowHeights = new float[cards.Count];
+        float totalMaximumHeight = 0f;
+        float maximumMultiplier = Mathf.Max(selectedScale, unselectedScale);
+        for (int i = 0; i < cards.Count; i++)
         {
-            RectTransform rect = card != null ? card.transform as RectTransform : null;
-            if (rect != null) rect.anchoredPosition += Vector2.up * topPadding;
+            RectTransform rect = cards[i] != null ? cards[i].transform as RectTransform : null;
+            if (rect == null) continue;
+            rect.localScale = i < baseScales.Count ? baseScales[i] : Vector3.one;
+            rowHeights[i] = RectTransformUtility.CalculateRelativeRectTransformBounds(content, rect).size.y;
+            totalMaximumHeight += rowHeights[i] * maximumMultiplier;
         }
 
-        Bounds cardBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(content, cards[0].transform);
-        for (int i = 1; i < cards.Count; i++)
+        const float gap = 8f;
+        float gapsHeight = gap * (cards.Count + 1);
+        float availableForCards = Mathf.Max(1f, viewportHeight - gapsHeight);
+        layoutScale = totalMaximumHeight > availableForCards
+            ? availableForCards / totalMaximumHeight
+            : 1f;
+
+        float totalSlotHeight = 0f;
+        for (int i = 0; i < rowHeights.Length; i++)
+            totalSlotHeight += rowHeights[i] * maximumMultiplier * layoutScale;
+        float slotGap = Mathf.Max(gap, (viewportHeight - totalSlotHeight) / (cards.Count + 1));
+        float cursorFromTop = slotGap;
+        for (int i = 0; i < cards.Count; i++)
         {
-            if (cards[i] == null) continue;
-            Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(content, cards[i].transform);
-            cardBounds.Encapsulate(bounds.min);
-            cardBounds.Encapsulate(bounds.max);
-        }
+            RectTransform rect = cards[i] != null ? cards[i].transform as RectTransform : null;
+            if (rect == null) continue;
 
-        float requiredHeight = -cardBounds.min.y + viewportHeight * 0.5f;
-        if (requiredHeight > content.rect.height)
-        {
-            float[] savedCardCenterY = new float[cards.Count];
-            for (int i = 0; i < cards.Count; i++)
-            {
-                if (cards[i] == null) continue;
-                RectTransform rect = cards[i].transform as RectTransform;
-                savedCardCenterY[i] = content.InverseTransformPoint(rect.TransformPoint(rect.rect.center)).y;
-            }
-
-            content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, requiredHeight);
-            Canvas.ForceUpdateCanvases();
-
-            // Preserve each card's content-local position when resizing moves its anchor reference.
-            for (int i = 0; i < cards.Count; i++)
-            {
-                if (cards[i] == null) continue;
-                RectTransform rect = cards[i].transform as RectTransform;
-                float currentCenterY = content.InverseTransformPoint(rect.TransformPoint(rect.rect.center)).y;
-                rect.anchoredPosition += Vector2.up * (savedCardCenterY[i] - currentCenterY);
-            }
+            float slotHeight = rowHeights[i] * maximumMultiplier * layoutScale;
+            Vector2 position = rect.anchoredPosition;
+            position.y = viewportHeight * 0.5f - cursorFromTop - slotHeight * 0.5f;
+            rect.anchoredPosition = position;
+            cursorFromTop += slotHeight + slotGap;
         }
 
         songScrollRect.StopMovement();
+        songScrollRect.Rebuild(CanvasUpdate.PostLayout);
         songScrollRect.verticalNormalizedPosition = 1f;
         Canvas.ForceUpdateCanvases();
+        songScrollRect.Rebuild(CanvasUpdate.PostLayout);
         scrollContentPrepared = true;
-    }
-
-    private void CenterSelectedCard()
-    {
-        if (songScrollRect == null || songScrollRect.content == null || selectedIndex < 0 || selectedIndex >= cards.Count)
-            return;
-
-        if (!scrollContentPrepared)
-        {
-            PrepareScrollContentForCentering();
-            if (!scrollContentPrepared) return;
-        }
-
-        RectTransform content = songScrollRect.content;
-        RectTransform viewport = songScrollRect.viewport != null
-            ? songScrollRect.viewport
-            : songScrollRect.transform as RectTransform;
-        RectTransform card = cards[selectedIndex] != null ? cards[selectedIndex].transform as RectTransform : null;
-        if (viewport == null || card == null || content.pivot.y < 0.99f) return;
-
-        Canvas.ForceUpdateCanvases();
-        float viewportHeight = viewport.rect.height * viewport.lossyScale.y / content.lossyScale.y;
-        float maxOffset = Mathf.Max(0f, content.rect.height - viewportHeight);
-        Vector3 cardCenter = content.InverseTransformPoint(card.TransformPoint(card.rect.center));
-        float desiredOffset = Mathf.Clamp(-cardCenter.y - viewportHeight * 0.5f, 0f, maxOffset);
-
-        songScrollRect.StopMovement();
-        songScrollRect.verticalNormalizedPosition = maxOffset > 0f ? 1f - desiredOffset / maxOffset : 1f;
     }
 
     public void LaunchSelectedSong()
