@@ -395,10 +395,10 @@ public class ChartPlayer : MonoBehaviour
         if (recordingKey.HasValue) return;
 
         NoteKey? pressed = null;
-        if (Input.GetKeyDown(KeyCode.D)) pressed = NoteKey.W;
-        else if (Input.GetKeyDown(KeyCode.F)) pressed = NoteKey.A;
-        else if (Input.GetKeyDown(KeyCode.K)) pressed = NoteKey.S;
-        else if (Input.GetKeyDown(KeyCode.J)) pressed = NoteKey.D;
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.UpArrow)) pressed = NoteKey.W;
+        else if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.LeftArrow)) pressed = NoteKey.A;
+        else if (Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.DownArrow)) pressed = NoteKey.S;
+        else if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.RightArrow)) pressed = NoteKey.D;
         if (pressed == null) return;
 
         float snap = Mathf.Max(0.0625f, recordSnapBeats);
@@ -417,10 +417,10 @@ public class ChartPlayer : MonoBehaviour
     {
         switch (key)
         {
-            case NoteKey.W: return Input.GetKeyUp(KeyCode.D);
-            case NoteKey.A: return Input.GetKeyUp(KeyCode.F);
-            case NoteKey.S: return Input.GetKeyUp(KeyCode.K);
-            default: return Input.GetKeyUp(KeyCode.J);
+            case NoteKey.W: return Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.UpArrow);
+            case NoteKey.A: return Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.LeftArrow);
+            case NoteKey.S: return Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.DownArrow);
+            default: return Input.GetKeyUp(KeyCode.J) || Input.GetKeyUp(KeyCode.RightArrow);
         }
     }
 

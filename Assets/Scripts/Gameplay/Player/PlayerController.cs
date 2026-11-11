@@ -11,7 +11,10 @@ public class PlayerController : MonoBehaviour
 
     // Layout for the four rhythm lanes: D (up), F (left), J (right), K (down).
     private static readonly KeyCode[] InputKeys = {
-        KeyCode.D, KeyCode.F, KeyCode.J, KeyCode.K
+        KeyCode.D, KeyCode.UpArrow,
+        KeyCode.F, KeyCode.LeftArrow,
+        KeyCode.J, KeyCode.RightArrow,
+        KeyCode.K, KeyCode.DownArrow
     };
 
     private const int PerfectScore = 300;
@@ -511,10 +514,10 @@ public class PlayerController : MonoBehaviour
     // Normalize key while preserving each direction's assigned animation.
     KeyCode NormalizeKey(KeyCode key)
     {
-        if (key == KeyCode.D) return KeyCode.W; // บน
-        if (key == KeyCode.F) return KeyCode.A; // ซ้าย
-        if (key == KeyCode.J) return KeyCode.D; // ขวา
-        if (key == KeyCode.K) return KeyCode.S; // ล่าง
+        if (key == KeyCode.D || key == KeyCode.UpArrow) return KeyCode.W; // บน
+        if (key == KeyCode.F || key == KeyCode.LeftArrow) return KeyCode.A; // ซ้าย
+        if (key == KeyCode.J || key == KeyCode.RightArrow) return KeyCode.D; // ขวา
+        if (key == KeyCode.K || key == KeyCode.DownArrow) return KeyCode.S; // ล่าง
         return key;
     }
 

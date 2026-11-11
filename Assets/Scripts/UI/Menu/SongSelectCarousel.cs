@@ -98,8 +98,8 @@ public class SongSelectCarousel : MonoBehaviour
             FitExistingCardsInViewport();
         ReadPointerHover();
 
-        if (Input.GetKeyDown(KeyCode.DownArrow)) ChangeSelection(1);
-        else if (Input.GetKeyDown(KeyCode.UpArrow)) ChangeSelection(-1);
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow)) ChangeSelection(1);
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) ChangeSelection(-1);
 
         float wheel = Input.mouseScrollDelta.y;
         RectTransform scrollViewport = songScrollRect != null
